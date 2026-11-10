@@ -9,11 +9,11 @@ const BASE = "https://pba-api01.actech2.com";
 const TOURNAMENTS = [
   {
     name: "PBA 50th Season Governors' Cup",
-    slug: "pba-50th-season-governors-cup"
+    slug: "pba-50th-season-commissioner-s-cup"
   },
   {
     name: "PBA 50th Season Commissioner's Cup",
-    slug: "pba-50th-season-commissioners-cup"
+    slug: "pba-50th-season-commissioner-s-cup"
   }
 ];
 
