@@ -1,8 +1,8 @@
 {
   "name": "two-sports-pba",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
-  "description": "Two Sports PBA scoreboard fan project",
+  "description": "Two Sports PBA basketball app",
   "scripts": {
     "start": "node server.js"
   },
