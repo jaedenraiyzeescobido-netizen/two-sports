@@ -11,903 +11,689 @@
   --bg:#101114;
   --surface:#191b20;
   --surface2:#22252c;
-  --text:#f5f5f6;
-  --muted:#969ba6;
-  --line:#30333b;
-  --accent:#4c8dff;
-  --accent-text:#ffffff;
-  --danger:#ff6464;
-  --green:#53d69a;
+  --text:#f5f5f7;
+  --muted:#9296a1;
+  --accent:#e6ff38;
+  --border:#30333b;
+  --danger:#ff5555;
 }
 
 body.light {
-  --bg:#f3f4f6;
+  --bg:#f4f5f7;
   --surface:#ffffff;
   --surface2:#e9ebef;
-  --text:#17191e;
-  --muted:#666d78;
-  --line:#d9dce2;
-  --accent:#246bdb;
-  --accent-text:#ffffff;
-  --danger:#d83e3e;
-  --green:#159c61;
+  --text:#15171b;
+  --muted:#6d7280;
+  --border:#d9dce2;
 }
 
-*{box-sizing:border-box}
+* {
+  box-sizing:border-box;
+}
 
 body {
   margin:0;
   background:var(--bg);
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
-  transition:background .2s,color .2s;
 }
 
-button,select,input{font:inherit}
-button{cursor:pointer}
+button,input,select {
+  font:inherit;
+}
 
-.topbar {
-  height:66px;
-  padding:0 22px;
+button {
+  cursor:pointer;
+}
+
+header {
+  height:65px;
+  padding:0 18px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  background:var(--surface);
-  border-bottom:1px solid var(--line);
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
   position:sticky;
   top:0;
   z-index:20;
 }
 
-.brand {
-  font-size:22px;
+.logo {
+  font-size:23px;
   font-weight:900;
   letter-spacing:-1px;
 }
 
-.brand span{color:var(--accent)}
-
-.top-actions {
-  display:flex;
-  align-items:center;
-  gap:10px;
+.logo span {
+  color:var(--accent);
 }
 
-.icon-btn {
-  border:1px solid var(--line);
+.header-actions {
+  display:flex;
+  gap:9px;
+}
+
+.icon-button {
   background:var(--surface2);
-  color:var(--text);
-  border-radius:10px;
-  padding:9px 12px;
-}
-
-.layout {
-  display:flex;
-  min-height:calc(100vh - 66px);
-}
-
-.sidebar {
-  width:225px;
-  background:var(--surface);
-  border-right:1px solid var(--line);
-  padding:18px 12px;
-  flex-shrink:0;
-}
-
-.nav-label {
-  font-size:10px;
-  font-weight:bold;
-  color:var(--muted);
-  letter-spacing:1.5px;
-  padding:15px 12px 8px;
-}
-
-.nav-btn {
-  width:100%;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:12px;
-  margin-bottom:4px;
   border:0;
-  border-radius:10px;
-  background:transparent;
-  color:var(--muted);
-  text-align:left;
-  font-size:14px;
-  font-weight:600;
-}
-
-.nav-btn:hover {
-  background:var(--surface2);
   color:var(--text);
+  padding:10px 13px;
+  border-radius:10px;
 }
 
-.nav-btn.active {
-  background:var(--accent);
-  color:var(--accent-text);
+.app {
+  max-width:1100px;
+  margin:auto;
+  padding:18px 16px 100px;
 }
 
-.nav-icon {
-  width:20px;
-  text-align:center;
-  font-size:17px;
+.page {
+  display:none;
 }
 
-.main {
-  flex:1;
-  min-width:0;
-  padding:28px;
-  max-width:1450px;
-  margin:0 auto;
-  width:100%;
+.page.active {
+  display:block;
 }
 
-.page{display:none}
-.page.active{display:block}
-
-.page-heading {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  flex-wrap:wrap;
-  margin-bottom:22px;
+.page-title {
+  font-size:27px;
+  font-weight:900;
+  margin:8px 0 18px;
 }
 
-h1 {
-  font-size:29px;
-  margin:0;
-  letter-spacing:-1px;
-}
-
-h2 {
+.section-title {
   font-size:19px;
-  margin:0 0 15px;
+  font-weight:800;
+  margin:25px 0 12px;
 }
 
-h3{margin:0 0 8px}
-
-.subtitle {
+.muted {
   color:var(--muted);
-  font-size:13px;
-  margin-top:7px;
 }
-
-.section{margin-top:30px}
 
 .card {
   background:var(--surface);
-  border:1px solid var(--line);
+  border:1px solid var(--border);
   border-radius:15px;
-  padding:18px;
-}
-
-.hero {
-  padding:27px;
-  min-height:190px;
-  border-radius:18px;
-  background:linear-gradient(120deg,#272b34,#17191e);
-  border:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  overflow:hidden;
-}
-
-body.light .hero {
-  background:linear-gradient(120deg,#e4e8ee,#ffffff);
-}
-
-.hero-tag {
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:20px;
-  background:var(--accent);
-  color:var(--accent-text);
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1px;
+  padding:16px;
   margin-bottom:12px;
 }
 
-.hero h2 {
-  font-size:32px;
-  margin:0;
-  max-width:500px;
-}
-
-.hero p {
-  color:var(--muted);
-  font-size:13px;
-}
-
-.hero-ball {
-  font-size:85px;
-  opacity:.9;
-}
-
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:14px;
-}
-
-.stat-card {
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:18px;
-}
-
-.stat-number {
-  font-size:28px;
-  font-weight:900;
-  margin-top:8px;
-}
-
-.muted{color:var(--muted)}
-.small{font-size:12px}
-
-select,input {
-  color:var(--text);
-  background:var(--surface2);
-  border:1px solid var(--line);
-  border-radius:9px;
-  padding:10px 12px;
-  outline:none;
-  max-width:100%;
-}
-
-input{min-width:0}
-
-.primary-btn {
-  background:var(--accent);
-  color:var(--accent-text);
-  border:0;
-  padding:10px 15px;
-  border-radius:9px;
-  font-weight:800;
-}
-
-.secondary-btn {
-  background:var(--surface2);
-  color:var(--text);
-  border:1px solid var(--line);
-  padding:9px 13px;
-  border-radius:9px;
-  font-weight:700;
-}
-
-.game-list {
-  display:grid;
-  gap:11px;
-}
-
-.game-card {
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:13px;
-  padding:16px;
+.row {
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:15px;
-  flex-wrap:wrap;
-}
-
-.game-info {
-  min-width:0;
-  flex:1;
-}
-
-.game-title {
-  font-weight:800;
-  font-size:15px;
-}
-
-.game-summary {
-  color:var(--muted);
-  font-size:12px;
-  margin-top:6px;
-  line-height:1.5;
-}
-
-.game-status {
-  display:inline-block;
-  padding:5px 8px;
-  border-radius:6px;
-  background:var(--surface2);
-  font-size:10px;
-  font-weight:800;
-  color:var(--muted);
-  margin-bottom:8px;
-}
-
-.live {
-  color:white;
-  background:#d92e3c;
-}
-
-.team-logo {
-  width:65px;
-  height:65px;
-  border-radius:50%;
-  background:var(--surface2);
-  border:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  font-weight:900;
-  font-size:18px;
-  flex-shrink:0;
-}
-
-.team-logo img {
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.entity-card {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
   gap:12px;
 }
 
-.entity-card .team-logo {
-  width:80px;
-  height:80px;
+.pill {
+  display:inline-block;
+  padding:6px 10px;
+  background:var(--surface2);
+  color:var(--muted);
+  border-radius:20px;
+  font-size:12px;
 }
 
-.entity-card h3{font-size:15px}
-
-.follow-btn {
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:8px 13px;
-  background:var(--surface2);
-  color:var(--text);
-  font-size:12px;
+.live {
+  color:#ff5757;
   font-weight:800;
 }
 
-.follow-btn.following {
+.primary-button {
   background:var(--accent);
-  color:var(--accent-text);
-  border-color:var(--accent);
+  color:#111;
+  border:0;
+  padding:10px 14px;
+  border-radius:9px;
+  font-weight:800;
 }
 
-.empty {
-  padding:38px 20px;
-  text-align:center;
+.secondary-button {
+  background:var(--surface2);
+  color:var(--text);
+  border:1px solid var(--border);
+  padding:9px 12px;
+  border-radius:9px;
+}
+
+select,input {
   background:var(--surface);
-  border:1px dashed var(--line);
-  border-radius:15px;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:11px;
 }
 
-.empty-icon {
-  font-size:38px;
-  margin-bottom:12px;
+select {
+  max-width:100%;
 }
 
-.empty h3{margin-bottom:7px}
-
-.empty p {
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.6;
-  max-width:480px;
-  margin:0 auto;
+input {
+  width:100%;
 }
 
 .tabs {
   display:flex;
-  flex-wrap:wrap;
   gap:8px;
-  margin-bottom:17px;
+  overflow-x:auto;
+  padding:5px 0 14px;
+  scrollbar-width:none;
 }
 
-.tab-btn {
+.tabs button {
+  white-space:nowrap;
   background:var(--surface2);
-  border:1px solid var(--line);
-  color:var(--muted);
-  padding:9px 14px;
+  color:var(--text);
+  border:1px solid var(--border);
   border-radius:20px;
-  font-size:12px;
+  padding:9px 14px;
+}
+
+.tabs button.selected {
+  background:var(--accent);
+  color:#111;
+  border-color:var(--accent);
   font-weight:800;
 }
 
-.tab-btn.active {
-  color:var(--accent-text);
-  background:var(--accent);
-  border-color:var(--accent);
-}
-
-.bracket {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(180px,1fr));
-  gap:14px;
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:72px;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  z-index:30;
   overflow-x:auto;
 }
 
-.bracket-round{min-width:180px}
-
-.bracket-match {
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:14px;
-  margin-bottom:12px;
-}
-
-.bracket-team {
-  padding:9px 0;
-  border-bottom:1px solid var(--line);
-  font-size:13px;
-}
-
-.bracket-team:last-child{border:0}
-
-.feed {
-  max-width:430px;
-  margin:0 auto;
-  display:grid;
-  gap:14px;
-}
-
-.feed-card {
-  min-height:360px;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:#191b20;
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:25px;
-  overflow:hidden;
-}
-
-.feed-card-content{position:relative;z-index:1}
-
-.feed-card .feed-icon {
-  font-size:55px;
-  margin-bottom:20px;
-}
-
-.feed-card p {
-  color:#b6bbc5;
-  font-size:13px;
-  line-height:1.6;
-}
-
-.feed-card a {
-  color:#78aaff;
-  font-size:13px;
-}
-
-.video-feed {
-  max-width:430px;
-  height:min(75vh,760px);
-  min-height:440px;
-  margin:0 auto;
-  overflow-y:auto;
-  scroll-snap-type:y mandatory;
-  border-radius:16px;
-  scrollbar-width:thin;
-}
-
-.video-card {
-  min-height:100%;
-  scroll-snap-align:start;
-  background:#000;
-  border:1px solid var(--line);
-  border-radius:16px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  margin-bottom:12px;
-}
-
-.video-card iframe {
-  width:100%;
-  aspect-ratio:9/16;
-  max-height:650px;
+.nav-button {
   border:0;
-  background:#000;
-  flex:1;
+  background:none;
+  color:var(--muted);
+  min-width:60px;
+  padding:8px 4px;
+  font-size:10px;
 }
 
-.video-caption {
-  padding:13px;
-  background:var(--surface);
+.nav-button .nav-icon {
+  display:block;
+  font-size:19px;
+  margin-bottom:4px;
 }
 
-.video-caption h3 {
+.nav-button.active {
+  color:var(--accent);
+  font-weight:800;
+}
+
+.score {
+  font-size:25px;
+  font-weight:900;
+}
+
+.game-team {
+  font-weight:800;
   font-size:14px;
   line-height:1.4;
 }
 
-.video-caption p {
-  color:var(--muted);
-  font-size:11px;
+.game-card {
+  cursor:pointer;
 }
 
-.video-open {
-  display:inline-block;
+.game-card:hover {
+  border-color:var(--accent);
+}
+
+.team-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+  gap:10px;
+}
+
+.team-card {
+  text-align:center;
+  cursor:pointer;
+}
+
+.team-logo {
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  margin:0 auto 10px;
+  background:var(--surface2);
+  font-weight:900;
+  font-size:18px;
+}
+
+.team-name {
+  font-size:13px;
+  font-weight:800;
+}
+
+.player-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.player-row:last-child {
+  border-bottom:0;
+}
+
+.news-card {
+  display:flex;
+  gap:13px;
+  align-items:flex-start;
+  cursor:pointer;
+}
+
+.news-image {
+  width:110px;
+  height:85px;
+  object-fit:cover;
+  border-radius:9px;
+  background:var(--surface2);
+  flex-shrink:0;
+}
+
+.news-title {
+  font-weight:800;
+  line-height:1.4;
+}
+
+.news-card:hover .news-title {
   color:var(--accent);
-  font-size:12px;
-  margin-top:7px;
 }
 
-.detail-panel{margin-top:18px}
+.table-wrap {
+  overflow-x:auto;
+  margin-top:12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
 
-.detail-panel table {
+table {
   width:100%;
+  min-width:650px;
   border-collapse:collapse;
   font-size:12px;
+  white-space:nowrap;
 }
 
-.detail-panel th,
-.detail-panel td {
+th,td {
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+}
+
+th {
+  background:var(--surface2);
+  font-weight:900;
+}
+
+td:first-child,th:first-child {
   text-align:left;
-  border-bottom:1px solid var(--line);
-  padding:10px;
-  white-space:nowrap;
+  position:sticky;
+  left:0;
+  background:var(--surface);
+}
+
+th:first-child {
+  background:var(--surface2);
+}
+
+.error {
+  color:var(--danger);
+  padding:12px 0;
 }
 
 .loading {
   color:var(--muted);
   padding:20px 0;
-  font-size:13px;
+  text-align:center;
 }
 
-.error-text {
-  color:var(--danger);
-  font-size:12px;
-}
+/* SHORTS FEED */
 
-.average-card {
-  background:var(--surface);
-  border:1px solid var(--line);
+.shorts-feed {
+  height:calc(100dvh - 180px);
+  min-height:420px;
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  overscroll-behavior-y:contain;
   border-radius:15px;
-  padding:17px;
-  min-width:0;
+  scrollbar-width:thin;
 }
 
-.average-top {
+.short-card {
+  height:calc(100dvh - 180px);
+  min-height:420px;
+  position:relative;
+  background:#050505;
+  border-radius:15px;
+  overflow:hidden;
+  margin-bottom:12px;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+}
+
+.short-video {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  background:#000;
+}
+
+.short-video iframe {
+  width:100%;
+  height:100%;
+  border:0;
+}
+
+.short-overlay {
+  position:absolute;
+  z-index:3;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:55px 15px 18px;
+  color:white;
+  pointer-events:none;
+  background:linear-gradient(transparent,rgba(0,0,0,.9));
+}
+
+.short-title {
+  font-size:15px;
+  font-weight:800;
+  line-height:1.4;
+  max-width:85%;
+  margin-bottom:9px;
+}
+
+.short-actions {
+  position:absolute;
+  right:12px;
+  bottom:95px;
+  z-index:5;
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:14px;
+  flex-direction:column;
+  gap:13px;
 }
 
-.average-name {
-  font-size:16px;
-  font-weight:900;
-  overflow-wrap:anywhere;
+.short-action {
+  border:0;
+  border-radius:50%;
+  width:43px;
+  height:43px;
+  background:rgba(30,30,30,.85);
+  color:white;
+  font-size:19px;
 }
 
-.average-team {
-  font-size:11px;
-  color:var(--muted);
-  margin-top:4px;
+.short-action.liked {
+  color:var(--accent);
 }
 
-.average-grid {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:8px;
+.short-link {
+  pointer-events:auto;
+  display:inline-block;
+  color:var(--accent);
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+  margin-top:5px;
 }
 
-.average-stat {
-  background:var(--surface2);
-  border-radius:10px;
-  padding:10px 6px;
-  text-align:center;
-  min-width:0;
-}
-
-.average-stat strong {
-  display:block;
-  font-size:20px;
-  font-weight:900;
-}
-
-.average-stat span {
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  margin-top:4px;
-  text-transform:uppercase;
-}
-
-.average-foot {
-  margin-top:12px;
-  padding-top:10px;
-  border-top:1px solid var(--line);
-  color:var(--muted);
-  font-size:11px;
-}
-
-.mobile-nav{display:none}
-
-footer {
-  padding:25px;
+.feed-empty {
+  padding:35px 15px;
   text-align:center;
   color:var(--muted);
-  font-size:11px;
 }
 
-@media(max-width:800px) {
-  .sidebar{display:none}
-
-  .main{padding:20px 15px 90px}
-
-  .mobile-nav {
-    display:flex;
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    z-index:30;
-    background:var(--surface);
-    border-top:1px solid var(--line);
-    justify-content:space-around;
-    padding:8px 3px calc(8px + env(safe-area-inset-bottom));
+@media(min-width:700px) {
+  .short-card {
+    max-width:440px;
+    margin:0 auto 12px;
   }
 
-  .mobile-nav button {
-    border:0;
-    background:transparent;
-    color:var(--muted);
-    font-size:10px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:4px;
-    padding:5px;
+  .shorts-feed {
+    max-width:460px;
+    margin:auto;
   }
-
-  .mobile-nav button.active{color:var(--accent)}
-  .mobile-nav span{font-size:19px}
-  .hero h2{font-size:25px}
-  .hero-ball{font-size:55px}
-  .bracket{grid-template-columns:repeat(3,190px)}
 }
 
-@media(max-width:420px) {
-  h1{font-size:25px}
-  .hero{padding:20px}
-  .hero-ball{font-size:42px}
-  .average-stat strong{font-size:17px}
+@media(max-width:450px) {
+  .app {
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .page-title {
+    font-size:24px;
+  }
+
+  .shorts-feed,.short-card {
+    height:calc(100dvh - 170px);
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header class="topbar">
-  <div class="brand">TWO <span>SPORTS</span></div>
-  <div class="top-actions">
-    <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
-    <button class="icon-btn" id="themeBtn" title="Change theme">☼</button>
+<header>
+  <div class="logo">TWO <span>SPORTS</span></div>
+  <div class="header-actions">
+    <button class="icon-button" onclick="toggleTheme()" aria-label="Toggle theme">◐</button>
+    <button class="icon-button" onclick="refreshCurrentPage()" aria-label="Refresh">↻</button>
   </div>
 </header>
 
-<div class="layout">
+<main class="app">
 
-<aside class="sidebar">
-  <div class="nav-label">DISCOVER</div>
-  <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span> Home</button>
-  <button class="nav-btn" data-page="scores"><span class="nav-icon">▣</span> Scores & Schedule</button>
-  <button class="nav-btn" data-page="teams"><span class="nav-icon">◈</span> Teams</button>
-  <button class="nav-btn" data-page="players"><span class="nav-icon">♟</span> Players</button>
-  <button class="nav-btn" data-page="news"><span class="nav-icon">▤</span> News</button>
+  <section id="home" class="page active">
+    <div class="page-title">PBA Today</div>
 
-  <div class="nav-label">MY SPORTS</div>
-  <button class="nav-btn" data-page="followedPlayers"><span class="nav-icon">★</span> Followed Players</button>
-  <button class="nav-btn" data-page="followedTeams"><span class="nav-icon">♥</span> Followed Teams</button>
-  <button class="nav-btn" data-page="highlights"><span class="nav-icon">▶</span> Highlights</button>
-
-  <div class="nav-label">COMPETITION</div>
-  <button class="nav-btn" data-page="playoffs"><span class="nav-icon">⌘</span> Playoff Bracket</button>
-  <button class="nav-btn" data-page="more"><span class="nav-icon">⚙</span> Settings</button>
-</aside>
-
-<main class="main">
-
-<section class="page active" id="page-home">
-  <div class="hero">
-    <div>
-      <div class="hero-tag">PBA BASKETBALL</div>
-      <h2>Every game.<br>Every moment.</h2>
-      <p>Your home for Philippine basketball.</p>
-      <button class="primary-btn" onclick="showPage('scores')">View Scores →</button>
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="muted">CURRENT CONFERENCE</div>
+          <strong id="homeConference">Governors' Cup</strong>
+        </div>
+        <select id="homeConferenceSelect" onchange="changeConference(this.value)">
+          <option value="governors">Governors' Cup</option>
+          <option value="commissioners">Commissioner's Cup</option>
+        </select>
+      </div>
     </div>
-    <div class="hero-ball">🏀</div>
-  </div>
 
-  <div class="section">
-    <div class="page-heading">
-      <div><h2>Season Overview</h2><div class="subtitle">Your PBA basketball dashboard</div></div>
-      <select id="homeConference"></select>
+    <div class="section-title">Games</div>
+    <div id="homeGames" class="loading">Loading games...</div>
+
+    <div class="section-title">Latest PBA News</div>
+    <div id="homeNews" class="loading">Loading news...</div>
+  </section>
+
+  <section id="scores" class="page">
+    <div class="page-title">Scores & Schedule</div>
+    <div class="tabs">
+      <button class="selected" onclick="setGameFilter('all',this)">All</button>
+      <button onclick="setGameFilter('live',this)">Live</button>
+      <button onclick="setGameFilter('completed',this)">Completed</button>
+      <button onclick="setGameFilter('upcoming',this)">Upcoming</button>
     </div>
-    <div class="grid">
-      <div class="stat-card"><div class="muted small">GAMES RETRIEVED</div><div class="stat-number" id="homeGames">—</div></div>
-      <div class="stat-card"><div class="muted small">FOLLOWED TEAMS</div><div class="stat-number" id="homeTeams">0</div></div>
-      <div class="stat-card"><div class="muted small">FOLLOWED PLAYERS</div><div class="stat-number" id="homePlayers">0</div></div>
+
+    <select id="scoresConference" onchange="changeConference(this.value)">
+      <option value="governors">Governors' Cup</option>
+      <option value="commissioners">Commissioner's Cup</option>
+    </select>
+
+    <div id="scoresGames" class="loading">Loading games...</div>
+  </section>
+
+  <section id="teams" class="page">
+    <div class="page-title">PBA Teams</div>
+    <div id="teamGrid" class="team-grid loading">Loading teams...</div>
+  </section>
+
+  <section id="players" class="page">
+    <div class="page-title">Players</div>
+    <input id="playerSearch" placeholder="Search players..." oninput="searchPlayers()">
+    <div id="playerList" class="loading">
+      Loading player information...
     </div>
-  </div>
+  </section>
 
-  <div class="section">
-    <div class="page-heading">
-      <h2>Latest Games</h2>
-      <button class="secondary-btn" onclick="showPage('scores')">All Games →</button>
+  <section id="followedPlayers" class="page">
+    <div class="page-title">Followed Players</div>
+    <div id="followedPlayerList"></div>
+    <div class="section-title">Player Highlights</div>
+    <div id="followedPlayerVideos"></div>
+  </section>
+
+  <section id="followedTeams" class="page">
+    <div class="page-title">Followed Teams</div>
+    <div id="followedTeamList"></div>
+    <div class="section-title">Team Highlights</div>
+    <div id="followedTeamVideos"></div>
+  </section>
+
+  <section id="highlights" class="page">
+    <div class="page-title">PBA Highlights</div>
+    <div class="muted" style="margin-bottom:14px">
+      Swipe vertically to browse videos. Use the YouTube controls to interact.
     </div>
-    <div id="homeGameList" class="game-list"><div class="loading">Loading games...</div></div>
-  </div>
+    <div id="highlightFeed" class="loading">Loading videos...</div>
+  </section>
 
-  <div class="section">
-    <h2>Explore Two Sports</h2>
-    <div class="grid">
-      <div class="card"><h3>♟ Players</h3><p class="muted small">Explore player profiles and follow your favorites.</p><button class="secondary-btn" onclick="showPage('players')">Explore</button></div>
-      <div class="card"><h3>◈ Teams</h3><p class="muted small">Browse teams and follow the teams you support.</p><button class="secondary-btn" onclick="showPage('teams')">Explore</button></div>
-      <div class="card"><h3>▶ Highlights</h3><p class="muted small">A vertical feed for basketball highlights.</p><button class="secondary-btn" onclick="showPage('highlights')">Watch</button></div>
+  <section id="news" class="page">
+    <div class="row">
+      <div class="page-title">PBA News</div>
+      <button class="secondary-button" onclick="loadNews()">Refresh</button>
     </div>
-  </div>
-</section>
+    <div class="muted" style="margin-bottom:14px">
+      Articles from One Sports.
+    </div>
+    <div id="newsList" class="loading">Loading news...</div>
+  </section>
 
-<section class="page" id="page-scores">
-  <div class="page-heading">
-    <div><h1>Scores & Schedule</h1><div class="subtitle">PBA games from the connected data source</div></div>
-    <select id="scoresConference"></select>
-  </div>
+  <section id="playoffs" class="page">
+    <div class="page-title">Playoffs</div>
+    <div class="card">
+      <p>A verified PBA playoff bracket is not currently available from the connected data source.</p>
+      <p class="muted">Two Sports will show bracket information here when a reliable source is available.</p>
+    </div>
+  </section>
 
-  <div class="tabs">
-    <button class="tab-btn active" data-game-filter="all">All Games</button>
-    <button class="tab-btn" data-game-filter="live">Live</button>
-    <button class="tab-btn" data-game-filter="upcoming">Upcoming</button>
-    <button class="tab-btn" data-game-filter="completed">Completed</button>
-  </div>
+  <section id="settings" class="page">
+    <div class="page-title">Settings</div>
+    <div class="card row">
+      <div>
+        <strong>Appearance</strong>
+        <div class="muted">Switch between light and dark mode.</div>
+      </div>
+      <button class="secondary-button" onclick="toggleTheme()">Toggle</button>
+    </div>
+    <div class="card">
+      <strong>Data sources</strong>
+      <p class="muted">PBA official website and One Sports.</p>
+      <a href="https://www.pba.ph/" target="_blank" rel="noopener">PBA website ↗</a>
+      <br><br>
+      <a href="https://www.onesports.ph/" target="_blank" rel="noopener">One Sports ↗</a>
+    </div>
+    <div class="card">
+      <strong>Connection status</strong>
+      <div id="connectionStatus" class="muted">Checking...</div>
+    </div>
+  </section>
 
-  <div id="scoresList" class="game-list"><div class="loading">Loading games...</div></div>
-  <div id="gameDetails" class="detail-panel"></div>
-</section>
+  <section id="gameDetail" class="page">
+    <button class="secondary-button" onclick="showPage('scores')">← Back to games</button>
+    <div id="gameDetailContent" class="loading">Loading game...</div>
+  </section>
 
-<section class="page" id="page-teams">
-  <div class="page-heading">
-    <div><h1>Teams</h1><div class="subtitle">Explore PBA teams</div></div>
-    <input id="teamSearch" placeholder="Search teams...">
-  </div>
-  <div id="teamsList" class="grid"><div class="loading">Loading teams...</div></div>
-</section>
-
-<section class="page" id="page-players">
-  <div class="page-heading">
-    <div><h1>Players</h1><div class="subtitle">Find and follow PBA players</div></div>
-    <input id="playerSearch" placeholder="Search players...">
-  </div>
-  <div id="playersList" class="grid"><div class="loading">Loading players...</div></div>
-</section>
-
-<section class="page" id="page-followedPlayers">
-  <div class="page-heading">
-    <div><h1>Followed Players</h1><div class="subtitle">Your players and their averages in the selected conference</div></div>
-    <select id="followedPlayersConference"></select>
-  </div>
-
-  <div id="followedPlayersList" class="grid"></div>
-
-  <div class="section">
-    <h2>Player Highlights</h2>
-    <div id="playerHighlights" class="feed"></div>
-  </div>
-</section>
-
-<section class="page" id="page-followedTeams">
-  <div class="page-heading">
-    <div><h1>Followed Teams</h1><div class="subtitle">Your teams and their latest highlights</div></div>
-    <select id="followedTeamsConference"></select>
-  </div>
-
-  <div id="followedTeamsList" class="grid"></div>
-
-  <div class="section">
-    <h2>Team Highlights</h2>
-    <div id="teamHighlights" class="feed"></div>
-  </div>
-</section>
-
-<section class="page" id="page-highlights">
-  <div class="page-heading">
-    <div><h1>Highlights</h1><div class="subtitle">Basketball video highlights</div></div>
-    <select id="highlightsConference"></select>
-  </div>
-  <div id="highlightsFeed" class="feed"><div class="loading">Loading highlights...</div></div>
-</section>
-
-<section class="page" id="page-news">
-  <div class="page-heading">
-    <div><h1>News</h1><div class="subtitle">PBA news and updates</div></div>
-  </div>
-  <div id="newsList"></div>
-</section>
-
-<section class="page" id="page-playoffs">
-  <div class="page-heading">
-    <div><h1>Playoff Bracket</h1><div class="subtitle">Follow the road to the championship</div></div>
-    <select id="playoffConference"></select>
-  </div>
-  <div id="playoffBracket"><div class="loading">Loading playoff information...</div></div>
-</section>
-
-<section class="page" id="page-more">
-  <div class="page-heading">
-    <div><h1>Settings</h1><div class="subtitle">Customize your Two Sports experience</div></div>
-  </div>
-
-  <div class="card">
-    <h3>Appearance</h3>
-    <p class="muted small">Choose your preferred theme.</p>
-    <button class="secondary-btn" onclick="toggleTheme()">Switch Theme</button>
-  </div>
-
-  <div class="card section">
-    <h3>Data Connection</h3>
-    <p class="muted small">Check whether the Two Sports backend can reach its configured PBA source.</p>
-    <button class="primary-btn" onclick="testConnection()">Test Connection</button>
-    <p id="connectionResult" class="small muted"></p>
-  </div>
-
-  <div class="card section">
-    <h3>About Two Sports</h3>
-    <p class="muted small">Two Sports is a basketball fan project. Game information and other content depend on connected data sources.</p>
-    <p class="muted small">Version 5.0</p>
-  </div>
-</section>
+  <section id="teamDetail" class="page">
+    <button class="secondary-button" onclick="showPage('teams')">← Back to teams</button>
+    <div id="teamDetailContent"></div>
+  </section>
 
 </main>
-</div>
 
-<nav class="mobile-nav">
-  <button class="active" data-page="home"><span>⌂</span>Home</button>
-  <button data-page="scores"><span>▣</span>Scores</button>
-  <button data-page="teams"><span>◈</span>Teams</button>
-  <button data-page="players"><span>♟</span>Players</button>
-  <button data-page="more"><span>☰</span>More</button>
+<nav class="bottom-nav">
+  <button class="nav-button active" onclick="showPage('home',this)">
+    <span class="nav-icon">⌂</span>Home
+  </button>
+  <button class="nav-button" onclick="showPage('scores',this)">
+    <span class="nav-icon">🏀</span>Scores
+  </button>
+  <button class="nav-button" onclick="showPage('teams',this)">
+    <span class="nav-icon">◉</span>Teams
+  </button>
+  <button class="nav-button" onclick="showPage('players',this)">
+    <span class="nav-icon">♟</span>Players
+  </button>
+  <button class="nav-button" onclick="showPage('highlights',this)">
+    <span class="nav-icon">▶</span>Videos
+  </button>
+  <button class="nav-button" onclick="showPage('news',this)">
+    <span class="nav-icon">▤</span>News
+  </button>
+  <button class="nav-button" onclick="showPage('settings',this)">
+    <span class="nav-icon">⚙</span>More
+  </button>
 </nav>
-
-<footer>TWO SPORTS · PBA BASKETBALL</footer>
 
 <script>
 const API = "/api/pba";
 
-let conferences = [];
-let games = [];
-let teams = [];
-let players = [];
-let playerAverages = [];
-let highlights = [];
-let currentConference = "";
-let gameFilter = "all";
+let currentConference = localStorage.getItem("conference") || "governors";
+let currentGameFilter = "all";
+let allGames = [];
+let allVideos = [];
+let allPlayers = [];
+let allNews = [];
 
 let followedTeams = JSON.parse(
-  localStorage.getItem("twoSportsFollowedTeams") || "[]"
+  localStorage.getItem("followedTeams") || "[]"
 );
 
 let followedPlayers = JSON.parse(
-  localStorage.getItem("twoSportsFollowedPlayers") || "[]"
+  localStorage.getItem("followedPlayers") || "[]"
 );
 
-const $ = id => document.getElementById(id);
+let likedVideos = JSON.parse(
+  localStorage.getItem("likedVideos") || "[]"
+);
+
+const teamNames = [
+  "Barangay Ginebra San Miguel",
+  "San Miguel Beermen",
+  "TNT Tropang Giga",
+  "Meralco Bolts",
+  "Magnolia Chicken Timplados",
+  "Rain or Shine Elasto Painters",
+  "Phoenix Fuel Masters",
+  "NLEX Road Warriors",
+  "Converge FiberXers",
+  "NorthPort Batang Pier",
+  "Terrafirma Dyip",
+  "Blackwater Bossing"
+];
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -919,962 +705,707 @@ function escapeHTML(value) {
   })[char]);
 }
 
-async function apiGet(path) {
-  const response = await fetch(path, {
-    headers:{"Accept":"application/json"},
-    cache:"no-store"
-  });
-
-  let data;
-
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error("The server returned an invalid response.");
-  }
+async function api(url) {
+  const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(
-      data.detail || data.error || `Request failed (${response.status})`
-    );
+    throw new Error(`Request failed (${response.status})`);
   }
 
-  return data;
+  return response.json();
 }
 
-function unavailableCard(title,message) {
-  return `
-    <div class="empty" style="grid-column:1/-1">
-      <div class="empty-icon">🏀</div>
-      <h3>${escapeHTML(title)}</h3>
-      <p>${escapeHTML(message || "The connected source has not provided this information yet.")}</p>
-    </div>
-  `;
-}
-
-function showPage(name) {
+function showPage(id, button) {
   document.querySelectorAll(".page").forEach(page => {
-    page.classList.toggle("active",page.id === `page-${name}`);
+    page.classList.remove("active");
   });
 
-  document.querySelectorAll("[data-page]").forEach(button => {
-    button.classList.toggle("active",button.dataset.page === name);
+  const page = document.getElementById(id);
+
+  if (!page) return;
+
+  page.classList.add("active");
+
+  document.querySelectorAll(".nav-button").forEach(item => {
+    item.classList.remove("active");
   });
 
-  if (name === "followedPlayers") renderFollowedPlayers();
-  if (name === "followedTeams") renderFollowedTeams();
-  if (name === "highlights") loadHighlights("all");
-  if (name === "playoffs") loadPlayoffs();
-}
+  if (button) {
+    button.classList.add("active");
+  } else {
+    const nav = [...document.querySelectorAll(".nav-button")]
+      .find(item => item.getAttribute("onclick")?.includes(`'${id}'`));
 
-document.querySelectorAll("[data-page]").forEach(button => {
-  button.addEventListener("click",() => showPage(button.dataset.page));
-});
+    if (nav) nav.classList.add("active");
+  }
 
-function saveFollows() {
-  localStorage.setItem(
-    "twoSportsFollowedTeams",
-    JSON.stringify(followedTeams)
-  );
-
-  localStorage.setItem(
-    "twoSportsFollowedPlayers",
-    JSON.stringify(followedPlayers)
-  );
-
-  $("homeTeams").textContent = followedTeams.length;
-  $("homePlayers").textContent = followedPlayers.length;
+  if (id === "home") loadHome();
+  if (id === "scores") loadGames();
+  if (id === "teams") loadTeams();
+  if (id === "players") loadPlayers();
+  if (id === "followedPlayers") renderFollowedPlayers();
+  if (id === "followedTeams") renderFollowedTeams();
+  if (id === "highlights") loadHighlights();
+  if (id === "news") loadNews();
+  if (id === "settings") checkConnection();
 }
 
 function toggleTheme() {
   document.body.classList.toggle("light");
 
   localStorage.setItem(
-    "twoSportsTheme",
+    "theme",
     document.body.classList.contains("light") ? "light" : "dark"
   );
 }
 
-$("themeBtn").addEventListener("click",toggleTheme);
-
-if (localStorage.getItem("twoSportsTheme") === "light") {
+if (localStorage.getItem("theme") === "light") {
   document.body.classList.add("light");
 }
 
-function setConferenceOptions() {
-  const ids = [
-    "homeConference",
-    "scoresConference",
-    "followedPlayersConference",
-    "followedTeamsConference",
-    "highlightsConference",
-    "playoffConference"
-  ];
+function changeConference(value) {
+  currentConference = value;
+  localStorage.setItem("conference", value);
 
-  ids.forEach(id => {
-    const select = $(id);
+  document.getElementById("homeConferenceSelect").value = value;
+  document.getElementById("scoresConference").value = value;
 
-    if (!select) return;
+  document.getElementById("homeConference").textContent =
+    value === "governors" ? "Governors' Cup" : "Commissioner's Cup";
 
-    const previous = select.value;
+  loadGames();
+}
 
-    select.innerHTML = conferences.map(conf => `
-      <option value="${escapeHTML(conf.id)}">
-        ${escapeHTML(conf.name)}
-      </option>
-    `).join("");
+function setGameFilter(filter, button) {
+  currentGameFilter = filter;
 
-    if (previous && conferences.some(c => String(c.id) === previous)) {
-      select.value = previous;
-    } else if (currentConference) {
-      select.value = currentConference;
-    }
+  document.querySelectorAll("#scores .tabs button").forEach(item => {
+    item.classList.remove("selected");
   });
+
+  button.classList.add("selected");
+  renderGames();
 }
 
-function syncConferenceSelectors() {
-  [
-    "homeConference",
-    "scoresConference",
-    "followedPlayersConference",
-    "followedTeamsConference",
-    "highlightsConference",
-    "playoffConference"
-  ].forEach(id => {
-    const select = $(id);
-    if (select) select.value = currentConference;
-  });
-}
+function gameStatus(game) {
+  const text = `${game.text || ""} ${game.title || ""}`.toLowerCase();
 
-async function loadConferences() {
-  const data = await apiGet(`${API}/conferences`);
-
-  conferences = Array.isArray(data.conferences)
-    ? data.conferences
-    : [];
-
-  if (conferences.length) {
-    currentConference = String(data.current || conferences[0].id);
-  }
-
-  setConferenceOptions();
-}
-
-async function loadGames() {
-  $("homeGameList").innerHTML =
-    '<div class="loading">Loading games...</div>';
-
-  $("scoresList").innerHTML =
-    '<div class="loading">Loading games...</div>';
-
-  try {
-    const data = await apiGet(
-      `${API}/conferences/${encodeURIComponent(currentConference)}/games`
-    );
-
-    games = Array.isArray(data.games) ? data.games : [];
-
-    $("homeGames").textContent = games.length;
-
-    renderGames();
-  } catch(error) {
-    games = [];
-    $("homeGames").textContent = "—";
-
-    const message = unavailableCard("Games unavailable",error.message);
-
-    $("homeGameList").innerHTML = message;
-    $("scoresList").innerHTML = message;
-  }
-}
-
-function gameCategory(game) {
-  const status = String(
-    game.status || game.state || ""
-  ).toLowerCase();
-
-  if (status.includes("live") || status.includes("progress")) {
+  if (/\blive\b|in progress|quarter|q[1-4]/i.test(text)) {
     return "live";
   }
 
-  if (status.includes("final") || status.includes("complete")) {
+  if (/final|completed|ended/i.test(text)) {
     return "completed";
   }
 
-  if (status.includes("scheduled") || status.includes("upcoming")) {
-    return "upcoming";
-  }
+  return "upcoming";
+}
 
-  return "unknown";
+function teamNamesFromText(text) {
+  const lower = (text || "").toLowerCase();
+
+  return teamNames.filter(team =>
+    lower.includes(team.toLowerCase())
+  );
 }
 
 function gameCard(game) {
-  const id = String(game.id || "");
-  const category = gameCategory(game);
+  const names = teamNamesFromText(game.text || "");
 
-  const label = game.label || `PBA Game ${id}`;
-  const summary = game.summary || "";
+  const first = names[0] || game.title || "PBA Game";
+  const second = names[1] || "Team information unavailable";
 
-  const statusText =
-    category === "live" ? "LIVE" :
-    category === "completed" ? "COMPLETED" :
-    category === "upcoming" ? "UPCOMING" :
-    "GAME INFORMATION";
+  const status = gameStatus(game);
 
   return `
-    <article class="game-card">
-      <div class="game-info">
-        <span class="game-status ${category === "live" ? "live" : ""}">
-          ${statusText}
-        </span>
-
-        <div class="game-title">${escapeHTML(label)}</div>
-
-        <div class="game-summary">
-          ${escapeHTML(summary || "Game details are available when returned by the source.")}
-        </div>
-
-        <div class="game-summary">
-          ${escapeHTML(game.tournament || game.conferenceName || "")}
-        </div>
+    <div class="card game-card" onclick="openGame('${escapeHTML(game.id)}')">
+      <div class="row">
+        <span class="pill">${status.toUpperCase()}</span>
+        <span class="muted">Game ${escapeHTML(game.id)}</span>
       </div>
-
-      <button class="secondary-btn"
-        onclick="openGame('${escapeHTML(id)}')">
-        Box Score
-      </button>
-    </article>
+      <div class="row" style="margin-top:15px">
+        <div class="game-team">${escapeHTML(first)}</div>
+        <div class="score">${escapeHTML(game.scores?.[0] || "—")}</div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div class="game-team">${escapeHTML(second)}</div>
+        <div class="score">${escapeHTML(game.scores?.[1] || "—")}</div>
+      </div>
+      <div class="muted" style="font-size:11px;margin-top:12px">
+        Open game details →
+      </div>
+    </div>
   `;
 }
 
-function renderGames() {
-  const recent = games.slice(0,4);
+async function loadGames() {
+  const home = document.getElementById("homeGames");
+  const scores = document.getElementById("scoresGames");
 
-  $("homeGameList").innerHTML = recent.length
-    ? recent.map(gameCard).join("")
-    : unavailableCard(
-        "No games retrieved",
-        "The connected PBA source did not return games for this conference."
-      );
-
-  const filtered = gameFilter === "all"
-    ? games
-    : games.filter(game => gameCategory(game) === gameFilter);
-
-  $("scoresList").innerHTML = filtered.length
-    ? filtered.map(gameCard).join("")
-    : unavailableCard(
-        "No games in this section",
-        "No matching games were returned by the connected source."
-      );
-}
-
-document.querySelectorAll("[data-game-filter]").forEach(button => {
-  button.addEventListener("click",() => {
-    document.querySelectorAll("[data-game-filter]").forEach(item => {
-      item.classList.remove("active");
-    });
-
-    button.classList.add("active");
-
-    gameFilter = button.dataset.gameFilter;
-
-    renderGames();
-  });
-});
-
-async function openGame(id) {
-  $("gameDetails").innerHTML =
-    '<div class="loading">Loading box score...</div>';
+  if (home) home.innerHTML = `<div class="loading">Loading games...</div>`;
+  if (scores) scores.innerHTML = `<div class="loading">Loading games...</div>`;
 
   try {
-    const data = await apiGet(
-      `${API}/games/${encodeURIComponent(id)}?conference=${encodeURIComponent(currentConference)}`
+    const data = await api(
+      `${API}/games?conference=${encodeURIComponent(currentConference)}`
     );
 
-    let boxScoreHTML = "";
+    allGames = data.games || [];
 
-    if (Array.isArray(data.players) && data.players.length) {
-      boxScoreHTML = `
-        <div class="card section">
-          <h2>Box Score</h2>
+    renderGames();
 
-          <p class="muted small">
-            Player statistics retrieved from the connected game source.
-          </p>
+    if (!allGames.length) {
+      const message = data.error ||
+        "No games were returned by the PBA data source.";
 
-          <div style="overflow-x:auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>Player</th>
-                  <th>MIN</th>
-                  <th>PTS</th>
-                  <th>REB</th>
-                  <th>AST</th>
-                  <th>STL</th>
-                  <th>BLK</th>
-                  <th>TO</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                ${data.players.map(player => `
-                  <tr>
-                    <td>${escapeHTML(player.name)}</td>
-                    <td>${escapeHTML(player.minutes ?? "—")}</td>
-                    <td>${escapeHTML(player.points ?? "—")}</td>
-                    <td>${escapeHTML(player.rebounds ?? "—")}</td>
-                    <td>${escapeHTML(player.assists ?? "—")}</td>
-                    <td>${escapeHTML(player.steals ?? "—")}</td>
-                    <td>${escapeHTML(player.blocks ?? "—")}</td>
-                    <td>${escapeHTML(player.turnovers ?? "—")}</td>
-                  </tr>
-                `).join("")}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-    } else {
-      boxScoreHTML = unavailableCard(
-        "Box score unavailable",
-        "The PBA source did not return recognizable player statistics for this game."
-      );
+      if (home) home.innerHTML = `<div class="card muted">${escapeHTML(message)}</div>`;
+      if (scores) scores.innerHTML = `<div class="card muted">${escapeHTML(message)}</div>`;
     }
+  } catch (error) {
+    const message = `Could not load games: ${error.message}`;
 
-    $("gameDetails").innerHTML = `
-      <div class="card">
-        <div class="page-heading">
-          <h2>${escapeHTML(data.title || "Game Details")}</h2>
-
-          <button class="secondary-btn"
-            onclick="document.getElementById('gameDetails').innerHTML=''">
-            Close
-          </button>
-        </div>
-
-        <p class="muted small">
-          ${escapeHTML(data.conferenceName || "")}
-        </p>
-
-        ${boxScoreHTML}
-
-        <div class="section">
-          <h3>Game Source</h3>
-
-          <p class="muted small">
-            Statistics are shown only when returned by the connected source.
-          </p>
-
-          ${data.sourceUrl
-            ? `<a href="${escapeHTML(data.sourceUrl)}"
-                 target="_blank"
-                 rel="noopener">
-                 Open original game source
-               </a>`
-            : ""}
-        </div>
-      </div>
-    `;
-
-    $("gameDetails").scrollIntoView({behavior:"smooth"});
-  } catch(error) {
-    $("gameDetails").innerHTML = unavailableCard(
-      "Box score unavailable",
-      error.message
-    );
+    if (home) home.innerHTML = `<div class="error">${escapeHTML(message)}</div>`;
+    if (scores) scores.innerHTML = `<div class="error">${escapeHTML(message)}</div>`;
   }
 }
 
-async function changeConference(value) {
-  currentConference = value;
+function renderGames() {
+  const home = document.getElementById("homeGames");
+  const scores = document.getElementById("scoresGames");
 
-  syncConferenceSelectors();
+  if (home) {
+    home.innerHTML = allGames.length
+      ? allGames.slice(0, 5).map(gameCard).join("")
+      : `<div class="muted">No games available.</div>`;
+  }
 
-  await Promise.allSettled([
-    loadGames(),
-    loadPlayerAverages(),
-    loadPlayers()
-  ]);
+  if (scores) {
+    const filtered = allGames.filter(game =>
+      currentGameFilter === "all" ||
+      gameStatus(game) === currentGameFilter
+    );
 
-  renderFollowedPlayers();
-  renderFollowedTeams();
-
-  loadHighlights("all");
-  loadPlayoffs();
+    scores.innerHTML = filtered.length
+      ? filtered.map(gameCard).join("")
+      : `<div class="card muted">No games found for this filter.</div>`;
+  }
 }
 
-[
-  "homeConference",
-  "scoresConference",
-  "followedPlayersConference",
-  "followedTeamsConference",
-  "highlightsConference",
-  "playoffConference"
-].forEach(id => {
-  $(id).addEventListener("change",e => {
-    changeConference(e.target.value);
-  });
-});
+async function openGame(id) {
+  showPage("gameDetail");
+
+  const container = document.getElementById("gameDetailContent");
+  container.innerHTML = `<div class="loading">Loading box score...</div>`;
+
+  try {
+    const data = await api(`${API}/games/${encodeURIComponent(id)}`);
+
+    let html = `
+      <div class="page-title">Game Details</div>
+      <div class="card">
+        <div class="muted">GAME ID</div>
+        <strong>${escapeHTML(id)}</strong>
+      </div>
+    `;
+
+    if (data.boxScoreTables?.length) {
+      html += `<div class="section-title">Box Score</div>`;
+
+      data.boxScoreTables.forEach(table => {
+        const columns = table.columns || [];
+
+        html += `
+          <div class="card">
+            <div class="section-title" style="margin-top:0">
+              ${escapeHTML(table.team || "Team statistics")}
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    ${columns.map(column =>
+                      `<th>${escapeHTML(column)}</th>`
+                    ).join("")}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${table.players.map(player => `
+                    <tr>
+                      ${columns.map(column => `
+                        <td>${escapeHTML(player.stats?.[column] || "")}</td>
+                      `).join("")}
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      });
+    } else {
+      html += `
+        <div class="card">
+          <strong>Box score unavailable</strong>
+          <p class="muted">
+            ${escapeHTML(data.error || "The source did not provide readable player statistics.")}
+          </p>
+        </div>
+      `;
+    }
+
+    container.innerHTML = html;
+  } catch (error) {
+    container.innerHTML =
+      `<div class="error">Could not load game details: ${escapeHTML(error.message)}</div>`;
+  }
+}
 
 /* TEAMS */
 
 async function loadTeams() {
-  $("teamsList").innerHTML =
-    '<div class="loading">Loading teams...</div>';
+  const grid = document.getElementById("teamGrid");
 
-  try {
-    const data = await apiGet(`${API}/teams`);
+  grid.innerHTML = teamNames.map(team => {
+    const initials = team.split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(word => word[0])
+      .join("");
 
-    teams = Array.isArray(data.teams) ? data.teams : [];
-
-    renderTeams();
-  } catch(error) {
-    $("teamsList").innerHTML = unavailableCard(
-      "Teams unavailable",
-      error.message
-    );
-  }
+    return `
+      <div class="card team-card" onclick="openTeam('${escapeHTML(team)}')">
+        <div class="team-logo">${escapeHTML(initials)}</div>
+        <div class="team-name">${escapeHTML(team)}</div>
+        <div style="margin-top:12px">
+          <button class="secondary-button"
+            onclick="event.stopPropagation();toggleTeam('${escapeHTML(team)}')">
+            ${followedTeams.includes(team) ? "Following ✓" : "Follow +"}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
-function teamCard(team) {
-  const id = String(team.id || team.teamId || team.name || "");
-  const name = team.name || team.teamName || "Unknown Team";
-  const logo = team.logoUrl || team.logo || "";
+function toggleTeam(team) {
+  if (followedTeams.includes(team)) {
+    followedTeams = followedTeams.filter(item => item !== team);
+  } else {
+    followedTeams.push(team);
+  }
 
-  const following = followedTeams.includes(id);
+  localStorage.setItem("followedTeams", JSON.stringify(followedTeams));
+  loadTeams();
+}
 
-  return `
-    <div class="card entity-card">
-      <div class="team-logo">
-        ${logo
-          ? `<img src="${escapeHTML(logo)}" alt="${escapeHTML(name)} logo" onerror="this.remove()">`
-          : escapeHTML(
-              team.code ||
-              name.split(" ").map(w => w[0]).join("").slice(0,3).toUpperCase()
-            )
-        }
+function openTeam(team) {
+  showPage("teamDetail");
+
+  const following = followedTeams.includes(team);
+
+  document.getElementById("teamDetailContent").innerHTML = `
+    <div class="page-title">${escapeHTML(team)}</div>
+    <div class="card">
+      <div class="team-logo">${escapeHTML(team.split(" ").slice(0,2).map(x=>x[0]).join(""))}</div>
+      <div class="team-name" style="text-align:center;font-size:18px">
+        ${escapeHTML(team)}
       </div>
-
-      <h3>${escapeHTML(name)}</h3>
-
-      <p class="muted small">
-        ${team.guest ? "Guest team" : "PBA Team"}
-      </p>
-
-      <button class="follow-btn ${following ? "following" : ""}"
-        onclick="toggleTeamFollow('${escapeHTML(id)}')">
-        ${following ? "✓ Following" : "+ Follow Team"}
+      <button class="primary-button" style="width:100%;margin-top:15px"
+        onclick="toggleTeam('${escapeHTML(team)}');openTeam('${escapeHTML(team)}')">
+        ${following ? "Unfollow Team" : "Follow Team"}
       </button>
+    </div>
+    <div class="section-title">Team information</div>
+    <div class="card muted">
+      Verified team statistics and roster data are not currently available from the connected source.
     </div>
   `;
 }
 
-function renderTeams() {
-  const search = ($("teamSearch").value || "").toLowerCase();
-
-  const filtered = teams.filter(team =>
-    String(team.name || team.teamName || "")
-      .toLowerCase()
-      .includes(search)
-  );
-
-  $("teamsList").innerHTML = filtered.length
-    ? filtered.map(teamCard).join("")
-    : unavailableCard("No teams found","Try another search.");
-}
-
-$("teamSearch").addEventListener("input",renderTeams);
-
-function toggleTeamFollow(id) {
-  followedTeams = followedTeams.includes(id)
-    ? followedTeams.filter(item => item !== id)
-    : [...followedTeams,id];
-
-  saveFollows();
-  renderTeams();
-  renderFollowedTeams();
-}
-
-/* PLAYERS AND AVERAGES */
-
-async function loadPlayerAverages() {
-  playerAverages = [];
-
-  try {
-    const data = await apiGet(
-      `${API}/players/averages?conference=${encodeURIComponent(currentConference)}`
-    );
-
-    playerAverages = Array.isArray(data.players)
-      ? data.players
-      : [];
-  } catch(error) {
-    console.warn("Player averages unavailable:",error.message);
-  }
-}
+/* PLAYERS */
 
 async function loadPlayers() {
-  $("playersList").innerHTML =
-    '<div class="loading">Loading players from conference box scores...</div>';
+  const list = document.getElementById("playerList");
+
+  list.innerHTML = `<div class="loading">Loading players...</div>`;
 
   try {
-    const data = await apiGet(
-      `${API}/players?conference=${encodeURIComponent(currentConference)}`
-    );
+    const data = await api(`${API}/players`);
 
-    players = Array.isArray(data.players)
-      ? data.players
-      : [];
+    allPlayers = data.players || [];
+
+    if (!allPlayers.length) {
+      list.innerHTML = `
+        <div class="card">
+          <strong>Player directory unavailable</strong>
+          <p class="muted">${escapeHTML(data.message || "No verified player directory was returned.")}</p>
+        </div>
+      `;
+      return;
+    }
 
     renderPlayers();
-  } catch(error) {
-    players = [];
-
-    $("playersList").innerHTML = unavailableCard(
-      "Players unavailable",
-      error.message
-    );
+  } catch (error) {
+    list.innerHTML = `<div class="error">${escapeHTML(error.message)}</div>`;
   }
-}
-
-function playerIdentity(player) {
-  return String(
-    player.id ||
-    player.playerId ||
-    player.name ||
-    player.playerName ||
-    ""
-  );
-}
-
-function playerName(player) {
-  return String(player.name || player.playerName || "Unknown Player");
-}
-
-function playerCard(player) {
-  const id = playerIdentity(player);
-  const name = playerName(player);
-  const following = followedPlayers.includes(id);
-
-  return `
-    <div class="card entity-card">
-      <div class="team-logo">
-        ${player.imageUrl
-          ? `<img src="${escapeHTML(player.imageUrl)}" alt="${escapeHTML(name)}" onerror="this.remove()">`
-          : "♟"
-        }
-      </div>
-
-      <h3>${escapeHTML(name)}</h3>
-
-      <p class="muted small">
-        ${escapeHTML(player.team || player.teamName || "PBA Player")}
-      </p>
-
-      <button class="follow-btn ${following ? "following" : ""}"
-        onclick="togglePlayerFollow('${escapeHTML(id)}')">
-        ${following ? "✓ Following" : "+ Follow Player"}
-      </button>
-    </div>
-  `;
 }
 
 function renderPlayers() {
-  const search = ($("playerSearch").value || "").toLowerCase();
+  const list = document.getElementById("playerList");
+  const query = (document.getElementById("playerSearch").value || "").toLowerCase();
 
-  const filtered = players.filter(player =>
-    playerName(player).toLowerCase().includes(search)
+  const filtered = allPlayers.filter(player =>
+    (player.name || "").toLowerCase().includes(query)
   );
 
-  $("playersList").innerHTML = filtered.length
-    ? filtered.map(playerCard).join("")
-    : unavailableCard(
-        "Player directory unavailable",
-        "No verified player profiles or box-score players were returned for this conference."
-      );
-}
-
-$("playerSearch").addEventListener("input",renderPlayers);
-
-function togglePlayerFollow(id) {
-  followedPlayers = followedPlayers.includes(id)
-    ? followedPlayers.filter(item => item !== id)
-    : [...followedPlayers,id];
-
-  saveFollows();
-  renderPlayers();
-  renderFollowedPlayers();
-}
-
-function averageValue(value) {
-  if (value === null || value === undefined || value === "") {
-    return "—";
-  }
-
-  return Number.isFinite(Number(value))
-    ? Number(value).toFixed(1)
-    : "—";
-}
-
-function findAverageForFollowed(id) {
-  return playerAverages.find(player => {
-    const playerId = String(
-      player.id || player.playerId || player.name || ""
-    ).toLowerCase();
-
-    return playerId === id.toLowerCase();
-  });
-}
-
-function followedPlayerAverageCard(id) {
-  const player = findAverageForFollowed(id);
-
-  const profile = players.find(item =>
-    playerIdentity(item) === id
-  );
-
-  const name = player
-    ? player.name
-    : profile
-      ? playerName(profile)
-      : id;
-
-  if (!player) {
-    return `
-      <article class="average-card">
-        <div class="average-top">
-          <div>
-            <div class="average-name">${escapeHTML(name)}</div>
-            <div class="average-team">Conference averages</div>
-          </div>
-
-          <button class="follow-btn following"
-            onclick="togglePlayerFollow('${escapeHTML(id)}')">
-            Following ✓
-          </button>
-        </div>
-
-        <p class="muted small">
-          No box-score averages were returned for this player in the selected conference.
-        </p>
-      </article>
-    `;
-  }
-
-  const a = player.averages || {};
-
-  return `
-    <article class="average-card">
-      <div class="average-top">
+  list.innerHTML = filtered.length
+    ? filtered.map(player => `
+      <div class="player-row">
         <div>
-          <div class="average-name">${escapeHTML(player.name)}</div>
-          <div class="average-team">
-            ${escapeHTML(player.conference || "Selected conference")}
-            · ${Number(player.games) || 0} games
-          </div>
+          <strong>${escapeHTML(player.name)}</strong>
+          <div class="muted">${escapeHTML(player.team || "PBA player")}</div>
         </div>
-
-        <button class="follow-btn following"
-          onclick="togglePlayerFollow('${escapeHTML(id)}')">
-          Following ✓
+        <button class="secondary-button"
+          onclick="togglePlayer('${escapeHTML(player.name)}')">
+          ${followedPlayers.includes(player.name) ? "Following ✓" : "Follow +"}
         </button>
       </div>
-
-      <div class="average-grid">
-        <div class="average-stat"><strong>${averageValue(a.points)}</strong><span>PTS</span></div>
-        <div class="average-stat"><strong>${averageValue(a.rebounds)}</strong><span>REB</span></div>
-        <div class="average-stat"><strong>${averageValue(a.assists)}</strong><span>AST</span></div>
-        <div class="average-stat"><strong>${averageValue(a.steals)}</strong><span>STL</span></div>
-        <div class="average-stat"><strong>${averageValue(a.blocks)}</strong><span>BLK</span></div>
-        <div class="average-stat"><strong>${averageValue(a.turnovers)}</strong><span>TO</span></div>
-      </div>
-
-      <div class="average-foot">
-        Per-game averages · Based on retrieved box scores
-      </div>
-    </article>
-  `;
+    `).join("")
+    : `<div class="card muted">No matching players found.</div>`;
 }
 
-function renderFollowedPlayers() {
-  $("followedPlayersList").innerHTML = followedPlayers.length
-    ? followedPlayers.map(followedPlayerAverageCard).join("")
-    : unavailableCard(
-        "No followed players yet",
-        "Follow players from the Players page. Their conference averages will appear here."
-      );
+function searchPlayers() {
+  renderPlayers();
+}
 
-  loadHighlights("player");
+function togglePlayer(name) {
+  if (followedPlayers.includes(name)) {
+    followedPlayers = followedPlayers.filter(item => item !== name);
+  } else {
+    followedPlayers.push(name);
+  }
+
+  localStorage.setItem("followedPlayers", JSON.stringify(followedPlayers));
+  renderPlayers();
+}
+
+/* FOLLOWED CONTENT */
+
+function renderFollowedPlayers() {
+  const list = document.getElementById("followedPlayerList");
+
+  list.innerHTML = followedPlayers.length
+    ? followedPlayers.map(name => `
+      <div class="card row">
+        <strong>${escapeHTML(name)}</strong>
+        <button class="secondary-button"
+          onclick="togglePlayer('${escapeHTML(name)}');renderFollowedPlayers()">
+          Unfollow
+        </button>
+      </div>
+    `).join("")
+    : `<div class="card muted">You are not following any players yet.</div>`;
+
+  renderVideoFeed(
+    document.getElementById("followedPlayerVideos"),
+    allVideos.filter(video =>
+      followedPlayers.some(name =>
+        video.title.toLowerCase().includes(name.toLowerCase())
+      )
+    )
+  );
 }
 
 function renderFollowedTeams() {
-  const selected = teams.filter(team =>
-    followedTeams.includes(
-      String(team.id || team.teamId || team.name)
+  const list = document.getElementById("followedTeamList");
+
+  list.innerHTML = followedTeams.length
+    ? followedTeams.map(team => `
+      <div class="card row">
+        <strong>${escapeHTML(team)}</strong>
+        <button class="secondary-button"
+          onclick="toggleTeam('${escapeHTML(team)}');renderFollowedTeams()">
+          Unfollow
+        </button>
+      </div>
+    `).join("")
+    : `<div class="card muted">You are not following any teams yet.</div>`;
+
+  renderVideoFeed(
+    document.getElementById("followedTeamVideos"),
+    allVideos.filter(video =>
+      followedTeams.some(team =>
+        video.title.toLowerCase().includes(team.toLowerCase())
+      )
     )
   );
-
-  $("followedTeamsList").innerHTML = selected.length
-    ? selected.map(teamCard).join("")
-    : unavailableCard(
-        "No followed teams yet",
-        "Follow teams from the Teams page. Your followed teams will appear here."
-      );
-
-  loadHighlights("team");
 }
 
-/* VIDEO HIGHLIGHTS */
+/* VIDEO FEED */
 
-async function loadHighlights(type="all") {
-  const target =
-    type === "player" ? $("playerHighlights") :
-    type === "team" ? $("teamHighlights") :
-    $("highlightsFeed");
+async function loadHighlights() {
+  const feed = document.getElementById("highlightFeed");
 
-  if (!target) return;
-
-  target.classList.remove("video-feed");
-
-  target.innerHTML =
-    '<div class="loading">Loading official basketball videos...</div>';
+  feed.innerHTML = `<div class="loading">Loading videos...</div>`;
 
   try {
-    const params = new URLSearchParams();
+    const data = await api(`${API}/highlights`);
 
-    if (type !== "all") {
-      params.set("type",type);
+    allVideos = data.videos || [];
+
+    if (!allVideos.length) {
+      feed.innerHTML = `
+        <div class="card">
+          <strong>No videos available</strong>
+          <p class="muted">${escapeHTML(data.error || "No PBA-related videos were found in the One Sports feed.")}</p>
+          <a href="https://www.youtube.com/@onesportsphl" target="_blank" rel="noopener">
+            Visit One Sports on YouTube ↗
+          </a>
+        </div>
+      `;
+      return;
     }
 
-    const data = await apiGet(
-      `${API}/highlights?${params.toString()}`
-    );
-
-    highlights = Array.isArray(data.highlights)
-      ? data.highlights
-      : [];
-
-    let filtered = highlights;
-
-    if (type === "team" || type === "player") {
-      filtered = [];
-    }
-
-    renderHighlightFeed(target,filtered);
-  } catch(error) {
-    target.classList.remove("video-feed");
-
-    target.innerHTML = unavailableCard(
-      "Videos unavailable",
-      error.message
-    );
+    renderVideoFeed(feed, allVideos);
+  } catch (error) {
+    feed.innerHTML = `
+      <div class="card">
+        <strong>Could not load videos</strong>
+        <p class="muted">${escapeHTML(error.message)}</p>
+        <a href="https://www.youtube.com/@onesportsphl" target="_blank" rel="noopener">
+          Open One Sports on YouTube ↗
+        </a>
+      </div>
+    `;
   }
 }
 
-function renderHighlightFeed(target,items) {
-  if (!items.length) {
-    target.classList.remove("video-feed");
+function renderVideoFeed(container, videos) {
+  if (!container) return;
 
-    target.innerHTML = unavailableCard(
-      "No playable highlights found",
-      "The official video source did not return any playable PBA highlights."
-    );
-
+  if (!videos.length) {
+    container.innerHTML = `
+      <div class="feed-empty">
+        <h3>No matching highlights</h3>
+        <p>There are no videos in the current feed whose titles match your followed teams or players.</p>
+      </div>
+    `;
     return;
   }
 
-  target.classList.add("video-feed");
+  container.className = "shorts-feed";
 
-  target.innerHTML = items.map(item => {
-    const videoId = String(item.id || "").trim();
-
-    if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
-      return "";
-    }
-
-    const embedUrl =
-      `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?playsinline=1&rel=0`;
-
-    const watchUrl =
-      `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+  container.innerHTML = videos.map(video => {
+    const liked = likedVideos.includes(video.id);
 
     return `
-      <article class="video-card">
-        <iframe
-          src="${embedUrl}"
-          title="${escapeHTML(item.title || "PBA Highlight")}"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-          referrerpolicy="strict-origin-when-cross-origin">
-        </iframe>
+      <article class="short-card" data-video="${escapeHTML(video.id)}">
+        <div class="short-video">
+          <iframe
+            src="${escapeHTML(video.embedUrl)}"
+            title="${escapeHTML(video.title)}"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
 
-        <div class="video-caption">
-          <h3>${escapeHTML(item.title || "PBA Highlight")}</h3>
-          <p>${escapeHTML(item.source || "One Sports Philippines")}</p>
-          <a class="video-open"
-             href="${watchUrl}"
-             target="_blank"
-             rel="noopener">
-             Open on YouTube ↗
+        <div class="short-actions">
+          <button class="short-action ${liked ? "liked" : ""}"
+            onclick="toggleLike('${escapeHTML(video.id)}',this)">
+            ♥
+          </button>
+          <button class="short-action"
+            onclick="window.open('${escapeHTML(video.url)}','_blank','noopener')">
+            ↗
+          </button>
+        </div>
+
+        <div class="short-overlay">
+          <div class="short-title">${escapeHTML(video.title)}</div>
+          <div class="muted">${escapeHTML(video.published ? new Date(video.published).toLocaleDateString() : "One Sports")}</div>
+          <a class="short-link" href="${escapeHTML(video.url)}" target="_blank" rel="noopener">
+            Open on YouTube for comments ↗
           </a>
         </div>
       </article>
     `;
   }).join("");
 
-  if (!target.innerHTML.trim()) {
-    target.classList.remove("video-feed");
-
-    target.innerHTML = unavailableCard(
-      "No playable videos",
-      "The returned videos did not have valid YouTube video IDs."
-    );
-  }
+  observeVideos(container);
 }
 
-/* PLAYOFFS */
+function toggleLike(id, button) {
+  if (likedVideos.includes(id)) {
+    likedVideos = likedVideos.filter(item => item !== id);
+    button.classList.remove("liked");
+  } else {
+    likedVideos.push(id);
+    button.classList.add("liked");
+  }
 
-async function loadPlayoffs() {
-  $("playoffBracket").innerHTML =
-    '<div class="loading">Loading playoff bracket...</div>';
+  localStorage.setItem("likedVideos", JSON.stringify(likedVideos));
+}
+
+function observeVideos(container) {
+  if (!("IntersectionObserver" in window)) return;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const iframe = entry.target.querySelector("iframe");
+
+      if (!iframe) return;
+
+      if (!entry.isIntersecting || entry.intersectionRatio < 0.6) {
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({
+            event:"command",
+            func:"pauseVideo",
+            args:[]
+          }),
+          "*"
+        );
+      }
+    });
+  }, {
+    root: container,
+    threshold: [0, 0.6, 1]
+  });
+
+  container.querySelectorAll(".short-card").forEach(card => {
+    observer.observe(card);
+  });
+}
+
+/* NEWS */
+
+async function loadNews() {
+  const list = document.getElementById("newsList");
+  const home = document.getElementById("homeNews");
+
+  if (list) list.innerHTML = `<div class="loading">Loading news...</div>`;
+  if (home) home.innerHTML = `<div class="loading">Loading news...</div>`;
 
   try {
-    const data = await apiGet(
-      `${API}/playoffs?conference=${encodeURIComponent(currentConference)}`
-    );
+    const data = await api(`${API}/news`);
 
-    if (!data.available || !data.bracket) {
-      $("playoffBracket").innerHTML = unavailableCard(
-        "Playoff bracket unavailable",
-        data.message || "Verified playoff bracket information has not been provided by the connected source."
-      );
+    allNews = data.articles || [];
 
-      return;
-    }
+    const message = data.error || data.message ||
+      "No PBA news articles could be extracted.";
 
-    renderBracket(data.bracket);
-  } catch(error) {
-    $("playoffBracket").innerHTML = unavailableCard(
-      "Playoff bracket unavailable",
-      error.message
-    );
-  }
-}
-
-function renderBracket(bracket) {
-  const rounds = bracket.rounds || [];
-
-  if (!rounds.length) {
-    $("playoffBracket").innerHTML = unavailableCard(
-      "No bracket rounds found",
-      "The source did not return playoff rounds."
-    );
-
-    return;
-  }
-
-  $("playoffBracket").innerHTML = `
-    <div class="bracket">
-      ${rounds.map(round => `
-        <div class="bracket-round">
-          <h2>${escapeHTML(round.name || "Playoff Round")}</h2>
-
-          ${(round.matches || []).map(match => `
-            <div class="bracket-match">
-              <div class="bracket-team">
-                ${escapeHTML(match.team1 || "TBD")}
-                <strong style="float:right">${escapeHTML(match.score1 ?? "")}</strong>
-              </div>
-
-              <div class="bracket-team">
-                ${escapeHTML(match.team2 || "TBD")}
-                <strong style="float:right">${escapeHTML(match.score2 ?? "")}</strong>
-              </div>
-
-              <p class="muted small">${escapeHTML(match.status || "")}</p>
+    const html = allNews.length
+      ? allNews.map(article => `
+        <article class="card news-card"
+          onclick="window.open('${escapeHTML(article.url)}','_blank','noopener')">
+          ${
+            article.image
+              ? `<img class="news-image" src="${escapeHTML(article.image)}" alt="" onerror="this.style.display='none'">`
+              : `<div class="news-image"></div>`
+          }
+          <div>
+            <div class="news-title">${escapeHTML(article.title)}</div>
+            <div class="muted" style="font-size:11px;margin-top:8px">
+              ${escapeHTML(article.category || "PBA")}
+              ${article.date ? " · " + escapeHTML(article.date) : ""}
             </div>
-          `).join("")}
+            <div class="short-link">Read article ↗</div>
+          </div>
+        </article>
+      `).join("")
+      : `
+        <div class="card">
+          <strong>News unavailable</strong>
+          <p class="muted">${escapeHTML(message)}</p>
+          <a href="https://www.onesports.ph/news/" target="_blank" rel="noopener">
+            Read One Sports news ↗
+          </a>
         </div>
-      `).join("")}
-    </div>
-  `;
-}
+      `;
 
-/* NEWS AND CONNECTION TEST */
+    if (list) list.innerHTML = html;
 
-function loadNews() {
-  $("newsList").innerHTML = unavailableCard(
-    "News source not connected",
-    "The current backend does not provide a verified PBA news feed yet."
-  );
-}
+    if (home) {
+      home.innerHTML = allNews.length
+        ? allNews.slice(0, 3).map(article => `
+          <div class="card news-card"
+            onclick="window.open('${escapeHTML(article.url)}','_blank','noopener')">
+            <div>
+              <div class="news-title">${escapeHTML(article.title)}</div>
+              <div class="short-link">Read article ↗</div>
+            </div>
+          </div>
+        `).join("")
+        : `<div class="card muted">${escapeHTML(message)}</div>`;
+    }
+  } catch (error) {
+    const html = `
+      <div class="card">
+        <strong>Could not load news</strong>
+        <p class="muted">${escapeHTML(error.message)}</p>
+        <a href="https://www.onesports.ph/news/" target="_blank" rel="noopener">
+          Open One Sports news ↗
+        </a>
+      </div>
+    `;
 
-async function testConnection() {
-  $("connectionResult").textContent = "Checking connection...";
-
-  try {
-    const data = await apiGet("/api/test-pba");
-
-    $("connectionResult").textContent = data.ok
-      ? `Connected. Games found: ${data.gamesFound ?? "unknown"}.`
-      : `Not connected: ${data.error || "Unknown source error"}`;
-  } catch(error) {
-    $("connectionResult").textContent =
-      `Backend error: ${error.message}`;
+    if (list) list.innerHTML = html;
+    if (home) home.innerHTML = html;
   }
 }
 
-/* REFRESH AND INITIALIZATION */
+/* HOME AND SETTINGS */
 
-async function refreshAll() {
-  $("refreshBtn").textContent = "…";
+async function loadHome() {
+  document.getElementById("homeConferenceSelect").value = currentConference;
+  document.getElementById("scoresConference").value = currentConference;
 
-  await Promise.allSettled([
+  document.getElementById("homeConference").textContent =
+    currentConference === "governors"
+      ? "Governors' Cup"
+      : "Commissioner's Cup";
+
+  await Promise.all([
     loadGames(),
-    loadTeams(),
-    loadPlayerAverages()
+    loadNews()
   ]);
-
-  await loadPlayers();
-
-  renderFollowedPlayers();
-  renderFollowedTeams();
-
-  $("refreshBtn").textContent = "↻";
 }
 
-$("refreshBtn").addEventListener("click",refreshAll);
-
-async function initialize() {
-  saveFollows();
+async function checkConnection() {
+  const status = document.getElementById("connectionStatus");
 
   try {
-    await loadConferences();
-  } catch(error) {
-    console.error("Conference loading failed:",error);
+    const data = await api("/api/health");
+
+    status.innerHTML = `
+      <span style="color:#4bd68b">● Online</span>
+      <div class="muted">${escapeHTML(data.app)}</div>
+    `;
+  } catch {
+    status.innerHTML = `<span class="error">● Offline</span>`;
   }
-
-  setConferenceOptions();
-
-  await Promise.allSettled([
-    loadGames(),
-    loadTeams(),
-    loadPlayerAverages()
-  ]);
-
-  await loadPlayers();
-
-  renderFollowedPlayers();
-  renderFollowedTeams();
-
-  loadNews();
-  loadPlayoffs();
 }
 
-initialize();
+function refreshCurrentPage() {
+  const page = document.querySelector(".page.active");
+
+  if (!page) return;
+
+  const id = page.id;
+
+  if (id === "home") loadHome();
+  if (id === "scores") loadGames();
+  if (id === "teams") loadTeams();
+  if (id === "players") loadPlayers();
+  if (id === "highlights") loadHighlights();
+  if (id === "news") loadNews();
+  if (id === "settings") checkConnection();
+}
+
+document.getElementById("homeConferenceSelect").value = currentConference;
+document.getElementById("scoresConference").value = currentConference;
+
+loadHome();
 </script>
 
 </body>
