@@ -4,680 +4,688 @@ const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const BASE = "https://pba-api01.actech2.com";
 
-const CONFERENCES = [
-  {
-    id: "governors",
-    name: "Season 50 Governors' Cup",
-    slug: "pba-50th-season-governors-cup"
-  },
-  {
-    id: "commissioners",
-    name: "Season 50 Commissioner's Cup",
-    slug: "pba-50th-season-commissioners-cup"
-  }
-];
-
-const TEAMS = [
-  { id: "BWB", code: "BWB", name: "Blackwater Bossing" },
-  { id: "CON", code: "CON", name: "Converge FiberXers" },
-  { id: "GIN", code: "GIN", name: "Barangay Ginebra San Miguel" },
-  { id: "MAG", code: "MAG", name: "Magnolia Hotshots" },
-  { id: "MER", code: "MER", name: "Meralco Bolts" },
-  { id: "MGP", code: "MGP", name: "Macau Giant Pandas", guest: true },
-  { id: "NLX", code: "NLX", name: "NLEX Road Warriors" },
-  { id: "PHX", code: "PHX", name: "Phoenix Fuel Masters" },
-  { id: "ROS", code: "ROS", name: "Rain or Shine Elasto Painters" },
-  { id: "SMB", code: "SMB", name: "San Miguel Beermen" },
-  { id: "TER", code: "TER", name: "Terrafirma Dyip" },
-  { id: "TGR", code: "TGR", name: "Titan Ultra Giant Risers" },
-  { id: "TNT", code: "TNT", name: "TNT Tropang 5G" }
-];
+const PBA_API = "https://pba-api01.actech2.com";
+const ONESPORTS_NEWS = "https://www.onesports.ph/news/";
+const ONESPORTS_CHANNEL = "https://www.youtube.com/@onesportsphl";
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 const cache = new Map();
 
-async function fetchText(url, timeoutMs = 20000) {
+const TEAMS = [
+  "Barangay Ginebra San Miguel",
+  "San Miguel Beermen",
+  "TNT Tropang Giga",
+  "Meralco Bolts",
+  "Magnolia Chicken Timplados",
+  "Rain or Shine Elasto Painters",
+  "Phoenix Fuel Masters",
+  "NLEX Road Warriors",
+  "Converge FiberXers",
+  "NorthPort Batang Pier",
+  "Terrafirma Dyip",
+  "Blackwater Bossing"
+];
+
+const CONFERENCES = {
+  governors: {
+    name: "Governors' Cup",
+    slug: "pba-50th-season-governors-cup"
+  },
+  commissioners: {
+    name: "Commissioner's Cup",
+    slug: "pba-50th-season-commissioners-cup"
+  }
+};
+
+function getCache(key) {
+  const item = cache.get(key);
+
+  if (!item || Date.now() > item.expires) {
+    cache.delete(key);
+    return null;
+  }
+
+  return item.data;
+}
+
+function setCache(key, data, seconds = 120) {
+  cache.set(key, {
+    data,
+    expires: Date.now() + seconds * 1000
+  });
+}
+
+async function fetchText(url, timeout = 15000) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const timer = setTimeout(() => controller.abort(), timeout);
 
   try {
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        "User-Agent": "Mozilla/5.0 TwoSports/2.0",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        "User-Agent": "Mozilla/5.0 (compatible; TwoSports/1.0)",
+        "Accept": "text/html,application/json,application/xml,*/*"
       }
     });
 
     if (!response.ok) {
-      throw new Error(`Source returned HTTP ${response.status}`);
+      throw new Error(`HTTP ${response.status}`);
     }
 
     return await response.text();
   } finally {
-    clearTimeout(timeout);
+    clearTimeout(timer);
   }
-}
-
-async function getPage(url) {
-  const cached = cache.get(url);
-
-  if (cached && Date.now() - cached.time < 60000) {
-    return cached.html;
-  }
-
-  const html = await fetchText(url);
-  cache.set(url, { html, time: Date.now() });
-
-  return html;
-}
-
-function getConference(id) {
-  return CONFERENCES.find(c => c.id === id);
 }
 
 function cleanText(value) {
-  return String(value || "").replace(/\s+/g, " ").trim();
+  return String(value || "")
+    .replace(/\s+/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+}
+
+function absoluteUrl(url, base) {
+  try {
+    return new URL(url, base).href;
+  } catch {
+    return "";
+  }
 }
 
 function parseGames(html, conference) {
   const $ = cheerio.load(html);
   const games = new Map();
 
-  $("a[href*='game_id=']").each((_, element) => {
+  $("a[href]").each((_, element) => {
     const href = $(element).attr("href") || "";
-    const match = href.match(/[?&]game_id=(\d+)/);
+    const match = href.match(/game_id=(\d+)/i);
 
     if (!match) return;
 
     const id = match[1];
-    const url = new URL(href, BASE).toString();
+    const container = $(element).closest(
+      "tr, article, li, .game, .game-card, .match, .match-card"
+    );
 
-    if (!games.has(id)) {
-      games.set(id, {
-        id,
-        conference: conference.id,
-        conferenceName: conference.name,
-        url,
-        label: cleanText($(element).text()) || `PBA Game ${id}`
-      });
-    }
+    const text = cleanText(
+      container.length ? container.text() : $(element).text()
+    );
+
+    const headings = container.find("h1,h2,h3,h4,strong,b");
+    const headingText = cleanText(headings.text());
+
+    const combined = `${headingText} ${text}`;
+
+    const scoreMatches = combined.match(/\b\d{1,3}\b/g) || [];
+
+    games.set(id, {
+      id,
+      conference,
+      title: headingText || cleanText($(element).text()) || `PBA Game ${id}`,
+      text: combined,
+      url: absoluteUrl(href, "https://www.pba.ph/"),
+      scores: scoreMatches.slice(-2)
+    });
   });
 
   return [...games.values()];
 }
 
+async function getGames(conferenceKey) {
+  const conference = CONFERENCES[conferenceKey];
+
+  if (!conference) {
+    throw new Error("Invalid conference.");
+  }
+
+  const cacheKey = `games-${conferenceKey}`;
+  const cached = getCache(cacheKey);
+
+  if (cached) return cached;
+
+  const url = `${PBA_API}/tournaments/${conference.slug}`;
+  const html = await fetchText(url, 20000);
+  const games = parseGames(html, conferenceKey);
+
+  const result = {
+    available: games.length > 0,
+    conference: conference.name,
+    games,
+    updatedAt: new Date().toISOString()
+  };
+
+  setCache(cacheKey, result, 90);
+  return result;
+}
+
 function normalizeHeader(value) {
   return cleanText(value)
-    .toLowerCase()
-    .replace(/[%().]/g, "")
-    .replace(/[^a-z0-9]/g, "");
+    .replace(/\s+/g, " ")
+    .replace(/%/g, "%")
+    .toUpperCase();
 }
 
-function numberValue(value) {
-  const text = cleanText(value);
+function findHeaderRow($table, $) {
+  let best = null;
+  let bestScore = 0;
 
-  if (!text || text === "-" || text === "—") return null;
+  $table.find("tr").each((_, row) => {
+    const cells = $(row).find("th,td");
+    const values = cells.map((_, cell) =>
+      normalizeHeader($(cell).text())
+    ).get();
 
-  const match = text.replace(/,/g, "").match(/-?\d+(\.\d+)?/);
+    const hasPlayer = values.some(value =>
+      /PLAYER|NAME/.test(value)
+    );
 
-  return match ? Number(match[0]) : null;
-}
+    const statCount = values.filter(value =>
+      /PTS|REB|AST|FG|FT|3P|STL|BLK|TO|PF|MIN|PLUS|OR|DR/.test(value)
+    ).length;
 
-function findHeader(headers, candidates) {
-  return headers.findIndex(header => candidates.includes(header));
-}
+    const score = (hasPlayer ? 10 : 0) + statCount;
 
-function parseBoxScoreTables($) {
-  const output = [];
-
-  $("table").each((_, table) => {
-    const rows = $(table).find("tr").toArray();
-
-    if (rows.length < 2) return;
-
-    let headerRowIndex = -1;
-    let headers = [];
-
-    for (let i = 0; i < Math.min(rows.length, 6); i++) {
-      const cells = $(rows[i]).find("th,td").toArray();
-
-      const current = cells.map(cell =>
-        normalizeHeader($(cell).text())
-      );
-
-      const hasPlayer = current.some(h =>
-        ["player", "name", "playername"].includes(h)
-      );
-
-      const hasStats = current.some(h =>
-        ["pts", "point", "points", "reb", "rebounds", "ast", "assists"].includes(h)
-      );
-
-      if (hasPlayer && hasStats) {
-        headerRowIndex = i;
-        headers = current;
-        break;
-      }
-    }
-
-    if (headerRowIndex < 0) return;
-
-    const playerIndex = findHeader(headers, [
-      "player", "name", "playername"
-    ]);
-
-    const pointsIndex = findHeader(headers, [
-      "pts", "point", "points"
-    ]);
-
-    const reboundsIndex = findHeader(headers, [
-      "reb", "rebs", "rebound", "rebounds"
-    ]);
-
-    const assistsIndex = findHeader(headers, [
-      "ast", "asts", "assist", "assists"
-    ]);
-
-    const minutesIndex = findHeader(headers, [
-      "min", "mins", "minutes"
-    ]);
-
-    const stealsIndex = findHeader(headers, [
-      "stl", "steals"
-    ]);
-
-    const blocksIndex = findHeader(headers, [
-      "blk", "blocks"
-    ]);
-
-    const turnoversIndex = findHeader(headers, [
-      "to", "tov", "turnovers"
-    ]);
-
-    const threesIndex = findHeader(headers, [
-      "3pm", "3ptm", "threepointersmade"
-    ]);
-
-    const teamHeading = $(table)
-      .closest("section,div")
-      .find("h2,h3,h4")
-      .first()
-      .text()
-      .trim();
-
-    for (const row of rows.slice(headerRowIndex + 1)) {
-      const cells = $(row).find("td,th").toArray();
-
-      if (!cells.length) continue;
-
-      const values = cells.map(cell =>
-        cleanText($(cell).text())
-      );
-
-      const name = values[playerIndex];
-
-      if (!name || /team totals|starters|bench/i.test(name)) {
-        continue;
-      }
-
-      const points = numberValue(values[pointsIndex]);
-      const rebounds = numberValue(values[reboundsIndex]);
-      const assists = numberValue(values[assistsIndex]);
-
-      if (points === null || rebounds === null || assists === null) {
-        continue;
-      }
-
-      output.push({
-        name,
-        team: teamHeading || null,
-        minutes: minutesIndex >= 0 ? values[minutesIndex] : null,
-        points,
-        rebounds,
-        assists,
-        steals: stealsIndex >= 0 ? numberValue(values[stealsIndex]) : null,
-        blocks: blocksIndex >= 0 ? numberValue(values[blocksIndex]) : null,
-        turnovers: turnoversIndex >= 0 ? numberValue(values[turnoversIndex]) : null,
-        threePointersMade: threesIndex >= 0 ? numberValue(values[threesIndex]) : null
-      });
+    if (hasPlayer && score > bestScore) {
+      best = row;
+      bestScore = score;
     }
   });
 
-  return output;
+  return best;
 }
 
-function extractGenericTables($) {
+function extractTeamName($table, $) {
+  let current = $table;
+
+  for (let i = 0; i < 5 && current.length; i++) {
+    const previous = current.prevAll("h1,h2,h3,h4,h5,strong,b").first();
+
+    if (previous.length) {
+      const value = cleanText(previous.text());
+
+      if (value.length > 2 && value.length < 80) {
+        return value;
+      }
+    }
+
+    current = current.parent();
+  }
+
+  return "";
+}
+
+function parseBoxScoreTables(html) {
+  const $ = cheerio.load(html);
   const tables = [];
 
-  $("table").each((_, table) => {
-    const rows = [];
+  $("table").each((tableIndex, tableElement) => {
+    const $table = $(tableElement);
+    const headerRow = findHeaderRow($table, $);
 
-    $(table).find("tr").each((__, row) => {
-      const cells = $(row).find("th,td").map((___, cell) =>
+    if (!headerRow) return;
+
+    const columns = $(headerRow)
+      .find("th,td")
+      .map((_, cell) => cleanText($(cell).text()))
+      .get();
+
+    if (columns.length < 2) return;
+
+    const normalized = columns.map(normalizeHeader);
+    const playerIndex = normalized.findIndex(value =>
+      /PLAYER|NAME/.test(value)
+    );
+
+    if (playerIndex === -1) return;
+
+    const players = [];
+
+    let foundHeader = false;
+
+    $table.find("tr").each((_, row) => {
+      if (row === headerRow) {
+        foundHeader = true;
+        return;
+      }
+
+      if (!foundHeader) return;
+
+      const cells = $(row).find("th,td");
+
+      if (!cells.length) return;
+
+      const values = cells.map((_, cell) =>
         cleanText($(cell).text())
       ).get();
 
-      if (cells.length) rows.push(cells);
+      if (values.length < 2) return;
+
+      const playerName = values[playerIndex];
+
+      if (!playerName) return;
+
+      if (
+        /TOTAL|TEAM TOTAL|PLAYER|STARTERS|BENCH/i.test(playerName)
+      ) {
+        return;
+      }
+
+      const stats = {};
+
+      columns.forEach((column, index) => {
+        stats[column || `Column ${index + 1}`] =
+          values[index] ?? "";
+      });
+
+      players.push({
+        name: playerName,
+        stats
+      });
     });
 
-    if (rows.length) tables.push(rows);
+    if (!players.length) return;
+
+    tables.push({
+      team: extractTeamName($table, $),
+      columns,
+      players
+    });
   });
 
   return tables;
 }
 
-async function getConferenceGames(conference) {
-  const url = `${BASE}/tournaments/${conference.slug}`;
-  const html = await getPage(url);
-
-  return parseGames(html, conference);
+function getGameIdFromUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.searchParams.get("game_id");
+  } catch {
+    return null;
+  }
 }
 
-async function getGameDetails(gameId, conference) {
-  const url =
-    `${BASE}/tournaments/${conference.slug}?game_id=${encodeURIComponent(gameId)}`;
+async function getGameDetails(id) {
+  const cacheKey = `details-${id}`;
+  const cached = getCache(cacheKey);
 
-  const html = await getPage(url);
-  const $ = cheerio.load(html);
+  if (cached) return cached;
 
-  const title =
-    cleanText($("h1").first().text()) ||
-    cleanText($("title").text()) ||
-    `Game ${gameId}`;
+  const urls = [
+    `https://www.pba.ph/playbyplay?game_id=${id}`,
+    `${PBA_API}/games/${id}`
+  ];
 
-  const bodyText = cleanText($("body").text());
-  const players = parseBoxScoreTables($);
-  const tables = extractGenericTables($);
+  let lastError = "Game details unavailable.";
+
+  for (const url of urls) {
+    try {
+      const html = await fetchText(url, 18000);
+      const boxScoreTables = parseBoxScoreTables(html);
+
+      if (boxScoreTables.length) {
+        const result = {
+          available: true,
+          id,
+          boxScoreAvailable: true,
+          boxScoreTables,
+          players: boxScoreTables.flatMap(table =>
+            table.players.map(player => ({
+              ...player,
+              team: table.team
+            }))
+          ),
+          updatedAt: new Date().toISOString()
+        };
+
+        setCache(cacheKey, result, 120);
+        return result;
+      }
+
+      lastError = "The page loaded, but no readable box-score tables were found.";
+    } catch (error) {
+      lastError = error.message;
+    }
+  }
 
   return {
-    id: String(gameId),
-    conference: conference.id,
-    conferenceName: conference.name,
-    title,
-    text: bodyText.slice(0, 12000),
-    tables,
-    players,
-    boxScoreAvailable: players.length > 0,
-    sourceUrl: url
+    available: false,
+    id,
+    boxScoreAvailable: false,
+    boxScoreTables: [],
+    players: [],
+    error: lastError
   };
 }
 
-/* YOUTUBE VIDEO FEED */
+/* ---------------- NEWS ---------------- */
 
-async function getOneSportsChannelId() {
-  const cached = cache.get("onesports-channel-id");
+function extractNewsFromHtml(html) {
+  const $ = cheerio.load(html);
+  const articles = new Map();
 
-  if (cached && Date.now() - cached.time < 86400000) {
-    return cached.id;
+  function addArticle(article) {
+    if (!article) return;
+
+    const title = cleanText(article.title || article.name);
+    const url = absoluteUrl(
+      article.url || article.link || article.href,
+      ONESPORTS_NEWS
+    );
+
+    if (!title || !url) return;
+
+    const combined = `${title} ${article.category || ""} ${article.description || ""}`;
+
+    if (!/pba|basketball|pb a news/i.test(combined)) return;
+
+    if (!url.includes("onesports.ph")) return;
+
+    articles.set(url, {
+      title,
+      url,
+      date: article.date || article.published || "",
+      image: article.image || article.thumbnail || "",
+      category: article.category || "PBA"
+    });
   }
 
-  const html = await fetchText(
-    "https://www.youtube.com/@onesportsphl",
-    15000
-  );
+  $("script[type='application/ld+json']").each((_, script) => {
+    try {
+      const data = JSON.parse($(script).html() || "{}");
+
+      function walk(value) {
+        if (!value || typeof value !== "object") return;
+
+        if (Array.isArray(value)) {
+          value.forEach(walk);
+          return;
+        }
+
+        if (
+          value.headline ||
+          (value.name && (value.url || value.mainEntityOfPage))
+        ) {
+          const image =
+            typeof value.image === "string"
+              ? value.image
+              : value.image?.url || "";
+
+          addArticle({
+            title: value.headline || value.name,
+            url: value.url || value.mainEntityOfPage?.["@id"],
+            date: value.datePublished || "",
+            image,
+            description: value.description || ""
+          });
+        }
+
+        Object.values(value).forEach(walk);
+      }
+
+      walk(data);
+    } catch {}
+  });
+
+  $("a[href]").each((_, element) => {
+    const href = $(element).attr("href") || "";
+    const title = cleanText($(element).text());
+
+    if (!title || title.length < 12) return;
+
+    const card = $(element).closest(
+      "article, li, .card, .post, .story, .news-item"
+    );
+
+    const context = cleanText(card.text());
+
+    const image =
+      card.find("img").first().attr("src") ||
+      card.find("img").first().attr("data-src") ||
+      "";
+
+    const date =
+      card.find("time").first().attr("datetime") ||
+      cleanText(card.find("time").first().text());
+
+    addArticle({
+      title,
+      url: href,
+      date,
+      image: absoluteUrl(image, ONESPORTS_NEWS),
+      category: context
+    });
+  });
+
+  return [...articles.values()].slice(0, 40);
+}
+
+async function getNews() {
+  const cached = getCache("onesports-news");
+  if (cached) return cached;
+
+  const html = await fetchText(ONESPORTS_NEWS, 20000);
+  const articles = extractNewsFromHtml(html);
+
+  const result = {
+    available: articles.length > 0,
+    source: ONESPORTS_NEWS,
+    articles,
+    message: articles.length
+      ? ""
+      : "One Sports loaded, but no PBA articles could be extracted. The site may load its articles dynamically.",
+    updatedAt: new Date().toISOString()
+  };
+
+  setCache("onesports-news", result, 300);
+  return result;
+}
+
+/* ---------------- YOUTUBE SHORTS-STYLE FEED ---------------- */
+
+async function getYouTubeChannelId() {
+  const cached = getCache("youtube-channel-id");
+  if (cached) return cached;
+
+  const html = await fetchText(ONESPORTS_CHANNEL, 15000);
 
   const patterns = [
-    /"channelId":"(UC[a-zA-Z0-9_-]{20,})"/,
-    /"externalId":"(UC[a-zA-Z0-9_-]{20,})"/,
-    /\/channel\/(UC[a-zA-Z0-9_-]{20,})/
+    /"channelId":"(UC[a-zA-Z0-9_-]+)"/,
+    /"externalId":"(UC[a-zA-Z0-9_-]+)"/,
+    /channel_id=([^"&]+)/,
+    /youtube\.com\/channel\/(UC[a-zA-Z0-9_-]+)/
   ];
-
-  let channelId = null;
 
   for (const pattern of patterns) {
     const match = html.match(pattern);
 
     if (match) {
-      channelId = match[1];
-      break;
+      setCache("youtube-channel-id", match[1], 86400);
+      return match[1];
     }
   }
 
-  if (!channelId) {
-    throw new Error("Could not identify the One Sports YouTube channel.");
-  }
-
-  cache.set("onesports-channel-id", {
-    id: channelId,
-    time: Date.now()
-  });
-
-  return channelId;
+  throw new Error("Could not identify the One Sports YouTube channel.");
 }
 
-function parseYouTubeFeed(xml) {
-  const $ = cheerio.load(xml, { xmlMode: true });
-  const videos = [];
+async function getYouTubeVideos() {
+  const cached = getCache("youtube-videos");
+  if (cached) return cached;
 
-  $("entry").each((_, entry) => {
-    const title = cleanText($(entry).find("title").first().text());
+  const channelId = await getYouTubeChannelId();
 
-    const videoId =
-      cleanText($(entry).find("yt\\:videoId").first().text()) ||
-      cleanText($(entry).find("videoId").first().text());
-
-    const published = cleanText(
-      $(entry).find("published").first().text()
-    );
-
-    const description = cleanText(
-      $(entry).find("media\\:group media\\:description").text()
-    );
-
-    if (!videoId || !title) return;
-
-    if (!/PBA|basketball|governors|commissioner|highlights/i.test(title)) {
-      return;
-    }
-
-    videos.push({
-      id: videoId,
-      title,
-      description,
-      published,
-      videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
-      embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
-      thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-      source: "One Sports Philippines"
-    });
-  });
-
-  return videos;
-}
-
-async function getHighlights() {
-  const cached = cache.get("pba-highlights");
-
-  if (cached && Date.now() - cached.time < 300000) {
-    return cached.videos;
-  }
-
-  const channelId = await getOneSportsChannelId();
-
-  const feedUrl =
+  const rssUrl =
     `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`;
 
-  const xml = await fetchText(feedUrl, 15000);
-  const videos = parseYouTubeFeed(xml);
+  const xml = await fetchText(rssUrl, 15000);
 
-  cache.set("pba-highlights", {
-    videos,
-    time: Date.now()
-  });
+  const entries = xml.match(/<entry>[\s\S]*?<\/entry>/g) || [];
 
-  return videos;
-}
+  const videos = entries.map(entry => {
+    const id = (entry.match(/<yt:videoId>([\s\S]*?)<\/yt:videoId>/) || [])[1] || "";
+    const title = (entry.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "";
+    const published = (entry.match(/<published>([\s\S]*?)<\/published>/) || [])[1] || "";
 
-/* ROUTES */
+    const decodedTitle = cleanText(
+      title.replace(/&amp;/g, "&")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+    );
 
-app.get("/api/health", (req, res) => {
-  res.json({
-    ok: true,
-    app: "Two Sports",
-    time: new Date().toISOString()
-  });
-});
-
-app.get("/api/pba/conferences", (req, res) => {
-  res.json({
-    conferences: CONFERENCES,
-    current: CONFERENCES[0].id
-  });
-});
-
-app.get("/api/pba/conferences/:id/games", async (req, res) => {
-  const conference = getConference(req.params.id);
-
-  if (!conference) {
-    return res.status(404).json({ error: "Conference not found." });
-  }
-
-  try {
-    const games = await getConferenceGames(conference);
-
-    res.json({
-      available: true,
-      conference,
-      games,
-      count: games.length
-    });
-  } catch (error) {
-    res.status(503).json({
-      available: false,
-      conference,
-      games: [],
-      error: "PBA games could not be retrieved.",
-      detail: error.message
-    });
-  }
-});
-
-app.get("/api/pba/games/:id", async (req, res) => {
-  const conference = getConference(
-    req.query.conference || "governors"
+    return {
+      id,
+      title: decodedTitle,
+      published,
+      url: `https://www.youtube.com/watch?v=${id}`,
+      embedUrl:
+        `https://www.youtube.com/embed/${id}?playsinline=1&controls=1&rel=0&enablejsapi=1`,
+      thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+    };
+  }).filter(video =>
+    video.id &&
+    /pba|basketball|philippine basketball|governors cup|commissioners cup/i.test(video.title)
   );
 
-  if (!conference) {
-    return res.status(404).json({ error: "Conference not found." });
-  }
+  const result = {
+    available: videos.length > 0,
+    videos,
+    source: ONESPORTS_CHANNEL,
+    updatedAt: new Date().toISOString()
+  };
 
-  try {
-    const game = await getGameDetails(req.params.id, conference);
+  setCache("youtube-videos", result, 300);
+  return result;
+}
 
-    res.json(game);
-  } catch (error) {
-    res.status(503).json({
-      error: "Game details could not be retrieved.",
-      detail: error.message
-    });
-  }
+/* ---------------- API ROUTES ---------------- */
+
+app.get("/api/pba/conferences", (req, res) => {
+  res.json(CONFERENCES);
 });
 
 app.get("/api/pba/teams", (req, res) => {
   res.json({
     available: true,
-    teams: TEAMS,
-    count: TEAMS.length
+    teams: TEAMS
   });
 });
 
-app.get("/api/pba/players/averages", async (req, res) => {
-  const conference = getConference(
-    req.query.conference || "governors"
-  );
-
-  if (!conference) {
-    return res.status(404).json({ error: "Conference not found." });
-  }
+app.get("/api/pba/games", async (req, res) => {
+  const conference = req.query.conference || "governors";
 
   try {
-    const games = await getConferenceGames(conference);
-    const totals = new Map();
-
-    for (const game of games) {
-      try {
-        const details = await getGameDetails(game.id, conference);
-
-        for (const player of details.players || []) {
-          const key = player.name.toLowerCase();
-
-          if (!totals.has(key)) {
-            totals.set(key, {
-              name: player.name,
-              games: 0,
-              points: 0,
-              rebounds: 0,
-              assists: 0,
-              steals: 0,
-              blocks: 0,
-              turnovers: 0,
-              stealsGames: 0,
-              blocksGames: 0,
-              turnoversGames: 0
-            });
-          }
-
-          const item = totals.get(key);
-
-          item.games++;
-          item.points += player.points;
-          item.rebounds += player.rebounds;
-          item.assists += player.assists;
-
-          if (player.steals !== null) {
-            item.steals += player.steals;
-            item.stealsGames++;
-          }
-
-          if (player.blocks !== null) {
-            item.blocks += player.blocks;
-            item.blocksGames++;
-          }
-
-          if (player.turnovers !== null) {
-            item.turnovers += player.turnovers;
-            item.turnoversGames++;
-          }
-        }
-      } catch (error) {
-        console.warn(`Skipping game ${game.id}:`, error.message);
-      }
-    }
-
-    const players = [...totals.values()].map(player => ({
-      id: player.name,
-      name: player.name,
-      games: player.games,
-      conference: conference.name,
-      averages: {
-        points: +(player.points / player.games).toFixed(1),
-        rebounds: +(player.rebounds / player.games).toFixed(1),
-        assists: +(player.assists / player.games).toFixed(1),
-        steals: player.stealsGames
-          ? +(player.steals / player.stealsGames).toFixed(1)
-          : null,
-        blocks: player.blocksGames
-          ? +(player.blocks / player.blocksGames).toFixed(1)
-          : null,
-        turnovers: player.turnoversGames
-          ? +(player.turnovers / player.turnoversGames).toFixed(1)
-          : null
-      }
-    }));
-
-    res.json({
-      available: players.length > 0,
-      conference,
-      players,
-      count: players.length
-    });
+    const result = await getGames(conference);
+    res.json(result);
   } catch (error) {
-    res.status(503).json({
+    res.status(502).json({
       available: false,
-      conference,
-      players: [],
-      error: "Conference averages could not be calculated.",
-      detail: error.message
+      games: [],
+      error: error.message
     });
   }
 });
 
-app.get("/api/pba/players", async (req, res) => {
-  const conference = getConference(
-    req.query.conference || "governors"
-  );
-
-  if (!conference) {
-    return res.status(404).json({ error: "Conference not found." });
-  }
-
+app.get("/api/pba/games/:id", async (req, res) => {
   try {
-    const games = await getConferenceGames(conference);
-    const found = new Map();
-
-    for (const game of games) {
-      try {
-        const details = await getGameDetails(game.id, conference);
-
-        for (const player of details.players || []) {
-          const key = player.name.toLowerCase();
-
-          if (!found.has(key)) {
-            found.set(key, {
-              id: player.name,
-              name: player.name,
-              team: player.team || "",
-              source: "Retrieved game box score"
-            });
-          }
-        }
-      } catch (error) {
-        // Continue checking the other games.
-      }
-    }
-
-    res.json({
-      available: found.size > 0,
-      players: [...found.values()],
-      count: found.size
-    });
+    const result = await getGameDetails(req.params.id);
+    res.json(result);
   } catch (error) {
-    res.status(503).json({
+    res.status(502).json({
       available: false,
-      players: [],
-      error: "Players could not be retrieved.",
-      detail: error.message
+      error: error.message
+    });
+  }
+});
+
+app.get("/api/pba/news", async (req, res) => {
+  try {
+    res.json(await getNews());
+  } catch (error) {
+    res.status(502).json({
+      available: false,
+      articles: [],
+      error: error.message,
+      source: ONESPORTS_NEWS
     });
   }
 });
 
 app.get("/api/pba/highlights", async (req, res) => {
   try {
-    const videos = await getHighlights();
-
-    res.json({
-      available: videos.length > 0,
-      highlights: videos,
-      count: videos.length,
-      source: "One Sports Philippines YouTube"
-    });
+    res.json(await getYouTubeVideos());
   } catch (error) {
-    res.status(503).json({
+    res.status(502).json({
       available: false,
-      highlights: [],
-      error: "Official highlights could not be retrieved.",
-      detail: error.message
+      videos: [],
+      error: error.message
     });
   }
+});
+
+app.get("/api/pba/players", async (req, res) => {
+  res.json({
+    available: false,
+    players: [],
+    message: "The official PBA player directory source has not been verified. Player information is not fabricated."
+  });
+});
+
+app.get("/api/pba/players/averages", (req, res) => {
+  res.json({
+    available: false,
+    players: [],
+    message: "Player averages are unavailable until verified box-score data can be retrieved."
+  });
 });
 
 app.get("/api/pba/playoffs", (req, res) => {
   res.json({
     available: false,
-    bracket: null,
-    message: "A verified playoff bracket feed is not connected."
+    message: "A verified live playoff bracket source is not currently available."
   });
 });
 
+/* ---------------- DIAGNOSTICS ---------------- */
+
 app.get("/api/test-pba", async (req, res) => {
+  const results = {};
+
+  for (const key of Object.keys(CONFERENCES)) {
+    try {
+      const result = await getGames(key);
+
+      results[key] = {
+        available: result.available,
+        count: result.games.length
+      };
+    } catch (error) {
+      results[key] = {
+        available: false,
+        error: error.message
+      };
+    }
+  }
+
+  res.json(results);
+});
+
+app.get("/api/test-news", async (req, res) => {
   try {
-    const conference = CONFERENCES[0];
-    const games = await getConferenceGames(conference);
+    const result = await getNews();
 
     res.json({
-      ok: true,
-      conference: conference.name,
-      gamesFound: games.length,
-      sample: games.slice(0, 5)
+      available: result.available,
+      count: result.articles.length,
+      message: result.message || ""
     });
   } catch (error) {
-    res.status(503).json({
-      ok: false,
+    res.json({
+      available: false,
       error: error.message
     });
   }
@@ -685,23 +693,26 @@ app.get("/api/test-pba", async (req, res) => {
 
 app.get("/api/test-videos", async (req, res) => {
   try {
-    const videos = await getHighlights();
+    const result = await getYouTubeVideos();
 
     res.json({
-      ok: true,
-      count: videos.length,
-      sample: videos.slice(0, 3)
+      available: result.available,
+      count: result.videos.length
     });
   } catch (error) {
-    res.status(503).json({
-      ok: false,
+    res.json({
+      available: false,
       error: error.message
     });
   }
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "online",
+    app: "Two Sports",
+    time: new Date().toISOString()
+  });
 });
 
 app.listen(PORT, () => {
