@@ -5,6 +5,3 @@ services:
     plan: free
     buildCommand: npm install
     startCommand: npm start
-    envVars:
-      - key: STATSRADAR_KEY
-        sync: false
