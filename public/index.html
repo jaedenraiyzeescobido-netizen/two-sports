@@ -19,6 +19,7 @@
   --danger:#ff6464;
   --green:#53d69a;
 }
+
 body.light {
   --bg:#f3f4f6;
   --surface:#ffffff;
@@ -31,239 +32,658 @@ body.light {
   --danger:#d83e3e;
   --green:#159c61;
 }
+
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
-  transition:background .2s,color .2s
+  transition:background .2s,color .2s;
 }
+
 button,select,input{font:inherit}
 button{cursor:pointer}
-.topbar{
-  height:66px;padding:0 22px;display:flex;align-items:center;
-  justify-content:space-between;background:var(--surface);
-  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20
+
+.topbar {
+  height:66px;
+  padding:0 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+  position:sticky;
+  top:0;
+  z-index:20;
 }
-.brand{font-size:22px;font-weight:900;letter-spacing:-1px}
+
+.brand {
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
 .brand span{color:var(--accent)}
-.top-actions{display:flex;align-items:center;gap:10px}
-.icon-btn{
-  border:1px solid var(--line);background:var(--surface2);
-  color:var(--text);border-radius:10px;padding:9px 12px
+
+.top-actions {
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
-.layout{display:flex;min-height:calc(100vh - 66px)}
-.sidebar{
-  width:225px;background:var(--surface);border-right:1px solid var(--line);
-  padding:18px 12px;flex-shrink:0
+
+.icon-btn {
+  border:1px solid var(--line);
+  background:var(--surface2);
+  color:var(--text);
+  border-radius:10px;
+  padding:9px 12px;
 }
-.nav-label{
-  font-size:10px;font-weight:bold;color:var(--muted);
-  letter-spacing:1.5px;padding:15px 12px 8px
+
+.layout {
+  display:flex;
+  min-height:calc(100vh - 66px);
 }
-.nav-btn{
-  width:100%;display:flex;align-items:center;gap:12px;padding:12px;
-  margin-bottom:4px;border:0;border-radius:10px;background:transparent;
-  color:var(--muted);text-align:left;font-size:14px;font-weight:600
+
+.sidebar {
+  width:225px;
+  background:var(--surface);
+  border-right:1px solid var(--line);
+  padding:18px 12px;
+  flex-shrink:0;
 }
-.nav-btn:hover{background:var(--surface2);color:var(--text)}
-.nav-btn.active{background:var(--accent);color:var(--accent-text)}
-.nav-icon{width:20px;text-align:center;font-size:17px}
-.main{
-  flex:1;min-width:0;padding:28px;max-width:1450px;
-  margin:0 auto;width:100%
+
+.nav-label {
+  font-size:10px;
+  font-weight:bold;
+  color:var(--muted);
+  letter-spacing:1.5px;
+  padding:15px 12px 8px;
 }
+
+.nav-btn {
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  margin-bottom:4px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:var(--muted);
+  text-align:left;
+  font-size:14px;
+  font-weight:600;
+}
+
+.nav-btn:hover {
+  background:var(--surface2);
+  color:var(--text);
+}
+
+.nav-btn.active {
+  background:var(--accent);
+  color:var(--accent-text);
+}
+
+.nav-icon {
+  width:20px;
+  text-align:center;
+  font-size:17px;
+}
+
+.main {
+  flex:1;
+  min-width:0;
+  padding:28px;
+  max-width:1450px;
+  margin:0 auto;
+  width:100%;
+}
+
 .page{display:none}
 .page.active{display:block}
-.page-heading{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:15px;flex-wrap:wrap;margin-bottom:22px
+
+.page-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:22px;
 }
-h1{font-size:29px;margin:0;letter-spacing:-1px}
-h2{font-size:19px;margin:0 0 15px}
+
+h1 {
+  font-size:29px;
+  margin:0;
+  letter-spacing:-1px;
+}
+
+h2 {
+  font-size:19px;
+  margin:0 0 15px;
+}
+
 h3{margin:0 0 8px}
-.subtitle{color:var(--muted);font-size:13px;margin-top:7px}
+
+.subtitle {
+  color:var(--muted);
+  font-size:13px;
+  margin-top:7px;
+}
+
 .section{margin-top:30px}
-.card{
-  background:var(--surface);border:1px solid var(--line);
-  border-radius:15px;padding:18px
+
+.card {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:18px;
 }
-.hero{
-  padding:27px;min-height:190px;border-radius:18px;
+
+.hero {
+  padding:27px;
+  min-height:190px;
+  border-radius:18px;
   background:linear-gradient(120deg,#272b34,#17191e);
-  border:1px solid var(--line);display:flex;align-items:center;
-  justify-content:space-between;gap:20px;overflow:hidden
+  border:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  overflow:hidden;
 }
-body.light .hero{background:linear-gradient(120deg,#e4e8ee,#ffffff)}
-.hero-tag{
-  display:inline-block;padding:6px 10px;border-radius:20px;
-  background:var(--accent);color:var(--accent-text);
-  font-size:10px;font-weight:900;letter-spacing:1px;margin-bottom:12px
+
+body.light .hero {
+  background:linear-gradient(120deg,#e4e8ee,#ffffff);
 }
-.hero h2{font-size:32px;margin:0;max-width:500px}
-.hero p{color:var(--muted);font-size:13px}
-.hero-ball{font-size:85px;opacity:.9}
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:14px
+
+.hero-tag {
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  background:var(--accent);
+  color:var(--accent-text);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1px;
+  margin-bottom:12px;
 }
-.stat-card{
-  background:var(--surface);border:1px solid var(--line);
-  border-radius:14px;padding:18px
+
+.hero h2 {
+  font-size:32px;
+  margin:0;
+  max-width:500px;
 }
-.stat-number{font-size:28px;font-weight:900;margin-top:8px}
+
+.hero p {
+  color:var(--muted);
+  font-size:13px;
+}
+
+.hero-ball {
+  font-size:85px;
+  opacity:.9;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+
+.stat-card {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+}
+
+.stat-number {
+  font-size:28px;
+  font-weight:900;
+  margin-top:8px;
+}
+
 .muted{color:var(--muted)}
 .small{font-size:12px}
-select,input{
-  color:var(--text);background:var(--surface2);
-  border:1px solid var(--line);border-radius:9px;
-  padding:10px 12px;outline:none;max-width:100%
+
+select,input {
+  color:var(--text);
+  background:var(--surface2);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:10px 12px;
+  outline:none;
+  max-width:100%;
 }
+
 input{min-width:0}
-.primary-btn{
-  background:var(--accent);color:var(--accent-text);border:0;
-  padding:10px 15px;border-radius:9px;font-weight:800
+
+.primary-btn {
+  background:var(--accent);
+  color:var(--accent-text);
+  border:0;
+  padding:10px 15px;
+  border-radius:9px;
+  font-weight:800;
 }
-.secondary-btn{
-  background:var(--surface2);color:var(--text);
-  border:1px solid var(--line);padding:9px 13px;
-  border-radius:9px;font-weight:700
+
+.secondary-btn {
+  background:var(--surface2);
+  color:var(--text);
+  border:1px solid var(--line);
+  padding:9px 13px;
+  border-radius:9px;
+  font-weight:700;
 }
-.game-list{display:grid;gap:11px}
-.game-card{
-  background:var(--surface);border:1px solid var(--line);
-  border-radius:13px;padding:16px;display:flex;
-  align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap
+
+.game-list {
+  display:grid;
+  gap:11px;
 }
-.game-info{min-width:0;flex:1}
-.game-title{font-weight:800;font-size:15px}
-.game-summary{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.5}
-.game-status{
-  display:inline-block;padding:5px 8px;border-radius:6px;
-  background:var(--surface2);font-size:10px;font-weight:800;
-  color:var(--muted);margin-bottom:8px
+
+.game-card {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
 }
-.live{color:white;background:#d92e3c}
-.team-logo{
-  width:65px;height:65px;border-radius:50%;
-  background:var(--surface2);border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;font-weight:900;font-size:18px;flex-shrink:0
+
+.game-info {
+  min-width:0;
+  flex:1;
 }
-.team-logo img{width:100%;height:100%;object-fit:contain}
-.entity-card{
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;gap:12px
+
+.game-title {
+  font-weight:800;
+  font-size:15px;
 }
-.entity-card .team-logo{width:80px;height:80px}
+
+.game-summary {
+  color:var(--muted);
+  font-size:12px;
+  margin-top:6px;
+  line-height:1.5;
+}
+
+.game-status {
+  display:inline-block;
+  padding:5px 8px;
+  border-radius:6px;
+  background:var(--surface2);
+  font-size:10px;
+  font-weight:800;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+
+.live {
+  color:white;
+  background:#d92e3c;
+}
+
+.team-logo {
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  background:var(--surface2);
+  border:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  font-weight:900;
+  font-size:18px;
+  flex-shrink:0;
+}
+
+.team-logo img {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.entity-card {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:12px;
+}
+
+.entity-card .team-logo {
+  width:80px;
+  height:80px;
+}
+
 .entity-card h3{font-size:15px}
-.follow-btn{
-  border:1px solid var(--line);border-radius:20px;padding:8px 13px;
-  background:var(--surface2);color:var(--text);
-  font-size:12px;font-weight:800
+
+.follow-btn {
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:8px 13px;
+  background:var(--surface2);
+  color:var(--text);
+  font-size:12px;
+  font-weight:800;
 }
-.follow-btn.following{
-  background:var(--accent);color:var(--accent-text);
-  border-color:var(--accent)
+
+.follow-btn.following {
+  background:var(--accent);
+  color:var(--accent-text);
+  border-color:var(--accent);
 }
-.empty{
-  padding:38px 20px;text-align:center;background:var(--surface);
-  border:1px dashed var(--line);border-radius:15px
+
+.empty {
+  padding:38px 20px;
+  text-align:center;
+  background:var(--surface);
+  border:1px dashed var(--line);
+  border-radius:15px;
 }
-.empty-icon{font-size:38px;margin-bottom:12px}
+
+.empty-icon {
+  font-size:38px;
+  margin-bottom:12px;
+}
+
 .empty h3{margin-bottom:7px}
-.empty p{
-  color:var(--muted);font-size:13px;line-height:1.6;
-  max-width:480px;margin:0 auto
+
+.empty p {
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  max-width:480px;
+  margin:0 auto;
 }
-.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:17px}
-.tab-btn{
-  background:var(--surface2);border:1px solid var(--line);
-  color:var(--muted);padding:9px 14px;border-radius:20px;
-  font-size:12px;font-weight:800
+
+.tabs {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:17px;
 }
-.tab-btn.active{
-  color:var(--accent-text);background:var(--accent);
-  border-color:var(--accent)
+
+.tab-btn {
+  background:var(--surface2);
+  border:1px solid var(--line);
+  color:var(--muted);
+  padding:9px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:800;
 }
-.bracket{
-  display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));
-  gap:14px;overflow-x:auto
+
+.tab-btn.active {
+  color:var(--accent-text);
+  background:var(--accent);
+  border-color:var(--accent);
 }
+
+.bracket {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(180px,1fr));
+  gap:14px;
+  overflow-x:auto;
+}
+
 .bracket-round{min-width:180px}
-.bracket-match{
-  background:var(--surface);border:1px solid var(--line);
-  border-radius:12px;padding:14px;margin-bottom:12px
+
+.bracket-match {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:12px;
 }
-.bracket-team{
-  padding:9px 0;border-bottom:1px solid var(--line);font-size:13px
+
+.bracket-team {
+  padding:9px 0;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
 }
+
 .bracket-team:last-child{border:0}
-.feed{max-width:430px;margin:0 auto;display:grid;gap:14px}
-.feed-card{
-  min-height:360px;border-radius:18px;border:1px solid var(--line);
-  background:#191b20;position:relative;display:flex;
-  align-items:center;justify-content:center;text-align:center;
-  padding:25px;overflow:hidden
+
+.feed {
+  max-width:430px;
+  margin:0 auto;
+  display:grid;
+  gap:14px;
 }
+
+.feed-card {
+  min-height:360px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:#191b20;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:25px;
+  overflow:hidden;
+}
+
 .feed-card-content{position:relative;z-index:1}
-.feed-card .feed-icon{font-size:55px;margin-bottom:20px}
-.feed-card p{color:#b6bbc5;font-size:13px;line-height:1.6}
-.feed-card a{color:#78aaff;font-size:13px}
+
+.feed-card .feed-icon {
+  font-size:55px;
+  margin-bottom:20px;
+}
+
+.feed-card p {
+  color:#b6bbc5;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.feed-card a {
+  color:#78aaff;
+  font-size:13px;
+}
+
+.video-feed {
+  max-width:430px;
+  height:min(75vh,760px);
+  min-height:440px;
+  margin:0 auto;
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  border-radius:16px;
+  scrollbar-width:thin;
+}
+
+.video-card {
+  min-height:100%;
+  scroll-snap-align:start;
+  background:#000;
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  margin-bottom:12px;
+}
+
+.video-card iframe {
+  width:100%;
+  aspect-ratio:9/16;
+  max-height:650px;
+  border:0;
+  background:#000;
+  flex:1;
+}
+
+.video-caption {
+  padding:13px;
+  background:var(--surface);
+}
+
+.video-caption h3 {
+  font-size:14px;
+  line-height:1.4;
+}
+
+.video-caption p {
+  color:var(--muted);
+  font-size:11px;
+}
+
+.video-open {
+  display:inline-block;
+  color:var(--accent);
+  font-size:12px;
+  margin-top:7px;
+}
+
 .detail-panel{margin-top:18px}
-.detail-panel table{width:100%;border-collapse:collapse;font-size:12px}
-.detail-panel th,.detail-panel td{
-  text-align:left;border-bottom:1px solid var(--line);padding:10px
+
+.detail-panel table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
 }
-.loading{color:var(--muted);padding:20px 0;font-size:13px}
-.error-text{color:var(--danger);font-size:12px}
-.average-card{
-  background:var(--surface);border:1px solid var(--line);
-  border-radius:15px;padding:17px;min-width:0
+
+.detail-panel th,
+.detail-panel td {
+  text-align:left;
+  border-bottom:1px solid var(--line);
+  padding:10px;
+  white-space:nowrap;
 }
-.average-top{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:10px;margin-bottom:14px
+
+.loading {
+  color:var(--muted);
+  padding:20px 0;
+  font-size:13px;
 }
-.average-name{font-size:16px;font-weight:900;overflow-wrap:anywhere}
-.average-team{font-size:11px;color:var(--muted);margin-top:4px}
-.average-grid{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px
+
+.error-text {
+  color:var(--danger);
+  font-size:12px;
 }
-.average-stat{
-  background:var(--surface2);border-radius:10px;padding:10px 6px;
-  text-align:center;min-width:0
+
+.average-card {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:17px;
+  min-width:0;
 }
-.average-stat strong{display:block;font-size:20px;font-weight:900}
-.average-stat span{
-  display:block;color:var(--muted);font-size:10px;
-  margin-top:4px;text-transform:uppercase
+
+.average-top {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:14px;
 }
-.average-foot{
-  margin-top:12px;padding-top:10px;border-top:1px solid var(--line);
-  color:var(--muted);font-size:11px
+
+.average-name {
+  font-size:16px;
+  font-weight:900;
+  overflow-wrap:anywhere;
 }
+
+.average-team {
+  font-size:11px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.average-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+
+.average-stat {
+  background:var(--surface2);
+  border-radius:10px;
+  padding:10px 6px;
+  text-align:center;
+  min-width:0;
+}
+
+.average-stat strong {
+  display:block;
+  font-size:20px;
+  font-weight:900;
+}
+
+.average-stat span {
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+  text-transform:uppercase;
+}
+
+.average-foot {
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+}
+
 .mobile-nav{display:none}
-footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
-@media(max-width:800px){
+
+footer {
+  padding:25px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
+
+@media(max-width:800px) {
   .sidebar{display:none}
+
   .main{padding:20px 15px 90px}
-  .mobile-nav{
-    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;
-    background:var(--surface);border-top:1px solid var(--line);
-    justify-content:space-around;padding:8px 3px calc(8px + env(safe-area-inset-bottom))
+
+  .mobile-nav {
+    display:flex;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:30;
+    background:var(--surface);
+    border-top:1px solid var(--line);
+    justify-content:space-around;
+    padding:8px 3px calc(8px + env(safe-area-inset-bottom));
   }
-  .mobile-nav button{
-    border:0;background:transparent;color:var(--muted);
-    font-size:10px;display:flex;flex-direction:column;
-    align-items:center;gap:4px;padding:5px
+
+  .mobile-nav button {
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    font-size:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    padding:5px;
   }
+
   .mobile-nav button.active{color:var(--accent)}
   .mobile-nav span{font-size:19px}
   .hero h2{font-size:25px}
   .hero-ball{font-size:55px}
   .bracket{grid-template-columns:repeat(3,190px)}
 }
-@media(max-width:420px){
+
+@media(max-width:420px) {
   h1{font-size:25px}
   .hero{padding:20px}
   .hero-ball{font-size:42px}
@@ -273,6 +693,7 @@ footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
 </head>
 
 <body>
+
 <header class="topbar">
   <div class="brand">TWO <span>SPORTS</span></div>
   <div class="top-actions">
@@ -282,6 +703,7 @@ footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
 </header>
 
 <div class="layout">
+
 <aside class="sidebar">
   <div class="nav-label">DISCOVER</div>
   <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span> Home</button>
@@ -348,12 +770,14 @@ footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
     <div><h1>Scores & Schedule</h1><div class="subtitle">PBA games from the connected data source</div></div>
     <select id="scoresConference"></select>
   </div>
+
   <div class="tabs">
     <button class="tab-btn active" data-game-filter="all">All Games</button>
     <button class="tab-btn" data-game-filter="live">Live</button>
     <button class="tab-btn" data-game-filter="upcoming">Upcoming</button>
     <button class="tab-btn" data-game-filter="completed">Completed</button>
   </div>
+
   <div id="scoresList" class="game-list"><div class="loading">Loading games...</div></div>
   <div id="gameDetails" class="detail-panel"></div>
 </section>
@@ -379,7 +803,9 @@ footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
     <div><h1>Followed Players</h1><div class="subtitle">Your players and their averages in the selected conference</div></div>
     <select id="followedPlayersConference"></select>
   </div>
+
   <div id="followedPlayersList" class="grid"></div>
+
   <div class="section">
     <h2>Player Highlights</h2>
     <div id="playerHighlights" class="feed"></div>
@@ -391,8 +817,13 @@ footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
     <div><h1>Followed Teams</h1><div class="subtitle">Your teams and their latest highlights</div></div>
     <select id="followedTeamsConference"></select>
   </div>
+
   <div id="followedTeamsList" class="grid"></div>
-  <div class="section"><h2>Team Highlights</h2><div id="teamHighlights" class="feed"></div></div>
+
+  <div class="section">
+    <h2>Team Highlights</h2>
+    <div id="teamHighlights" class="feed"></div>
+  </div>
 </section>
 
 <section class="page" id="page-highlights">
@@ -404,7 +835,9 @@ footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
 </section>
 
 <section class="page" id="page-news">
-  <div class="page-heading"><div><h1>News</h1><div class="subtitle">PBA news and updates</div></div></div>
+  <div class="page-heading">
+    <div><h1>News</h1><div class="subtitle">PBA news and updates</div></div>
+  </div>
   <div id="newsList"></div>
 </section>
 
@@ -417,21 +850,27 @@ footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
 </section>
 
 <section class="page" id="page-more">
-  <div class="page-heading"><div><h1>Settings</h1><div class="subtitle">Customize your Two Sports experience</div></div></div>
+  <div class="page-heading">
+    <div><h1>Settings</h1><div class="subtitle">Customize your Two Sports experience</div></div>
+  </div>
+
   <div class="card">
-    <h3>Appearance</h3><p class="muted small">Choose your preferred theme.</p>
+    <h3>Appearance</h3>
+    <p class="muted small">Choose your preferred theme.</p>
     <button class="secondary-btn" onclick="toggleTheme()">Switch Theme</button>
   </div>
+
   <div class="card section">
     <h3>Data Connection</h3>
     <p class="muted small">Check whether the Two Sports backend can reach its configured PBA source.</p>
     <button class="primary-btn" onclick="testConnection()">Test Connection</button>
     <p id="connectionResult" class="small muted"></p>
   </div>
+
   <div class="card section">
     <h3>About Two Sports</h3>
     <p class="muted small">Two Sports is a basketball fan project. Game information and other content depend on connected data sources.</p>
-    <p class="muted small">Version 4.1</p>
+    <p class="muted small">Version 5.0</p>
   </div>
 </section>
 
@@ -460,14 +899,23 @@ let highlights = [];
 let currentConference = "";
 let gameFilter = "all";
 
-let followedTeams = JSON.parse(localStorage.getItem("twoSportsFollowedTeams") || "[]");
-let followedPlayers = JSON.parse(localStorage.getItem("twoSportsFollowedPlayers") || "[]");
+let followedTeams = JSON.parse(
+  localStorage.getItem("twoSportsFollowedTeams") || "[]"
+);
+
+let followedPlayers = JSON.parse(
+  localStorage.getItem("twoSportsFollowedPlayers") || "[]"
+);
 
 const $ = id => document.getElementById(id);
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
   })[char]);
 }
 
@@ -476,59 +924,106 @@ async function apiGet(path) {
     headers:{"Accept":"application/json"},
     cache:"no-store"
   });
+
   let data;
-  try { data = await response.json(); }
-  catch { throw new Error("The server returned an invalid response."); }
-  if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`);
+
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("The server returned an invalid response.");
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data.detail || data.error || `Request failed (${response.status})`
+    );
+  }
+
   return data;
 }
 
+function unavailableCard(title,message) {
+  return `
+    <div class="empty" style="grid-column:1/-1">
+      <div class="empty-icon">🏀</div>
+      <h3>${escapeHTML(title)}</h3>
+      <p>${escapeHTML(message || "The connected source has not provided this information yet.")}</p>
+    </div>
+  `;
+}
+
 function showPage(name) {
-  document.querySelectorAll(".page").forEach(page =>
-    page.classList.toggle("active", page.id === `page-${name}`)
-  );
-  document.querySelectorAll("[data-page]").forEach(button =>
-    button.classList.toggle("active", button.dataset.page === name)
-  );
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("active",page.id === `page-${name}`);
+  });
+
+  document.querySelectorAll("[data-page]").forEach(button => {
+    button.classList.toggle("active",button.dataset.page === name);
+  });
 
   if (name === "followedPlayers") renderFollowedPlayers();
   if (name === "followedTeams") renderFollowedTeams();
+  if (name === "highlights") loadHighlights("all");
+  if (name === "playoffs") loadPlayoffs();
 }
 
-document.querySelectorAll("[data-page]").forEach(button =>
-  button.addEventListener("click", () => showPage(button.dataset.page))
-);
+document.querySelectorAll("[data-page]").forEach(button => {
+  button.addEventListener("click",() => showPage(button.dataset.page));
+});
 
 function saveFollows() {
-  localStorage.setItem("twoSportsFollowedTeams", JSON.stringify(followedTeams));
-  localStorage.setItem("twoSportsFollowedPlayers", JSON.stringify(followedPlayers));
+  localStorage.setItem(
+    "twoSportsFollowedTeams",
+    JSON.stringify(followedTeams)
+  );
+
+  localStorage.setItem(
+    "twoSportsFollowedPlayers",
+    JSON.stringify(followedPlayers)
+  );
+
   $("homeTeams").textContent = followedTeams.length;
   $("homePlayers").textContent = followedPlayers.length;
 }
 
 function toggleTheme() {
   document.body.classList.toggle("light");
-  localStorage.setItem("twoSportsTheme",
-    document.body.classList.contains("light") ? "light" : "dark");
+
+  localStorage.setItem(
+    "twoSportsTheme",
+    document.body.classList.contains("light") ? "light" : "dark"
+  );
 }
 
-$("themeBtn").addEventListener("click", toggleTheme);
+$("themeBtn").addEventListener("click",toggleTheme);
+
 if (localStorage.getItem("twoSportsTheme") === "light") {
   document.body.classList.add("light");
 }
 
 function setConferenceOptions() {
   const ids = [
-    "homeConference","scoresConference","followedPlayersConference",
-    "followedTeamsConference","highlightsConference","playoffConference"
+    "homeConference",
+    "scoresConference",
+    "followedPlayersConference",
+    "followedTeamsConference",
+    "highlightsConference",
+    "playoffConference"
   ];
+
   ids.forEach(id => {
     const select = $(id);
+
     if (!select) return;
+
     const previous = select.value;
-    select.innerHTML = conferences.map(conf =>
-      `<option value="${escapeHTML(conf.id)}">${escapeHTML(conf.name)}</option>`
-    ).join("");
+
+    select.innerHTML = conferences.map(conf => `
+      <option value="${escapeHTML(conf.id)}">
+        ${escapeHTML(conf.name)}
+      </option>
+    `).join("");
+
     if (previous && conferences.some(c => String(c.id) === previous)) {
       select.value = previous;
     } else if (currentConference) {
@@ -539,8 +1034,12 @@ function setConferenceOptions() {
 
 function syncConferenceSelectors() {
   [
-    "homeConference","scoresConference","followedPlayersConference",
-    "followedTeamsConference","highlightsConference","playoffConference"
+    "homeConference",
+    "scoresConference",
+    "followedPlayersConference",
+    "followedTeamsConference",
+    "highlightsConference",
+    "playoffConference"
   ].forEach(id => {
     const select = $(id);
     if (select) select.value = currentConference;
@@ -549,155 +1048,293 @@ function syncConferenceSelectors() {
 
 async function loadConferences() {
   const data = await apiGet(`${API}/conferences`);
-  conferences = Array.isArray(data.conferences) ? data.conferences : [];
-  if (conferences.length) currentConference = String(data.current || conferences[0].id);
+
+  conferences = Array.isArray(data.conferences)
+    ? data.conferences
+    : [];
+
+  if (conferences.length) {
+    currentConference = String(data.current || conferences[0].id);
+  }
+
   setConferenceOptions();
 }
 
 async function loadGames() {
-  $("homeGameList").innerHTML = '<div class="loading">Loading games...</div>';
-  $("scoresList").innerHTML = '<div class="loading">Loading games...</div>';
+  $("homeGameList").innerHTML =
+    '<div class="loading">Loading games...</div>';
+
+  $("scoresList").innerHTML =
+    '<div class="loading">Loading games...</div>';
 
   try {
     const data = await apiGet(
       `${API}/conferences/${encodeURIComponent(currentConference)}/games`
     );
+
     games = Array.isArray(data.games) ? data.games : [];
+
     $("homeGames").textContent = games.length;
+
     renderGames();
-  } catch (error) {
+  } catch(error) {
     games = [];
     $("homeGames").textContent = "—";
-    const message = unavailableCard("Games unavailable", error.message);
+
+    const message = unavailableCard("Games unavailable",error.message);
+
     $("homeGameList").innerHTML = message;
     $("scoresList").innerHTML = message;
   }
 }
 
 function gameCategory(game) {
-  const status = String(game.status || game.state || "").toLowerCase();
-  if (status.includes("live") || status.includes("progress")) return "live";
-  if (status.includes("final") || status.includes("complete")) return "completed";
-  if (status.includes("scheduled") || status.includes("upcoming")) return "upcoming";
+  const status = String(
+    game.status || game.state || ""
+  ).toLowerCase();
+
+  if (status.includes("live") || status.includes("progress")) {
+    return "live";
+  }
+
+  if (status.includes("final") || status.includes("complete")) {
+    return "completed";
+  }
+
+  if (status.includes("scheduled") || status.includes("upcoming")) {
+    return "upcoming";
+  }
+
   return "unknown";
 }
 
 function gameCard(game) {
   const id = String(game.id || "");
   const category = gameCategory(game);
+
   const label = game.label || `PBA Game ${id}`;
   const summary = game.summary || "";
-  const statusText = category === "live" ? "LIVE" :
+
+  const statusText =
+    category === "live" ? "LIVE" :
     category === "completed" ? "COMPLETED" :
-    category === "upcoming" ? "UPCOMING" : "GAME INFORMATION";
+    category === "upcoming" ? "UPCOMING" :
+    "GAME INFORMATION";
 
   return `
     <article class="game-card">
       <div class="game-info">
-        <span class="game-status ${category === "live" ? "live" : ""}">${statusText}</span>
+        <span class="game-status ${category === "live" ? "live" : ""}">
+          ${statusText}
+        </span>
+
         <div class="game-title">${escapeHTML(label)}</div>
-        <div class="game-summary">${escapeHTML(summary || "Team names and scores are not available in the current game listing.")}</div>
-        <div class="game-summary">${escapeHTML(game.tournament || game.conference || "")}</div>
+
+        <div class="game-summary">
+          ${escapeHTML(summary || "Game details are available when returned by the source.")}
+        </div>
+
+        <div class="game-summary">
+          ${escapeHTML(game.tournament || game.conferenceName || "")}
+        </div>
       </div>
-      <button class="secondary-btn" onclick="openGame('${escapeHTML(id)}')">Game Details</button>
-    </article>`;
+
+      <button class="secondary-btn"
+        onclick="openGame('${escapeHTML(id)}')">
+        Box Score
+      </button>
+    </article>
+  `;
 }
 
 function renderGames() {
   const recent = games.slice(0,4);
-  $("homeGameList").innerHTML = recent.length ? recent.map(gameCard).join("") :
-    unavailableCard("No games retrieved","The connected PBA source did not return games for this conference.");
+
+  $("homeGameList").innerHTML = recent.length
+    ? recent.map(gameCard).join("")
+    : unavailableCard(
+        "No games retrieved",
+        "The connected PBA source did not return games for this conference."
+      );
 
   const filtered = gameFilter === "all"
     ? games
     : games.filter(game => gameCategory(game) === gameFilter);
 
-  $("scoresList").innerHTML = filtered.length ? filtered.map(gameCard).join("") :
-    unavailableCard("No games in this section","No matching games were returned by the connected source.");
+  $("scoresList").innerHTML = filtered.length
+    ? filtered.map(gameCard).join("")
+    : unavailableCard(
+        "No games in this section",
+        "No matching games were returned by the connected source."
+      );
 }
 
 document.querySelectorAll("[data-game-filter]").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll("[data-game-filter]").forEach(item => item.classList.remove("active"));
+  button.addEventListener("click",() => {
+    document.querySelectorAll("[data-game-filter]").forEach(item => {
+      item.classList.remove("active");
+    });
+
     button.classList.add("active");
+
     gameFilter = button.dataset.gameFilter;
+
     renderGames();
   });
 });
 
 async function openGame(id) {
-  $("gameDetails").innerHTML = '<div class="loading">Loading game details...</div>';
+  $("gameDetails").innerHTML =
+    '<div class="loading">Loading box score...</div>';
+
   try {
     const data = await apiGet(
       `${API}/games/${encodeURIComponent(id)}?conference=${encodeURIComponent(currentConference)}`
     );
 
-    let tablesHTML = "";
-    if (Array.isArray(data.tables)) {
-      tablesHTML = data.tables.map(table => `
+    let boxScoreHTML = "";
+
+    if (Array.isArray(data.players) && data.players.length) {
+      boxScoreHTML = `
         <div class="card section">
-          <h3>Game Statistics</h3>
-          <div style="overflow-x:auto"><table>
-            ${table.map((row,index) => `<tr>${row.map(cell =>
-              index === 0 ? `<th>${escapeHTML(cell)}</th>` : `<td>${escapeHTML(cell)}</td>`
-            ).join("")}</tr>`).join("")}
-          </table></div>
-        </div>`).join("");
+          <h2>Box Score</h2>
+
+          <p class="muted small">
+            Player statistics retrieved from the connected game source.
+          </p>
+
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>MIN</th>
+                  <th>PTS</th>
+                  <th>REB</th>
+                  <th>AST</th>
+                  <th>STL</th>
+                  <th>BLK</th>
+                  <th>TO</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${data.players.map(player => `
+                  <tr>
+                    <td>${escapeHTML(player.name)}</td>
+                    <td>${escapeHTML(player.minutes ?? "—")}</td>
+                    <td>${escapeHTML(player.points ?? "—")}</td>
+                    <td>${escapeHTML(player.rebounds ?? "—")}</td>
+                    <td>${escapeHTML(player.assists ?? "—")}</td>
+                    <td>${escapeHTML(player.steals ?? "—")}</td>
+                    <td>${escapeHTML(player.blocks ?? "—")}</td>
+                    <td>${escapeHTML(player.turnovers ?? "—")}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    } else {
+      boxScoreHTML = unavailableCard(
+        "Box score unavailable",
+        "The PBA source did not return recognizable player statistics for this game."
+      );
     }
 
     $("gameDetails").innerHTML = `
       <div class="card">
         <div class="page-heading">
           <h2>${escapeHTML(data.title || "Game Details")}</h2>
-          <button class="secondary-btn" onclick="document.getElementById('gameDetails').innerHTML=''">Close</button>
+
+          <button class="secondary-btn"
+            onclick="document.getElementById('gameDetails').innerHTML=''">
+            Close
+          </button>
         </div>
-        <p class="muted small">${escapeHTML(data.conferenceName || "")}</p>
-        <p class="game-summary">Information retrieved from the available game source. It may not contain a complete box score.</p>
-        ${tablesHTML}
+
+        <p class="muted small">
+          ${escapeHTML(data.conferenceName || "")}
+        </p>
+
+        ${boxScoreHTML}
+
         <div class="section">
-          <h3>Source Information</h3>
-          <p class="muted small">${escapeHTML(data.text || "No additional game text was returned.")}</p>
-          ${data.sourceUrl ? `<a href="${escapeHTML(data.sourceUrl)}" target="_blank" rel="noopener">Open original game source</a>` : ""}
+          <h3>Game Source</h3>
+
+          <p class="muted small">
+            Statistics are shown only when returned by the connected source.
+          </p>
+
+          ${data.sourceUrl
+            ? `<a href="${escapeHTML(data.sourceUrl)}"
+                 target="_blank"
+                 rel="noopener">
+                 Open original game source
+               </a>`
+            : ""}
         </div>
-      </div>`;
+      </div>
+    `;
+
     $("gameDetails").scrollIntoView({behavior:"smooth"});
-  } catch (error) {
-    $("gameDetails").innerHTML = unavailableCard("Game details unavailable",error.message);
+  } catch(error) {
+    $("gameDetails").innerHTML = unavailableCard(
+      "Box score unavailable",
+      error.message
+    );
   }
 }
 
 async function changeConference(value) {
   currentConference = value;
+
   syncConferenceSelectors();
-  await Promise.allSettled([loadGames(),loadPlayerAverages()]);
+
+  await Promise.allSettled([
+    loadGames(),
+    loadPlayerAverages(),
+    loadPlayers()
+  ]);
+
   renderFollowedPlayers();
+  renderFollowedTeams();
+
   loadHighlights("all");
   loadPlayoffs();
 }
 
-$("homeConference").addEventListener("change",e => changeConference(e.target.value));
-$("scoresConference").addEventListener("change",e => changeConference(e.target.value));
-$("followedPlayersConference").addEventListener("change",e => changeConference(e.target.value));
-$("followedTeamsConference").addEventListener("change",e => changeConference(e.target.value));
-$("highlightsConference").addEventListener("change",e => changeConference(e.target.value));
-$("playoffConference").addEventListener("change",e => changeConference(e.target.value));
+[
+  "homeConference",
+  "scoresConference",
+  "followedPlayersConference",
+  "followedTeamsConference",
+  "highlightsConference",
+  "playoffConference"
+].forEach(id => {
+  $(id).addEventListener("change",e => {
+    changeConference(e.target.value);
+  });
+});
 
-function unavailableCard(title,message) {
-  return `<div class="empty" style="grid-column:1/-1">
-    <div class="empty-icon">🏀</div>
-    <h3>${escapeHTML(title)}</h3>
-    <p>${escapeHTML(message || "The connected source has not provided this information yet.")}</p>
-  </div>`;
-}
+/* TEAMS */
 
 async function loadTeams() {
-  $("teamsList").innerHTML = '<div class="loading">Loading teams...</div>';
+  $("teamsList").innerHTML =
+    '<div class="loading">Loading teams...</div>';
+
   try {
     const data = await apiGet(`${API}/teams`);
+
     teams = Array.isArray(data.teams) ? data.teams : [];
+
     renderTeams();
   } catch(error) {
-    $("teamsList").innerHTML = unavailableCard("Teams unavailable",error.message);
+    $("teamsList").innerHTML = unavailableCard(
+      "Teams unavailable",
+      error.message
+    );
   }
 }
 
@@ -705,76 +1342,111 @@ function teamCard(team) {
   const id = String(team.id || team.teamId || team.name || "");
   const name = team.name || team.teamName || "Unknown Team";
   const logo = team.logoUrl || team.logo || "";
+
   const following = followedTeams.includes(id);
 
-  return `<div class="card entity-card">
-    <div class="team-logo">${logo
-      ? `<img src="${escapeHTML(logo)}" alt="${escapeHTML(name)} logo" onerror="this.remove()">`
-      : escapeHTML(team.code || name.split(" ").map(w=>w[0]).join("").slice(0,3).toUpperCase())
-    }</div>
-    <h3>${escapeHTML(name)}</h3>
-    <p class="muted small">${team.guest ? "Guest team" : "PBA Team"}</p>
-    <button class="follow-btn ${following ? "following" : ""}" onclick="toggleTeamFollow('${escapeHTML(id)}')">
-      ${following ? "✓ Following" : "+ Follow Team"}
-    </button>
-  </div>`;
+  return `
+    <div class="card entity-card">
+      <div class="team-logo">
+        ${logo
+          ? `<img src="${escapeHTML(logo)}" alt="${escapeHTML(name)} logo" onerror="this.remove()">`
+          : escapeHTML(
+              team.code ||
+              name.split(" ").map(w => w[0]).join("").slice(0,3).toUpperCase()
+            )
+        }
+      </div>
+
+      <h3>${escapeHTML(name)}</h3>
+
+      <p class="muted small">
+        ${team.guest ? "Guest team" : "PBA Team"}
+      </p>
+
+      <button class="follow-btn ${following ? "following" : ""}"
+        onclick="toggleTeamFollow('${escapeHTML(id)}')">
+        ${following ? "✓ Following" : "+ Follow Team"}
+      </button>
+    </div>
+  `;
 }
 
 function renderTeams() {
   const search = ($("teamSearch").value || "").toLowerCase();
+
   const filtered = teams.filter(team =>
-    String(team.name || team.teamName || "").toLowerCase().includes(search)
+    String(team.name || team.teamName || "")
+      .toLowerCase()
+      .includes(search)
   );
-  $("teamsList").innerHTML = filtered.length ? filtered.map(teamCard).join("") :
-    unavailableCard("No teams found","Try another search.");
+
+  $("teamsList").innerHTML = filtered.length
+    ? filtered.map(teamCard).join("")
+    : unavailableCard("No teams found","Try another search.");
 }
 
 $("teamSearch").addEventListener("input",renderTeams);
 
 function toggleTeamFollow(id) {
   followedTeams = followedTeams.includes(id)
-    ? followedTeams.filter(item=>item!==id)
+    ? followedTeams.filter(item => item !== id)
     : [...followedTeams,id];
+
   saveFollows();
   renderTeams();
   renderFollowedTeams();
 }
 
+/* PLAYERS AND AVERAGES */
+
 async function loadPlayerAverages() {
   playerAverages = [];
+
   try {
     const data = await apiGet(
       `${API}/players/averages?conference=${encodeURIComponent(currentConference)}`
     );
-    playerAverages = Array.isArray(data.players) ? data.players : [];
+
+    playerAverages = Array.isArray(data.players)
+      ? data.players
+      : [];
   } catch(error) {
     console.warn("Player averages unavailable:",error.message);
   }
 }
 
 async function loadPlayers() {
-  $("playersList").innerHTML = '<div class="loading">Loading players...</div>';
-  let directoryPlayers = [];
+  $("playersList").innerHTML =
+    '<div class="loading">Loading players from conference box scores...</div>';
 
   try {
-    const data = await apiGet(`${API}/players`);
-    directoryPlayers = Array.isArray(data.players) ? data.players : [];
+    const data = await apiGet(
+      `${API}/players?conference=${encodeURIComponent(currentConference)}`
+    );
+
+    players = Array.isArray(data.players)
+      ? data.players
+      : [];
+
+    renderPlayers();
   } catch(error) {
-    console.warn("Player directory unavailable:",error.message);
+    players = [];
+
+    $("playersList").innerHTML = unavailableCard(
+      "Players unavailable",
+      error.message
+    );
   }
-
-  players = directoryPlayers.length ? directoryPlayers : playerAverages.map(player => ({
-    id:player.name,
-    name:player.name,
-    team:player.team || "",
-    fromBoxScore:true
-  }));
-
-  renderPlayers();
 }
 
 function playerIdentity(player) {
-  return String(player.id || player.playerId || player.name || player.playerName || "");
+  return String(
+    player.id ||
+    player.playerId ||
+    player.name ||
+    player.playerName ||
+    ""
+  );
 }
 
 function playerName(player) {
@@ -786,205 +1458,391 @@ function playerCard(player) {
   const name = playerName(player);
   const following = followedPlayers.includes(id);
 
-  return `<div class="card entity-card">
-    <div class="team-logo">${player.imageUrl
-      ? `<img src="${escapeHTML(player.imageUrl)}" alt="${escapeHTML(name)}" onerror="this.remove()">`
-      : "♟"
-    }</div>
-    <h3>${escapeHTML(name)}</h3>
-    <p class="muted small">${escapeHTML(player.team || player.teamName || (player.fromBoxScore ? "Found in conference box score" : "PBA Player"))}</p>
-    <button class="follow-btn ${following ? "following" : ""}" onclick="togglePlayerFollow('${escapeHTML(id)}')">
-      ${following ? "✓ Following" : "+ Follow Player"}
-    </button>
-  </div>`;
+  return `
+    <div class="card entity-card">
+      <div class="team-logo">
+        ${player.imageUrl
+          ? `<img src="${escapeHTML(player.imageUrl)}" alt="${escapeHTML(name)}" onerror="this.remove()">`
+          : "♟"
+        }
+      </div>
+
+      <h3>${escapeHTML(name)}</h3>
+
+      <p class="muted small">
+        ${escapeHTML(player.team || player.teamName || "PBA Player")}
+      </p>
+
+      <button class="follow-btn ${following ? "following" : ""}"
+        onclick="togglePlayerFollow('${escapeHTML(id)}')">
+        ${following ? "✓ Following" : "+ Follow Player"}
+      </button>
+    </div>
+  `;
 }
 
 function renderPlayers() {
   const search = ($("playerSearch").value || "").toLowerCase();
-  const filtered = players.filter(player => playerName(player).toLowerCase().includes(search));
-  $("playersList").innerHTML = filtered.length ? filtered.map(playerCard).join("") :
-    unavailableCard("Player directory unavailable","No verified player profiles or box-score players were returned for this conference.");
+
+  const filtered = players.filter(player =>
+    playerName(player).toLowerCase().includes(search)
+  );
+
+  $("playersList").innerHTML = filtered.length
+    ? filtered.map(playerCard).join("")
+    : unavailableCard(
+        "Player directory unavailable",
+        "No verified player profiles or box-score players were returned for this conference."
+      );
 }
 
 $("playerSearch").addEventListener("input",renderPlayers);
 
 function togglePlayerFollow(id) {
   followedPlayers = followedPlayers.includes(id)
-    ? followedPlayers.filter(item=>item!==id)
+    ? followedPlayers.filter(item => item !== id)
     : [...followedPlayers,id];
+
   saveFollows();
   renderPlayers();
   renderFollowedPlayers();
 }
 
 function averageValue(value) {
-  return value === null || value === undefined || value === ""
-    ? "—"
-    : Number.isFinite(Number(value)) ? Number(value).toFixed(1) : "—";
+  if (value === null || value === undefined || value === "") {
+    return "—";
+  }
+
+  return Number.isFinite(Number(value))
+    ? Number(value).toFixed(1)
+    : "—";
 }
 
 function findAverageForFollowed(id) {
-  return playerAverages.find(player =>
-    String(player.id || player.playerId || player.name || "").toLowerCase() === id.toLowerCase()
-  );
+  return playerAverages.find(player => {
+    const playerId = String(
+      player.id || player.playerId || player.name || ""
+    ).toLowerCase();
+
+    return playerId === id.toLowerCase();
+  });
 }
 
 function followedPlayerAverageCard(id) {
   const player = findAverageForFollowed(id);
-  const profile = players.find(item => playerIdentity(item) === id);
-  const name = player ? player.name : profile ? playerName(profile) : id;
+
+  const profile = players.find(item =>
+    playerIdentity(item) === id
+  );
+
+  const name = player
+    ? player.name
+    : profile
+      ? playerName(profile)
+      : id;
 
   if (!player) {
-    return `<article class="average-card">
-      <div class="average-top">
-        <div><div class="average-name">${escapeHTML(name)}</div>
-        <div class="average-team">Conference averages</div></div>
-        <button class="follow-btn following" onclick="togglePlayerFollow('${escapeHTML(id)}')">Following ✓</button>
-      </div>
-      <p class="muted small">No box-score averages were returned for this player in the selected conference.</p>
-    </article>`;
+    return `
+      <article class="average-card">
+        <div class="average-top">
+          <div>
+            <div class="average-name">${escapeHTML(name)}</div>
+            <div class="average-team">Conference averages</div>
+          </div>
+
+          <button class="follow-btn following"
+            onclick="togglePlayerFollow('${escapeHTML(id)}')">
+            Following ✓
+          </button>
+        </div>
+
+        <p class="muted small">
+          No box-score averages were returned for this player in the selected conference.
+        </p>
+      </article>
+    `;
   }
 
   const a = player.averages || {};
-  return `<article class="average-card">
-    <div class="average-top">
-      <div>
-        <div class="average-name">${escapeHTML(player.name)}</div>
-        <div class="average-team">${escapeHTML(player.conference || "Selected conference")} · ${Number(player.games)||0} games</div>
+
+  return `
+    <article class="average-card">
+      <div class="average-top">
+        <div>
+          <div class="average-name">${escapeHTML(player.name)}</div>
+          <div class="average-team">
+            ${escapeHTML(player.conference || "Selected conference")}
+            · ${Number(player.games) || 0} games
+          </div>
+        </div>
+
+        <button class="follow-btn following"
+          onclick="togglePlayerFollow('${escapeHTML(id)}')">
+          Following ✓
+        </button>
       </div>
-      <button class="follow-btn following" onclick="togglePlayerFollow('${escapeHTML(id)}')">Following ✓</button>
-    </div>
-    <div class="average-grid">
-      <div class="average-stat"><strong>${averageValue(a.points)}</strong><span>PTS</span></div>
-      <div class="average-stat"><strong>${averageValue(a.rebounds)}</strong><span>REB</span></div>
-      <div class="average-stat"><strong>${averageValue(a.assists)}</strong><span>AST</span></div>
-      <div class="average-stat"><strong>${averageValue(a.steals)}</strong><span>STL</span></div>
-      <div class="average-stat"><strong>${averageValue(a.blocks)}</strong><span>BLK</span></div>
-      <div class="average-stat"><strong>${averageValue(a.turnovers)}</strong><span>TO</span></div>
-    </div>
-    <div class="average-foot">Per-game averages · Based on retrieved box scores</div>
-  </article>`;
+
+      <div class="average-grid">
+        <div class="average-stat"><strong>${averageValue(a.points)}</strong><span>PTS</span></div>
+        <div class="average-stat"><strong>${averageValue(a.rebounds)}</strong><span>REB</span></div>
+        <div class="average-stat"><strong>${averageValue(a.assists)}</strong><span>AST</span></div>
+        <div class="average-stat"><strong>${averageValue(a.steals)}</strong><span>STL</span></div>
+        <div class="average-stat"><strong>${averageValue(a.blocks)}</strong><span>BLK</span></div>
+        <div class="average-stat"><strong>${averageValue(a.turnovers)}</strong><span>TO</span></div>
+      </div>
+
+      <div class="average-foot">
+        Per-game averages · Based on retrieved box scores
+      </div>
+    </article>
+  `;
 }
 
 function renderFollowedPlayers() {
   $("followedPlayersList").innerHTML = followedPlayers.length
     ? followedPlayers.map(followedPlayerAverageCard).join("")
-    : unavailableCard("No followed players yet","Follow players from the Players page. Their conference averages will appear here.");
+    : unavailableCard(
+        "No followed players yet",
+        "Follow players from the Players page. Their conference averages will appear here."
+      );
+
   loadHighlights("player");
 }
 
 function renderFollowedTeams() {
   const selected = teams.filter(team =>
-    followedTeams.includes(String(team.id || team.teamId || team.name))
+    followedTeams.includes(
+      String(team.id || team.teamId || team.name)
+    )
   );
+
   $("followedTeamsList").innerHTML = selected.length
     ? selected.map(teamCard).join("")
-    : unavailableCard("No followed teams yet","Follow teams from the Teams page. Your followed teams will appear here.");
+    : unavailableCard(
+        "No followed teams yet",
+        "Follow teams from the Teams page. Your followed teams will appear here."
+      );
+
   loadHighlights("team");
 }
 
+/* VIDEO HIGHLIGHTS */
+
 async function loadHighlights(type="all") {
-  const target = type==="player" ? $("playerHighlights") :
-    type==="team" ? $("teamHighlights") : $("highlightsFeed");
+  const target =
+    type === "player" ? $("playerHighlights") :
+    type === "team" ? $("teamHighlights") :
+    $("highlightsFeed");
+
   if (!target) return;
 
-  target.innerHTML = '<div class="loading">Loading highlights...</div>';
+  target.classList.remove("video-feed");
+
+  target.innerHTML =
+    '<div class="loading">Loading official basketball videos...</div>';
 
   try {
     const params = new URLSearchParams();
-    if (currentConference) params.set("conference",currentConference);
-    if (type!=="all") params.set("type",type);
 
-    const data = await apiGet(`${API}/highlights?${params.toString()}`);
-    highlights = Array.isArray(data.highlights) ? data.highlights : [];
+    if (type !== "all") {
+      params.set("type",type);
+    }
 
-    const filtered = highlights.filter(item => {
-      if (type==="team") return followedTeams.includes(String(item.teamId || item.team || ""));
-      if (type==="player") return followedPlayers.includes(String(item.playerId || item.player || ""));
-      return true;
-    });
+    const data = await apiGet(
+      `${API}/highlights?${params.toString()}`
+    );
+
+    highlights = Array.isArray(data.highlights)
+      ? data.highlights
+      : [];
+
+    let filtered = highlights;
+
+    if (type === "team" || type === "player") {
+      filtered = [];
+    }
 
     renderHighlightFeed(target,filtered);
   } catch(error) {
-    target.innerHTML = unavailableCard("Highlights unavailable",error.message);
+    target.classList.remove("video-feed");
+
+    target.innerHTML = unavailableCard(
+      "Videos unavailable",
+      error.message
+    );
   }
 }
 
 function renderHighlightFeed(target,items) {
   if (!items.length) {
-    target.innerHTML = `<div class="feed-card"><div class="feed-card-content">
-      <div class="feed-icon">▶</div><h2>Highlights coming soon</h2>
-      <p>A vertical, swipe-style video feed will appear when a verified PBA highlights source is connected.</p>
-      <p>Two Sports will not display made-up videos or links.</p>
-    </div></div>`;
+    target.classList.remove("video-feed");
+
+    target.innerHTML = unavailableCard(
+      "No playable highlights found",
+      "The official video source did not return any playable PBA highlights."
+    );
+
     return;
   }
 
-  target.innerHTML = items.map(item=>`<article class="feed-card">
-    <div class="feed-card-content">
-      <div class="feed-icon">▶</div>
-      <h2>${escapeHTML(item.title || item.name || "PBA Highlight")}</h2>
-      <p>${escapeHTML(item.description || "")}</p>
-      ${item.videoUrl ? `<a href="${escapeHTML(item.videoUrl)}" target="_blank" rel="noopener">Watch Highlight</a>` : ""}
-    </div>
-  </article>`).join("");
+  target.classList.add("video-feed");
+
+  target.innerHTML = items.map(item => {
+    const videoId = String(item.id || "").trim();
+
+    if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return "";
+    }
+
+    const embedUrl =
+      `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?playsinline=1&rel=0`;
+
+    const watchUrl =
+      `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+
+    return `
+      <article class="video-card">
+        <iframe
+          src="${embedUrl}"
+          title="${escapeHTML(item.title || "PBA Highlight")}"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+
+        <div class="video-caption">
+          <h3>${escapeHTML(item.title || "PBA Highlight")}</h3>
+          <p>${escapeHTML(item.source || "One Sports Philippines")}</p>
+          <a class="video-open"
+             href="${watchUrl}"
+             target="_blank"
+             rel="noopener">
+             Open on YouTube ↗
+          </a>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  if (!target.innerHTML.trim()) {
+    target.classList.remove("video-feed");
+
+    target.innerHTML = unavailableCard(
+      "No playable videos",
+      "The returned videos did not have valid YouTube video IDs."
+    );
+  }
 }
 
+/* PLAYOFFS */
+
 async function loadPlayoffs() {
-  $("playoffBracket").innerHTML = '<div class="loading">Loading playoff bracket...</div>';
+  $("playoffBracket").innerHTML =
+    '<div class="loading">Loading playoff bracket...</div>';
+
   try {
-    const data = await apiGet(`${API}/playoffs?conference=${encodeURIComponent(currentConference)}`);
+    const data = await apiGet(
+      `${API}/playoffs?conference=${encodeURIComponent(currentConference)}`
+    );
+
     if (!data.available || !data.bracket) {
       $("playoffBracket").innerHTML = unavailableCard(
         "Playoff bracket unavailable",
         data.message || "Verified playoff bracket information has not been provided by the connected source."
       );
+
       return;
     }
+
     renderBracket(data.bracket);
   } catch(error) {
-    $("playoffBracket").innerHTML = unavailableCard("Playoff bracket unavailable",error.message);
+    $("playoffBracket").innerHTML = unavailableCard(
+      "Playoff bracket unavailable",
+      error.message
+    );
   }
 }
 
 function renderBracket(bracket) {
   const rounds = bracket.rounds || [];
+
   if (!rounds.length) {
-    $("playoffBracket").innerHTML = unavailableCard("No bracket rounds found","The source did not return playoff rounds.");
+    $("playoffBracket").innerHTML = unavailableCard(
+      "No bracket rounds found",
+      "The source did not return playoff rounds."
+    );
+
     return;
   }
-  $("playoffBracket").innerHTML = `<div class="bracket">${rounds.map(round=>`
-    <div class="bracket-round"><h2>${escapeHTML(round.name || "Playoff Round")}</h2>
-      ${(round.matches || []).map(match=>`
-        <div class="bracket-match">
-          <div class="bracket-team">${escapeHTML(match.team1 || "TBD")}<strong style="float:right">${escapeHTML(match.score1 ?? "")}</strong></div>
-          <div class="bracket-team">${escapeHTML(match.team2 || "TBD")}<strong style="float:right">${escapeHTML(match.score2 ?? "")}</strong></div>
-          <p class="muted small">${escapeHTML(match.status || "")}</p>
-        </div>`).join("")}
-    </div>`).join("")}</div>`;
+
+  $("playoffBracket").innerHTML = `
+    <div class="bracket">
+      ${rounds.map(round => `
+        <div class="bracket-round">
+          <h2>${escapeHTML(round.name || "Playoff Round")}</h2>
+
+          ${(round.matches || []).map(match => `
+            <div class="bracket-match">
+              <div class="bracket-team">
+                ${escapeHTML(match.team1 || "TBD")}
+                <strong style="float:right">${escapeHTML(match.score1 ?? "")}</strong>
+              </div>
+
+              <div class="bracket-team">
+                ${escapeHTML(match.team2 || "TBD")}
+                <strong style="float:right">${escapeHTML(match.score2 ?? "")}</strong>
+              </div>
+
+              <p class="muted small">${escapeHTML(match.status || "")}</p>
+            </div>
+          `).join("")}
+        </div>
+      `).join("")}
+    </div>
+  `;
 }
 
+/* NEWS AND CONNECTION TEST */
+
 function loadNews() {
-  $("newsList").innerHTML = unavailableCard("News source not connected","The current backend does not provide a verified PBA news feed yet.");
+  $("newsList").innerHTML = unavailableCard(
+    "News source not connected",
+    "The current backend does not provide a verified PBA news feed yet."
+  );
 }
 
 async function testConnection() {
   $("connectionResult").textContent = "Checking connection...";
+
   try {
     const data = await apiGet("/api/test-pba");
+
     $("connectionResult").textContent = data.ok
       ? `Connected. Games found: ${data.gamesFound ?? "unknown"}.`
       : `Not connected: ${data.error || "Unknown source error"}`;
   } catch(error) {
-    $("connectionResult").textContent = `Backend error: ${error.message}`;
+    $("connectionResult").textContent =
+      `Backend error: ${error.message}`;
   }
 }
 
+/* REFRESH AND INITIALIZATION */
+
 async function refreshAll() {
   $("refreshBtn").textContent = "…";
-  await Promise.allSettled([loadGames(),loadTeams(),loadPlayerAverages()]);
+
+  await Promise.allSettled([
+    loadGames(),
+    loadTeams(),
+    loadPlayerAverages()
+  ]);
+
   await loadPlayers();
+
   renderFollowedPlayers();
+  renderFollowedTeams();
+
   $("refreshBtn").textContent = "↻";
 }
 
@@ -992,6 +1850,7 @@ $("refreshBtn").addEventListener("click",refreshAll);
 
 async function initialize() {
   saveFollows();
+
   try {
     await loadConferences();
   } catch(error) {
@@ -1007,13 +1866,16 @@ async function initialize() {
   ]);
 
   await loadPlayers();
+
   renderFollowedPlayers();
   renderFollowedTeams();
+
   loadNews();
   loadPlayoffs();
 }
 
 initialize();
 </script>
+
 </body>
 </html>
