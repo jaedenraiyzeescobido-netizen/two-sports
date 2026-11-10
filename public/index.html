@@ -2,195 +2,860 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Two Sports — PBA Fan App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Two Sports</title>
+
 <style>
-:root{--bg:#080b11;--panel:#141b26;--panel2:#1b2431;--line:#293446;--red:#e52b3b;--muted:#9ba8ba;--white:#f7f9fc;--green:#35c98a}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font:15px/1.45 Inter,system-ui,Arial,sans-serif;padding-bottom:78px}
-header{height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#0d121a;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-.brand{font-weight:950;letter-spacing:.5px;font-size:23px}.brand span{color:var(--red)}.season{font-size:11px;color:var(--muted);text-align:right}
-main{max-width:900px;margin:auto;padding:18px}.page{display:none}.page.active{display:block}
-h1{font-size:29px;line-height:1.12;margin:8px 0 12px}h2{font-size:21px;margin:24px 0 12px}h3{font-size:16px;margin:0 0 6px}
-p{margin:6px 0}.muted{color:var(--muted);font-size:13px}.eyebrow{font-size:11px;color:#ff7a86;letter-spacing:1.3px;font-weight:800}
-.hero{background:radial-gradient(circle at 85% 15%,#60202c 0,transparent 42%),linear-gradient(135deg,#222c3b,#111720);border:1px solid #384456;border-radius:18px;padding:23px;margin:15px 0}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px;margin:11px 0}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.stack{display:grid;gap:11px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-button{border:0;cursor:pointer;color:white;font:inherit}.primary{background:var(--red);padding:10px 14px;border-radius:9px;font-weight:800}.secondary{background:var(--panel2);padding:9px 12px;border-radius:9px}.tabbar{display:flex;gap:8px;overflow:auto;padding:4px 0 10px}.tabbar button{background:var(--panel2);padding:9px 13px;border-radius:30px;white-space:nowrap;font-size:13px}.tabbar button.active{background:var(--red)}
-nav{position:fixed;z-index:10;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#101722;border-top:1px solid var(--line);padding:8px 2px calc(8px + env(safe-area-inset-bottom))}
-nav button{background:none;color:var(--muted);font-size:11px;display:grid;gap:3px;justify-items:center;min-width:54px}nav button b{font-size:19px}nav button.active{color:#ff5967}
-.search{width:100%;padding:12px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:white;margin:8px 0 13px}
-.team-mark{width:42px;height:42px;border-radius:12px;background:#263143;display:grid;place-items:center;font-weight:900;font-size:12px;flex-shrink:0}
-.teamrow{display:flex;align-items:center;gap:11px}.score{font-size:25px;font-weight:900;letter-spacing:1px}.tag{display:inline-block;border-radius:30px;background:#273345;padding:4px 8px;font-size:10px;font-weight:800;color:#d9e2ee}.tag.red{background:#54202a;color:#ff9da6}.tag.green{background:#173b31;color:#8bf0c3}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 7px;text-align:left;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:11px;text-transform:uppercase}
-.item{cursor:pointer}.item:active{transform:scale(.99)}.article-title{font-weight:800}.modal{display:none;position:fixed;inset:0;background:#000b;z-index:20;align-items:flex-end;justify-content:center;padding:12px}.modal.open{display:flex}.modalbox{background:#141b26;border:1px solid var(--line);border-radius:18px 18px 12px 12px;padding:20px;width:100%;max-width:560px;max-height:85vh;overflow:auto}.close{float:right;background:#293446;border-radius:8px;padding:7px 11px}
-small.source{color:var(--muted);display:block;margin-top:12px;font-size:11px}a{color:#ff8490;text-decoration:none}
-@media(min-width:700px){main{padding:25px}.modal{align-items:center}.modalbox{border-radius:18px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+:root {
+  --bg: #f4f7fc;
+  --surface: #ffffff;
+  --surface2: #edf2fa;
+  --text: #15233b;
+  --muted: #718096;
+  --line: #dce5f1;
+  --blue: #1769e0;
+  --blue2: #0d4fb5;
+  --green: #159b68;
+  --red: #d83d50;
+  --shadow: 0 5px 20px rgba(30,60,100,.06);
+}
+
+[data-theme="dark"] {
+  --bg: #080d16;
+  --surface: #111a29;
+  --surface2: #1b2940;
+  --text: #f3f7ff;
+  --muted: #9aabc3;
+  --line: #293951;
+  --blue: #438cff;
+  --blue2: #2470e7;
+  --green: #42d69b;
+  --red: #ff6478;
+  --shadow: 0 5px 20px rgba(0,0,0,.2);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, Arial, sans-serif;
+  padding-bottom: 80px;
+  transition: background .2s, color .2s;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
+header {
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 17px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  font-size: 23px;
+  font-weight: 950;
+  letter-spacing: -.8px;
+}
+
+.brand span { color: var(--blue); }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.season {
+  text-align: right;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.theme-toggle {
+  width: 39px;
+  height: 39px;
+  border-radius: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  font-size: 18px;
+}
+
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 18px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+h1 {
+  font-size: 29px;
+  line-height: 1.15;
+  margin: 8px 0 12px;
+}
+
+h2 {
+  font-size: 21px;
+  margin: 25px 0 12px;
+}
+
+h3 {
+  font-size: 16px;
+  margin: 0 0 6px;
+}
+
+p { margin: 6px 0; }
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.eyebrow {
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 1.3px;
+}
+
+.hero {
+  background: linear-gradient(125deg, var(--blue2), var(--blue));
+  color: white;
+  border-radius: 19px;
+  padding: 24px;
+  margin: 15px 0;
+  box-shadow: var(--shadow);
+}
+
+.hero .muted { color: #e0ebff; }
+
+.hero h1 { font-size: 32px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 11px 0;
+  box-shadow: var(--shadow);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 10px;
+}
+
+.stack {
+  display: grid;
+  gap: 10px;
+}
+
+.primary {
+  background: var(--blue);
+  color: white;
+  border: 0;
+  padding: 11px 15px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.secondary {
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  padding: 9px 12px;
+  border-radius: 10px;
+}
+
+.tag {
+  display: inline-block;
+  background: var(--surface2);
+  border-radius: 30px;
+  padding: 4px 9px;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.tag.blue {
+  color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 12%, var(--surface));
+}
+
+.tag.green {
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 12%, var(--surface));
+}
+
+.tag.red {
+  color: var(--red);
+  background: color-mix(in srgb, var(--red) 12%, var(--surface));
+}
+
+.score {
+  font-size: 27px;
+  font-weight: 950;
+  letter-spacing: .5px;
+}
+
+.team-mark {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--surface2);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 950;
+  flex-shrink: 0;
+}
+
+.teamrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item { cursor: pointer; }
+
+.tabbar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 5px 0 10px;
+}
+
+.tabbar button {
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 9px 14px;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.tabbar button.active {
+  background: var(--blue);
+  color: white;
+  border-color: var(--blue);
+}
+
+.search {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 13px;
+  color: var(--text);
+  margin: 10px 0;
+}
+
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-around;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: 9px 2px calc(9px + env(safe-area-inset-bottom));
+}
+
+nav button {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 11px;
+  display: grid;
+  gap: 3px;
+  justify-items: center;
+  min-width: 53px;
+}
+
+nav button b { font-size: 19px; }
+
+nav button.active { color: var(--blue); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th, td {
+  padding: 10px 7px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0,0,0,.65);
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px;
+}
+
+.modal.open { display: flex; }
+
+.modalbox {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  padding: 20px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 85vh;
+  overflow: auto;
+}
+
+.close {
+  float: right;
+  border: 0;
+  background: var(--surface2);
+  padding: 7px 11px;
+  border-radius: 9px;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.source-note {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 15px;
+}
+
+@media(min-width:700px) {
+  main { padding: 25px; }
+  .modal { align-items: center; }
+  .grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
 </style>
 </head>
+
 <body>
-<header><div class="brand">TWO <span>SPORTS</span></div><div class="season">SEASON 50<br>GOVERNORS' CUP · 2026</div></header>
+
+<header>
+  <div class="brand">TWO <span>SPORTS</span></div>
+
+  <div class="header-right">
+    <div class="season">PBA · SEASON 50<br>GOVERNORS' CUP</div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">☾</button>
+  </div>
+</header>
+
 <main>
 
 <section id="home" class="page active">
- <div class="eyebrow">PHILIPPINE BASKETBALL ASSOCIATION</div>
- <div class="hero"><span class="tag red">SEASON 50 · GOVERNORS' CUP</span><h1>All the PBA.<br>In one place.</h1><p class="muted">Scores, playoff race, teams, players and league updates.</p><button class="primary" onclick="go('scores')">Open Game Center →</button></div>
- <h2>Next Game</h2>
- <div class="card item" onclick="gameDetail('g5')">
-  <div class="row"><span class="tag red">QUARTERFINALS · GAME 5</span><span class="muted">NOV 10 · 7:30 PM PHT</span></div>
-  <div class="row" style="margin:18px 0"><div class="teamrow"><div class="team-mark">GIN</div><b>Ginebra</b></div><b class="score">VS</b><div class="teamrow"><div class="team-mark">SMB</div><b>San Miguel</b></div></div>
-  <p class="muted">Best-of-five series tied 2–2 · Winner advances to the semifinals.</p>
- </div>
- <h2>Playoff Picture</h2>
- <div class="grid">
-  <div class="card"><span class="tag green">ADVANCED</span><h3 style="margin-top:10px">NLEX</h3><div class="score">3–0</div><p class="muted">Defeated Phoenix</p></div>
-  <div class="card"><span class="tag green">ADVANCED</span><h3 style="margin-top:10px">TNT</h3><div class="score">3–0</div><p class="muted">Defeated Magnolia</p></div>
-  <div class="card"><span class="tag green">ADVANCED</span><h3 style="margin-top:10px">Converge</h3><div class="score">3–1</div><p class="muted">Defeated Rain or Shine</p></div>
-  <div class="card"><span class="tag red">GAME 5</span><h3 style="margin-top:10px">Ginebra vs SMB</h3><div class="score">2–2</div><p class="muted">Winner takes final semifinal spot</p></div>
- </div>
- <h2>Latest PBA Headlines</h2><div id="homeNews"></div>
- <small class="source">Data snapshot: November 10, 2026, before the scheduled 7:30 PM game. This is not a live scoring feed.</small>
+  <div class="eyebrow">PHILIPPINE BASKETBALL ASSOCIATION</div>
+
+  <div class="hero">
+    <span class="tag">PBA SEASON 50</span>
+    <h1>All the PBA.<br>In one place.</h1>
+    <p class="muted">Scores, teams, players and league updates.</p>
+    <button class="primary" onclick="go('scores')">Open Game Center →</button>
+  </div>
+
+  <h2>Latest Result</h2>
+
+  <div class="card">
+    <div class="row">
+      <span class="tag green">FINAL</span>
+      <span class="muted">NOVEMBER 10 · GAME 5</span>
+    </div>
+
+    <div class="row" style="margin:20px 0">
+      <div style="text-align:center">
+        <div class="team-mark" style="margin:auto">GIN</div>
+        <b>Ginebra</b>
+        <div class="score">110</div>
+      </div>
+
+      <div class="score">–</div>
+
+      <div style="text-align:center">
+        <div class="team-mark" style="margin:auto">SMB</div>
+        <b>San Miguel</b>
+        <div class="score">94</div>
+      </div>
+    </div>
+
+    <p class="muted">Ginebra wins the quarterfinal series 3–2 and advances to the semifinals.</p>
+    <button class="secondary" onclick="gameDetail('614')">Game details</button>
+  </div>
+
+  <h2>Semifinal Teams</h2>
+
+  <div class="grid">
+    <div class="card">
+      <span class="tag green">ADVANCED</span>
+      <h3 style="margin-top:10px">NLEX</h3>
+    </div>
+    <div class="card">
+      <span class="tag green">ADVANCED</span>
+      <h3 style="margin-top:10px">TNT</h3>
+    </div>
+    <div class="card">
+      <span class="tag green">ADVANCED</span>
+      <h3 style="margin-top:10px">Converge</h3>
+    </div>
+    <div class="card">
+      <span class="tag green">ADVANCED</span>
+      <h3 style="margin-top:10px">Ginebra</h3>
+    </div>
+  </div>
+
+  <h2>Latest Headlines</h2>
+  <div id="homeNews"></div>
+
+  <small class="source-note">
+    Scores shown are a dated results snapshot, not a verified live feed.
+  </small>
 </section>
 
 <section id="scores" class="page">
- <div class="eyebrow">GAME CENTER</div><h1>Scores & Schedule</h1><p class="muted">Season 50 · Governors' Cup · Philippine Time</p>
- <div class="tabbar"><button class="active" onclick="gameFilter('all',this)">All</button><button onclick="gameFilter('upcoming',this)">Upcoming</button><button onclick="gameFilter('final',this)">Final</button></div>
- <div id="games"></div>
+  <div class="eyebrow">GAME CENTER</div>
+  <h1>Scores & Schedule</h1>
+  <p class="muted">PBA Season 50 · Governors' Cup</p>
+
+  <div class="tabbar">
+    <button class="active" onclick="gameFilter('all',this)">All</button>
+    <button onclick="gameFilter('upcoming',this)">Upcoming</button>
+    <button onclick="gameFilter('final',this)">Final</button>
+  </div>
+
+  <div id="games"></div>
 </section>
 
 <section id="teams" class="page">
- <div class="eyebrow">LEAGUE DIRECTORY</div><h1>Teams</h1><p class="muted">Season 50 Governors' Cup participants, including guest team.</p>
- <input class="search" placeholder="Search teams..." oninput="searchCards('teamList',this.value)">
- <div id="teamList" class="grid"></div>
+  <div class="eyebrow">LEAGUE DIRECTORY</div>
+  <h1>Teams</h1>
+  <p class="muted">PBA team directory</p>
+
+  <input class="search" placeholder="Search teams..." oninput="searchCards('teamList',this.value)">
+
+  <div id="teamList" class="grid"></div>
 </section>
 
 <section id="players" class="page">
- <div class="eyebrow">PLAYER DIRECTORY</div><h1>Players</h1>
- <div class="card"><h3>Player data needs verification</h3><p class="muted">I have not inserted made-up player names, rosters or averages. Use the official PBA player directory for current roster data until a verified feed is connected.</p><a href="https://pba.ph" target="_blank" rel="noopener">Visit PBA official website ↗</a></div>
- <input class="search" placeholder="Search player directory (when connected)" disabled>
+  <div class="eyebrow">PLAYER DIRECTORY</div>
+  <h1>Players</h1>
+
+  <div class="card">
+    <h3>Player information</h3>
+    <p class="muted">
+      Current player rosters and statistics still need a verified data connection.
+      This section will not display invented player information.
+    </p>
+    <a href="https://pba.ph" target="_blank" rel="noopener">Official PBA website ↗</a>
+  </div>
 </section>
 
 <section id="standings" class="page">
- <div class="eyebrow">POSTSEASON</div><h1>Playoff Standings</h1><p class="muted">2026 Governors' Cup quarterfinals · updated through Nov 7, 2026.</p>
- <div class="card"><h3>Quarterfinal Series</h3><table><thead><tr><th>Series</th><th>Result</th><th>Status</th></tr></thead><tbody>
- <tr><td>NLEX vs Phoenix</td><td>3–0</td><td><span class="tag green">NLEX ADVANCES</span></td></tr>
- <tr><td>TNT vs Magnolia</td><td>3–0</td><td><span class="tag green">TNT ADVANCES</span></td></tr>
- <tr><td>Converge vs Rain or Shine</td><td>3–1</td><td><span class="tag green">CONVERGE ADVANCES</span></td></tr>
- <tr><td>Ginebra vs San Miguel</td><td>2–2</td><td><span class="tag red">GAME 5</span></td></tr>
- </tbody></table></div>
- <p class="muted">Elimination-round group tables are not shown as current standings because the competition has moved into the quarterfinals.</p>
+  <div class="eyebrow">POSTSEASON</div>
+  <h1>Playoff Standings</h1>
+
+  <div class="card">
+    <h3>Quarterfinal Series</h3>
+    <table>
+      <thead>
+        <tr><th>Series</th><th>Result</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>NLEX vs Phoenix</td><td>3–0</td><td>Advanced</td></tr>
+        <tr><td>TNT vs Magnolia</td><td>3–0</td><td>Advanced</td></tr>
+        <tr><td>Converge vs Rain or Shine</td><td>3–1</td><td>Advanced</td></tr>
+        <tr><td>Ginebra vs San Miguel</td><td>3–2</td><td>Final</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="muted">Historical playoff snapshot. Not an automatically updated standings table.</p>
 </section>
 
-<section id="news" class="page"><div class="eyebrow">LATEST UPDATES</div><h1>PBA News</h1><div id="newsList"></div></section>
-<section id="favorites" class="page"><div class="eyebrow">YOUR PBA</div><h1>Following</h1><div id="favoritesList"></div></section>
-<section id="more" class="page"><div class="eyebrow">MORE FROM THE LEAGUE</div><h1>Explore</h1>
- <div class="card item" onclick="go('standings')">🏆 <b>Playoff Standings</b><p class="muted">Quarterfinal series and advancement</p></div>
- <div class="card item" onclick="go('players')">🏀 <b>Player Directory</b><p class="muted">Current player information</p></div>
- <div class="card item"><b>Official PBA</b><p><a href="https://pba.ph" target="_blank" rel="noopener">pba.ph ↗</a></p></div>
+<section id="news" class="page">
+  <div class="eyebrow">LATEST UPDATES</div>
+  <h1>PBA News</h1>
+  <div id="newsList"></div>
+</section>
+
+<section id="favorites" class="page">
+  <div class="eyebrow">YOUR PBA</div>
+  <h1>Following</h1>
+  <div id="favoritesList"></div>
+</section>
+
+<section id="more" class="page">
+  <div class="eyebrow">MORE FROM THE LEAGUE</div>
+  <h1>Explore</h1>
+
+  <div class="card item" onclick="go('standings')">
+    🏆 <b>Playoff Standings</b>
+    <p class="muted">Quarterfinal results</p>
+  </div>
+
+  <div class="card item" onclick="go('players')">
+    🏀 <b>Player Directory</b>
+    <p class="muted">Player information</p>
+  </div>
+
+  <div class="card">
+    <b>Official PBA</b>
+    <p><a href="https://pba.ph" target="_blank" rel="noopener">Visit pba.ph ↗</a></p>
+  </div>
 </section>
 
 </main>
+
 <nav>
- <button class="active" onclick="go('home',this)"><b>⌂</b>Home</button>
- <button onclick="go('scores',this)"><b>▤</b>Scores</button>
- <button onclick="go('teams',this)"><b>♧</b>Teams</button>
- <button onclick="go('news',this)"><b>▣</b>News</button>
- <button onclick="go('more',this)"><b>☰</b>More</button>
+  <button class="active" onclick="go('home',this)"><b>⌂</b>Home</button>
+  <button onclick="go('scores',this)"><b>▤</b>Scores</button>
+  <button onclick="go('teams',this)"><b>♧</b>Teams</button>
+  <button onclick="go('news',this)"><b>▣</b>News</button>
+  <button onclick="go('more',this)"><b>☰</b>More</button>
 </nav>
-<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalbox"><button class="close" onclick="closeModal()">✕</button><div id="modalBody"></div></div></div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modalbox">
+    <button class="close" onclick="closeModal()">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
 
 <script>
-const teams=[
-["Barangay Ginebra San Miguel","GIN"],["San Miguel Beermen","SMB"],["TNT Tropang 5G","TNT"],["NLEX Road Warriors","NLEX"],["Converge FiberXers","CON"],["Magnolia Hotshots","MAG"],["Rain or Shine Elasto Painters","ROS"],["Phoenix Fuel Masters","PHX"],["Meralco Bolts","MER"],["Blackwater Bossing","BWB"],["Terrafirma Dyip","TER"],["Titan Ultra Giant Risers","TGR"],["Macau Giant Pandas","MAC"]
+/* THEME */
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("twoSportsTheme", theme);
+  document.getElementById("themeToggle").textContent =
+    theme === "dark" ? "☀" : "☾";
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || "light";
+  applyTheme(current === "dark" ? "light" : "dark");
+}
+
+applyTheme(localStorage.getItem("twoSportsTheme") || "light");
+
+
+/* DATA */
+const teams = [
+  ["Barangay Ginebra San Miguel","GIN"],
+  ["San Miguel Beermen","SMB"],
+  ["TNT Tropang 5G","TNT"],
+  ["NLEX Road Warriors","NLEX"],
+  ["Converge FiberXers","CON"],
+  ["Magnolia Hotshots","MAG"],
+  ["Rain or Shine Elasto Painters","ROS"],
+  ["Phoenix Fuel Masters","PHX"],
+  ["Meralco Bolts","MER"],
+  ["Blackwater Bossing","BWB"],
+  ["Terrafirma Dyip","TER"],
+  ["Titan Ultra Giant Risers","TGR"],
+  ["Macau Black Bears","MAC"]
 ];
 
-const games=[
-{id:"g5",date:"November 10, 2026 · 7:30 PM",home:"Barangay Ginebra",away:"San Miguel Beermen",status:"upcoming",detail:"Quarterfinals Game 5. Series tied 2–2. Winner advances to the semifinals."},
-{date:"November 6, 2026",home:"San Miguel Beermen",away:"Barangay Ginebra",hs:108,as:102,status:"final"},
-{date:"November 6, 2026",home:"Converge FiberXers",away:"Rain or Shine Elasto Painters",hs:120,as:109,status:"final"},
-{date:"November 3, 2026",home:"Barangay Ginebra",away:"San Miguel Beermen",hs:98,as:101,status:"final"},
-{date:"November 3, 2026",home:"Rain or Shine Elasto Painters",away:"Converge FiberXers",hs:89,as:105,status:"final"}
+const games = [
+  {
+    id: "614",
+    date: "November 10, 2026",
+    home: "Barangay Ginebra",
+    away: "San Miguel Beermen",
+    hs: 110,
+    as: 94,
+    status: "final",
+    detail: "Quarterfinals Game 5. Ginebra wins the series 3–2 and advances to the semifinals."
+  },
+  {
+    date: "November 6, 2026",
+    home: "San Miguel Beermen",
+    away: "Barangay Ginebra",
+    hs: 108,
+    as: 102,
+    status: "final"
+  },
+  {
+    date: "November 3, 2026",
+    home: "Barangay Ginebra",
+    away: "San Miguel Beermen",
+    hs: 98,
+    as: 101,
+    status: "final"
+  },
+  {
+    date: "October 30, 2026",
+    home: "San Miguel Beermen",
+    away: "Barangay Ginebra",
+    hs: 99,
+    as: 126,
+    status: "final"
+  },
+  {
+    date: "October 27, 2026",
+    home: "Barangay Ginebra",
+    away: "San Miguel Beermen",
+    hs: 104,
+    as: 95,
+    status: "final"
+  }
 ];
 
-const articles=[
-{title:"Ginebra and San Miguel head to a winner-take-all Game 5",date:"November 10, 2026",url:"https://www.rebanse.ph/pba-season-50-governors-cup-playoff-standings-full-schedule-and-results/"},
-{title:"RJ Abarrientos looks to bounce back after Game 4",date:"November 10, 2026",url:"https://www.rebanse.ph/pba-season-50-governors-cup-playoff-standings-full-schedule-and-results/"},
-{title:"Cjay Perez says San Miguel has more to give",date:"November 10, 2026",url:"https://www.rebanse.ph/pba-season-50-governors-cup-playoff-standings-full-schedule-and-results/"}
+const articles = [
+  {
+    title: "Ginebra defeats San Miguel in Game 5",
+    date: "November 10, 2026",
+    url: "https://www.rebanse.ph/ginebra-vs-san-miguel-quarters-game-5/"
+  },
+  {
+    title: "San Miguel forces a deciding Game 5",
+    date: "November 6, 2026",
+    url: "https://www.gmanetwork.com/news/sports/basketball/1008574/pba-san-miguel-escapes-barangay-ginebra-forces-game-5-in-quarterfinals/story/"
+  }
 ];
 
-let favorites=JSON.parse(localStorage.getItem("pba50favorites")||"[]");
+let favorites = JSON.parse(localStorage.getItem("twoSportsFavorites") || "[]");
 
-function go(id,btn){
- document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
- if(btn)btn.classList.add("active");
- else{
-  let b=[...document.querySelectorAll("nav button")].find(x=>x.getAttribute("onclick")?.includes("'"+id+"'"));
-  if(b)b.classList.add("active");
- }
- window.scrollTo(0,0);
+
+/* NAVIGATION */
+function go(id, btn) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll("nav button").forEach(button => {
+    button.classList.remove("active");
+  });
+
+  if (btn) {
+    btn.classList.add("active");
+  } else {
+    const navButton = [...document.querySelectorAll("nav button")]
+      .find(button => button.getAttribute("onclick")?.includes("'" + id + "'"));
+
+    if (navButton) navButton.classList.add("active");
+  }
+
+  window.scrollTo(0,0);
 }
 
-function modal(html){
- document.getElementById("modalBody").innerHTML=html;
- document.getElementById("modal").classList.add("open");
+
+/* MODALS */
+function modal(html) {
+  document.getElementById("modalBody").innerHTML = html;
+  document.getElementById("modal").classList.add("open");
 }
 
-function closeModal(){
- document.getElementById("modal").classList.remove("open");
+function closeModal() {
+  document.getElementById("modal").classList.remove("open");
 }
 
-function gameDetail(id){
- let g=games.find(x=>x.id===id);
- if(!g)return;
- modal(`<span class="tag red">QUARTERFINALS · GAME 5</span><h2>${g.home} vs ${g.away}</h2><p class="muted">${g.date} · PHT</p><h1 style="text-align:center">2 – 2</h1><p>${g.detail}</p><p class="muted">No live score is displayed because a verified live data feed is not connected.</p>`);
+function gameDetail(id) {
+  const game = games.find(item => String(item.id) === String(id));
+
+  if (!game) return;
+
+  modal(`
+    <span class="tag green">FINAL</span>
+    <h2>${game.home} vs ${game.away}</h2>
+    <p class="muted">${game.date}</p>
+
+    <div class="row" style="margin:25px 0;justify-content:center">
+      <div style="text-align:center">
+        <h3>${game.home}</h3>
+        <div class="score">${game.hs}</div>
+      </div>
+
+      <div class="score">–</div>
+
+      <div style="text-align:center">
+        <h3>${game.away}</h3>
+        <div class="score">${game.as}</div>
+      </div>
+    </div>
+
+    <p>${game.detail || "Final score."}</p>
+    <p class="muted">Quarterfinals · PBA Season 50</p>
+  `);
 }
 
-function renderGames(f="all"){
- let list=games.filter(g=>f==="all"||g.status===f);
- document.getElementById("games").innerHTML=list.map(g=>`<div class="card item" onclick="${g.id?`gameDetail('${g.id}')`:`modal('<h2>${g.home} ${g.hs} – ${g.as} ${g.away}</h2><p class=muted>${g.date}</p>')`}"><div class="row"><span class="tag ${g.status==="upcoming"?"red":"green"}">${g.status.toUpperCase()}</span><span class="muted">${g.date}</span></div><div class="row" style="margin:15px 0"><b>${g.home}</b><strong class="score">${g.status==="final"?g.hs+" – "+g.as:"VS"}</strong><b>${g.away}</b></div>${g.detail?`<p class="muted">${g.detail}</p>`:""}</div>`).join("");
+
+/* SCORES */
+function renderGames(filter = "all") {
+  const list = games.filter(game =>
+    filter === "all" || game.status === filter
+  );
+
+  document.getElementById("games").innerHTML = list.map(game => `
+    <div class="card item" onclick="gameDetail('${game.id || ""}')">
+      <div class="row">
+        <span class="tag green">FINAL</span>
+        <span class="muted">${game.date}</span>
+      </div>
+
+      <div class="row" style="margin:17px 0">
+        <b>${game.home}</b>
+        <strong class="score">${game.hs} – ${game.as}</strong>
+        <b>${game.away}</b>
+      </div>
+
+      ${game.detail ? `<p class="muted">${game.detail}</p>` : ""}
+    </div>
+  `).join("") || "<p class='muted'>No games in this category.</p>";
 }
 
-function gameFilter(f,b){
- document.querySelectorAll("#scores .tabbar button").forEach(x=>x.classList.remove("active"));
- b.classList.add("active");
- renderGames(f);
+function gameFilter(filter, button) {
+  document.querySelectorAll("#scores .tabbar button").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  button.classList.add("active");
+  renderGames(filter);
 }
 
-function renderTeams(){
- document.getElementById("teamList").innerHTML=teams.map(([name,abbr])=>`<div class="card item teamrow" data-search="${name.toLowerCase()}" onclick="teamDetail('${abbr}')"><div class="team-mark">${abbr}</div><div><b>${name}</b><p class="muted">${abbr==="MAC"?"Guest team · Season 50 Governors' Cup":"PBA team"}</p></div></div>`).join("");
+
+/* TEAMS */
+function renderTeams() {
+  document.getElementById("teamList").innerHTML = teams.map(([name,abbr]) => `
+    <div class="card item teamrow"
+         data-search="${name.toLowerCase()}"
+         onclick="teamDetail('${abbr}')">
+
+      <div class="team-mark">${abbr}</div>
+
+      <div>
+        <b>${name}</b>
+        <p class="muted">PBA team</p>
+      </div>
+    </div>
+  `).join("");
 }
 
-function teamDetail(abbr){
- let t=teams.find(x=>x[1]===abbr);
- let on=favorites.includes(abbr);
- modal(`<div class="team-mark">${abbr}</div><h2>${t[0]}</h2><p class="muted">Season 50 · Governors' Cup</p><button class="primary" onclick="toggleFav('${abbr}')">${on?"♥ Following":"♡ Follow team"}</button><p class="muted" style="margin-top:16px">Roster and individual player statistics are not displayed until verified roster data is connected.</p>`);
+function teamDetail(abbr) {
+  const team = teams.find(item => item[1] === abbr);
+  const following = favorites.includes(abbr);
+
+  modal(`
+    <div class="team-mark">${abbr}</div>
+    <h2>${team[0]}</h2>
+    <p class="muted">PBA Season 50</p>
+
+    <button class="primary" onclick="toggleFav('${abbr}')">
+      ${following ? "♥ Following" : "♡ Follow team"}
+    </button>
+
+    <p class="muted" style="margin-top:16px">
+      Verified roster and player statistics are not yet connected.
+    </p>
+  `);
 }
 
-function toggleFav(x){
- favorites=favorites.includes(x)?favorites.filter(y=>y!==x):[...favorites,x];
- localStorage.setItem("pba50favorites",JSON.stringify(favorites));
- renderFav();
- teamDetail(x);
+
+/* FAVORITES */
+function toggleFav(abbr) {
+  favorites = favorites.includes(abbr)
+    ? favorites.filter(item => item !== abbr)
+    : [...favorites, abbr];
+
+  localStorage.setItem("twoSportsFavorites", JSON.stringify(favorites));
+
+  renderFav();
+  teamDetail(abbr);
 }
 
-function renderFav(){
- document.getElementById("favoritesList").innerHTML=favorites.length?favorites.map(x=>{let t=teams.find(z=>z[1]===x);return `<div class="card row"><b>${t?t[0]:x}</b><button class="secondary" onclick="toggleFav('${x}')">Unfollow</button></div>`}).join(""):"<p class='muted'>Follow teams to build your list.</p>";
+function renderFav() {
+  const target = document.getElementById("favoritesList");
+
+  target.innerHTML = favorites.length
+    ? favorites.map(abbr => {
+        const team = teams.find(item => item[1] === abbr);
+
+        return `
+          <div class="card row">
+            <b>${team ? team[0] : abbr}</b>
+            <button class="secondary" onclick="toggleFav('${abbr}')">
+              Unfollow
+            </button>
+          </div>
+        `;
+      }).join("")
+    : "<p class='muted'>Follow teams to build your list.</p>";
 }
 
-function searchCards(id,q){
- document.querySelectorAll("#"+id+" [data-search]").forEach(x=>x.style.display=x.dataset.search.includes(q.toLowerCase())?"flex":"none");
+
+/* SEARCH */
+function searchCards(id, query) {
+  document.querySelectorAll("#" + id + " [data-search]").forEach(card => {
+    card.style.display = card.dataset.search.includes(query.toLowerCase())
+      ? "flex"
+      : "none";
+  });
 }
 
-function renderNews(){
- document.getElementById("newsList").innerHTML=articles.map(a=>`<div class="card"><span class="tag">PBA NEWS</span><h3 style="margin-top:10px">${a.title}</h3><p class="muted">${a.date}</p><a href="${a.url}" target="_blank" rel="noopener">Read coverage ↗</a></div>`).join("");
- document.getElementById("homeNews").innerHTML=articles.slice(0,2).map(a=>`<div class="card"><b>${a.title}</b><p class="muted">${a.date}</p><a href="${a.url}" target="_blank" rel="noopener">Read coverage ↗</a></div>`).join("");
+
+/* NEWS */
+function renderNews() {
+  const content = articles.map(article => `
+    <div class="card">
+      <span class="tag blue">PBA NEWS</span>
+      <h3 style="margin-top:10px">${article.title}</h3>
+      <p class="muted">${article.date}</p>
+      <a href="${article.url}" target="_blank" rel="noopener">
+        Read coverage ↗
+      </a>
+    </div>
+  `).join("");
+
+  document.getElementById("newsList").innerHTML = content;
+  document.getElementById("homeNews").innerHTML = content;
 }
 
+
+/* INITIALIZE */
 renderTeams();
 renderGames();
 renderNews();
 renderFav();
 </script>
+
 </body>
 </html>
