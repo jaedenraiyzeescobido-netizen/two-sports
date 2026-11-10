@@ -296,7 +296,29 @@ res.sendFile(
 path.join(__dirname, "public", "index.html")
 );
 });
+app.get("/api/test-pba", async (req, res) => {
+  const url = "https://pba-api01.actech2.com/tournaments/pba-50th-season-governors-cup";
 
+  try {
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(15000)
+    });
+
+    const html = await response.text();
+
+    res.json({
+      connected: true,
+      status: response.status,
+      pageLength: html.length,
+      containsGames: html.includes("game_id=")
+    });
+  } catch (error) {
+    res.json({
+      connected: false,
+      error: error.message
+    });
+  }
+});
 app.listen(PORT, "0.0.0.0", () => {
 console.log("Two Sports listening on port ${PORT}");
 });
