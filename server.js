@@ -7,226 +7,296 @@ const PORT = process.env.PORT || 3000;
 const BASE = "https://pba-api01.actech2.com";
 
 const TOURNAMENTS = [
-  {
-    name: "PBA 50th Season Governors' Cup",
-    slug: "pba-50th-season-commissioner-s-cup"
-  },
-  {
-    name: "PBA 50th Season Commissioner's Cup",
-    slug: "pba-50th-season-commissioner-s-cup"
-  }
+{
+name: "PBA 50th Season Governors' Cup",
+slug: "pba-50th-season-governors-cup"
+},
+{
+name: "PBA 50th Season Commissioner's Cup",
+slug: "pba-50th-season-commissioner-s-cup"
+}
 ];
 
 app.use(express.static(path.join(__dirname, "public")));
 
+let gamesCache = {
+data: null,
+updatedAt: 0
+};
+
+const CACHE_DURATION = 30000;
+
 async function getPage(url) {
-  const response = await fetch(url, {
-    headers: {
-      "User-Agent": "TwoSportsFanApp/1.0 (public scoreboard viewer)",
-      "Accept": "text/html,application/xhtml+xml"
-    },
-    signal: AbortSignal.timeout(15000)
-  });
+const response = await fetch(url, {
+headers: {
+"User-Agent": "Mozilla/5.0 TwoSports/1.0",
+"Accept": "text/html,application/xhtml+xml"
+},
+signal: AbortSignal.timeout(20000)
+});
 
-  if (!response.ok) {
-    throw new Error(`PBA source returned ${response.status}`);
-  }
-
-  return await response.text();
+if (!response.ok) {
+throw new Error("PBA source returned ${response.status}");
 }
 
-function clean(s) {
-  return (s || "").replace(/\s+/g, " ").trim();
+return await response.text();
+}
+
+function clean(value) {
+return (value || "").replace(/\s+/g, " ").trim();
 }
 
 function parseGames(html, tournament) {
-  const $ = cheerio.load(html);
-  const seen = new Set();
-  const games = [];
+const $ = cheerio.load(html);
+const seen = new Set();
+const games = [];
 
-  $('a[href*="game_id="]').each((_, el) => {
-    const href = $(el).attr("href") || "";
-    const match = href.match(/[?&]game_id=(\d+)/);
+$('a[href*="game_id="]').each((_, element) => {
+const href = $(element).attr("href") || "";
+const match = href.match(/[?&]game_id=(\d+)/);
 
-    if (!match || seen.has(match[1])) return;
+if (!match || seen.has(match[1])) return;
 
-    seen.add(match[1]);
+seen.add(match[1]);
 
-    const id = match[1];
-    const text = clean($(el).text());
-    const parentText = clean($(el).parent().text());
-    const surrounding = clean($(el).parent().parent().text());
+const id = match[1];
+const text = clean($(element).text());
+const parentText = clean($(element).parent().text());
+const surrounding = clean(
+  $(element).parent().parent().text()
+);
 
-    const combined = [text, parentText, surrounding]
-      .filter(Boolean)
-      .join(" · ");
+const combined = [
+  text,
+  parentText,
+  surrounding
+].filter(Boolean).join(" · ");
 
-    const teams = combined.match(
-      /\b([A-Z]{2,4})\s+(\d+)\s+(Final|Q[1-4]|OT|upcoming|live)?\s*([A-Z]{2,4})\s+(\d+)?/i
-    );
+const teams = combined.match(
+  /\b([A-Z]{2,4})\s+(\d+)\s+(Final|Q[1-4]|OT|upcoming|live)?\s*([A-Z]{2,4})\s+(\d+)?/i
+);
 
-    games.push({
-      id,
-      tournament: tournament.name,
-      sourceUrl: `${BASE}/tournaments/${tournament.slug}?game_id=${id}`,
-      label: text || combined || `Game ${id}`,
-      summary: combined,
-      status: teams?.[3] || "details",
-      homeCode: teams?.[1] || null,
-      homeScore: teams?.[2] ? Number(teams[2]) : null,
-      awayCode: teams?.[4] || null,
-      awayScore: teams?.[5] ? Number(teams[5]) : null
-    });
-  });
+games.push({
+  id,
+  tournament: tournament.name,
+  sourceUrl:
+    `${BASE}/tournaments/${tournament.slug}?game_id=${id}`,
+  label: text || combined || `Game ${id}`,
+  summary: combined,
+  status: teams?.[3] || "details",
+  homeCode: teams?.[1] || null,
+  homeScore: teams?.[2]
+    ? Number(teams[2])
+    : null,
+  awayCode: teams?.[4] || null,
+  awayScore: teams?.[5]
+    ? Number(teams[5])
+    : null
+});
 
-  return games;
+});
+
+return games;
 }
 
 function parseGamePage(html, tournament, id) {
-  const $ = cheerio.load(html);
-  const pageText = clean($("body").text());
-  const title = clean($("h1").first().text()) || tournament.name;
+const $ = cheerio.load(html);
 
-  const tables = [];
+const pageText = clean($("body").text());
+const title =
+clean($("h1").first().text()) || tournament.name;
 
-  $("table").each((_, table) => {
-    const rows = [];
+const tables = [];
 
-    $(table).find("tr").each((__, tr) => {
-      const cells = $(tr)
-        .find("th,td")
-        .map((___, td) => clean($(td).text()))
-        .get();
+$("table").each((_, table) => {
+const rows = [];
 
-      if (cells.length) rows.push(cells);
-    });
+$(table).find("tr").each((__, row) => {
+  const cells = $(row)
+    .find("th,td")
+    .map((___, cell) => clean($(cell).text()))
+    .get();
 
-    if (rows.length) tables.push(rows);
-  });
+  if (cells.length) rows.push(cells);
+});
 
-  const boxScoreTables = tables.filter(rows =>
-    rows.some(r => r.some(c => /PLAYER/i.test(c))) &&
-    rows.some(r => r.some(c => /^PTS$/i.test(c)))
-  );
+if (rows.length) tables.push(rows);
 
-  const playByPlay = [];
+});
 
-  $("body *").each((_, el) => {
-    if ($(el).children().length) return;
+const boxScoreTables = tables.filter(rows =>
+rows.some(row =>
+row.some(cell => /PLAYER/i.test(cell))
+) &&
+rows.some(row =>
+row.some(cell => /^PTS$/i.test(cell))
+)
+);
 
-    const text = clean($(el).text());
+const playByPlay = [];
 
-    if (/^P[1-4]\s+\d{1,2}:\d{2}/.test(text)) {
-      if (text.length < 260) playByPlay.push(text);
-    }
-  });
+$("body *").each((_, element) => {
+if ($(element).children().length) return;
 
-  const teams = [];
+const text = clean($(element).text());
 
-  const codeMatches = [
-    ...pageText.matchAll(
-      /\b(GIN|SMB|TNT|MER|MAG|ROS|CON|NLEX|NLX|PHX|BLA|BWB|TER|NOR|TGR|MGP)\b/g
-    )
-  ];
-
-  for (const m of codeMatches) {
-    if (!teams.includes(m[1])) teams.push(m[1]);
+if (/^P[1-4]\s+\d{1,2}:\d{2}/.test(text)) {
+  if (text.length < 260) {
+    playByPlay.push(text);
   }
+}
 
-  return {
-    id,
-    tournament: tournament.name,
-    sourceUrl: `${BASE}/tournaments/${tournament.slug}?game_id=${id}`,
-    title,
-    text: pageText.slice(0, 18000),
-    tables: boxScoreTables,
-    playByPlay: [...new Set(playByPlay)].slice(0, 100),
-    teams
-  };
+});
+
+const teams = [];
+
+const codeMatches = [
+...pageText.matchAll(
+/\b(GIN|SMB|TNT|MER|MAG|ROS|CON|NLEX|NLX|PHX|BLA|BWB|TER|NOR|TGR|MGP)\b/g
+)
+];
+
+for (const match of codeMatches) {
+if (!teams.includes(match[1])) {
+teams.push(match[1]);
+}
+}
+
+return {
+id,
+tournament: tournament.name,
+sourceUrl:
+"${BASE}/tournaments/${tournament.slug}?game_id=${id}",
+title,
+text: pageText.slice(0, 18000),
+tables: boxScoreTables,
+playByPlay: [...new Set(playByPlay)].slice(0, 100),
+teams
+};
 }
 
 app.get("/api/health", (_req, res) => {
-  res.json({
-    ok: true,
-    source: BASE
-  });
+res.json({
+ok: true,
+service: "Two Sports",
+source: BASE
+});
 });
 
 app.get("/api/pba/games", async (_req, res) => {
-  try {
-    const results = await Promise.all(
-      TOURNAMENTS.map(async tournament => {
-        const html = await getPage(
-          `${BASE}/tournaments/${tournament.slug}`
-        );
+try {
+if (
+gamesCache.data &&
+Date.now() - gamesCache.updatedAt < CACHE_DURATION
+) {
+return res.json(gamesCache.data);
+}
 
-        return parseGames(html, tournament);
-      })
-    );
+const results = await Promise.allSettled(
+  TOURNAMENTS.map(async tournament => {
+    const url =
+      `${BASE}/tournaments/${tournament.slug}`;
 
-    const games = results.flat();
+    const html = await getPage(url);
 
-    res.set("Cache-Control", "public, max-age=15");
+    return parseGames(html, tournament);
+  })
+);
 
-    res.json({
-      updatedAt: new Date().toISOString(),
-      games
-    });
+const games = [];
+const errors = [];
 
-  } catch (error) {
-    res.status(502).json({
-      error: "Could not retrieve the public PBA scoreboard right now.",
-      detail: error.message
+results.forEach((result, index) => {
+  if (result.status === "fulfilled") {
+    games.push(...result.value);
+  } else {
+    errors.push({
+      tournament: TOURNAMENTS[index].name,
+      message: result.reason.message
     });
   }
+});
+
+const responseData = {
+  updatedAt: new Date().toISOString(),
+  games,
+  errors
+};
+
+if (games.length > 0) {
+  gamesCache = {
+    data: responseData,
+    updatedAt: Date.now()
+  };
+}
+
+res.set("Cache-Control", "public, max-age=15");
+
+if (games.length === 0) {
+  return res.status(502).json({
+    error: "No PBA games could be retrieved.",
+    errors
+  });
+}
+
+res.json(responseData);
+
+} catch (error) {
+res.status(502).json({
+error: "Could not retrieve PBA games.",
+detail: error.message
+});
+}
 });
 
 app.get("/api/pba/games/:id", async (req, res) => {
-  try {
-    const id = String(req.params.id).replace(/\D/g, "");
+const id = String(req.params.id).replace(/\D/g, "");
 
-    if (!id) {
-      return res.status(400).json({
-        error: "Invalid game id"
-      });
-    }
+if (!id) {
+return res.status(400).json({
+error: "Invalid game ID"
+});
+}
 
-    let found = null;
+const results = await Promise.allSettled(
+TOURNAMENTS.map(async tournament => {
+const url =
+"${BASE}/tournaments/${tournament.slug}?game_id=${id}";
 
-    for (const tournament of TOURNAMENTS) {
-      try {
-        const html = await getPage(
-          `${BASE}/tournaments/${tournament.slug}?game_id=${id}`
-        );
+  const html = await getPage(url);
 
-        if (/Game Details|Competition|Box Score/i.test(html)) {
-          found = parseGamePage(html, tournament, id);
-          break;
-        }
-      } catch (_) {}
-    }
+  return parseGamePage(html, tournament, id);
+})
 
-    if (!found) {
-      return res.status(404).json({
-        error: "Game details were not found."
-      });
-    }
+);
 
-    res.set("Cache-Control", "public, max-age=8");
-    res.json(found);
+for (const result of results) {
+if (result.status !== "fulfilled") continue;
 
-  } catch (error) {
-    res.status(502).json({
-      error: "Could not load game details.",
-      detail: error.message
-    });
-  }
+const game = result.value;
+
+if (
+  game.text ||
+  game.tables.length ||
+  game.playByPlay.length
+) {
+  res.set("Cache-Control", "public, max-age=8");
+  return res.json(game);
+}
+
+}
+
+res.status(404).json({
+error: "Game details could not be found."
+});
 });
 
 app.get("*", (_req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+res.sendFile(
+path.join(__dirname, "public", "index.html")
+);
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Two Sports listening on ${PORT}`);
+console.log("Two Sports listening on port ${PORT}");
 });
