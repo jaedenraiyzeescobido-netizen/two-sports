@@ -1,85 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d16">
+<title>Two Sports — PBA</title>
 <style>
-.pba-live-section {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  background: #111827;
-  color: white;
-}
-
-.pba-live-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-
-.pba-live-header h2 {
-  font-size: 25px;
-  margin: 0;
-}
-
-.pba-live-header p {
-  opacity: 0.7;
-}
-
-.pba-official-link {
-  background: #e63946;
-  color: white;
-  padding: 10px 14px;
-  border-radius: 8px;
-  text-decoration: none;
-}
-
-.pba-scoreboard {
-  width: 100%;
-  height: 850px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: white;
-}
-
-.pba-scoreboard iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-@media (max-width: 600px) {
-  .pba-scoreboard {
-    height: 750px;
-  }
+:root{--bg:#090d16;--card:#111927;--card2:#192438;--line:#29374c;--txt:#f5f7fb;--muted:#94a2b7;--red:#f04452;--green:#44d69a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 system-ui,-apple-system,Segoe UI,Arial;padding-bottom:80px}
+button,input{font:inherit}
+button{cursor:pointer;color:inherit}
+.top{position:sticky;top:0;z-index:9;background:#090d16ed;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:15px max(16px,calc((100% - 1100px)/2));display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:950;letter-spacing:-1px}
+.logo i{color:var(--red);font-style:normal}
+.muted{color:var(--muted)}
+.wrap{max-width:1100px;margin:auto;padding:22px 16px}
+.eyebrow{font-size:10px;color:#ff7c87;font-weight:900;letter-spacing:1.5px}
+.title{font-size:30px;letter-spacing:-1px;margin:5px 0}
+.sub{color:var(--muted);margin:0 0 18px}
+.tabs{display:flex;gap:8px;overflow:auto;margin:18px 0}
+.tab,.chip{border:1px solid var(--line);background:var(--card);padding:9px 13px;border-radius:99px;white-space:nowrap;color:var(--muted);font-weight:750;font-size:12px}
+.tab.active,.chip.active{background:#3a202a;border-color:#81404b;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:16px}
+.game{cursor:pointer;transition:.15s}
+.game:active{transform:scale(.99)}
+.game-top{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:11px}
+.live{color:#ff7d87;font-weight:900}
+.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:18px 0}
+.team{text-align:center;min-width:0}
+.badge{width:48px;height:48px;border-radius:15px;background:#293950;display:grid;place-items:center;margin:0 auto 8px;font-weight:950}
+.team b{display:block;font-size:12px}
+.score{font-size:26px;font-weight:950;letter-spacing:-1px}
+.vs{font-size:10px;color:var(--muted);font-weight:900}
+.game-foot{border-top:1px solid var(--line);padding-top:10px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+.refresh{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:8px 12px}
+.page{display:none}
+.page.active{display:block}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:10;background:#0d1420f5;border-top:1px solid var(--line);display:flex;justify-content:center;padding:7px 5px calc(7px + env(safe-area-inset-bottom))}
+.nav{flex:1;max-width:125px;background:none;border:0;color:#8290a5;font-size:10px;font-weight:800;padding:5px}
+.nav span{display:block;font-size:19px}
+.nav.active{color:white}
+.detail-head{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+.back{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+.scoreboard{background:linear-gradient(130deg,#1b293d,#111927);border:1px solid #3a465b;border-radius:18px;padding:18px}
+.scoreline{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;text-align:center;gap:8px}
+.bigscore{font-size:34px;font-weight:950}
+.periods,.data-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:14px}
+.periods td,.periods th,.data-table td,.data-table th{padding:9px 7px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.periods td:first-child,.data-table td:first-child,.data-table th:first-child{text-align:left}
+.data-table th{color:var(--muted);font-size:10px;text-transform:uppercase}
+.table-wrap{overflow:auto}
+.section-title{font-size:17px;margin:22px 0 10px}
+.event{border-left:2px solid #394960;padding:7px 0 7px 12px;margin-left:7px;color:#dce3ed;font-size:12px}
+.event small{color:var(--muted);display:block}
+.status{font-size:11px;color:var(--muted)}
+.notice{background:#192438;border:1px solid var(--line);border-radius:13px;padding:12px;color:var(--muted);font-size:12px;margin:12px 0}
+.search{width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;color:white;margin-bottom:12px}
+.foot{text-align:center;color:#69778b;font-size:10px;padding:24px 8px}
+@media(max-width:650px){
+.grid{grid-template-columns:1fr}
+.wrap{padding:18px 13px}
+.title{font-size:27px}
+.card{padding:14px}
 }
 </style>
-<section id="pba-live" class="pba-live-section">
-  <div class="pba-live-header">
-    <div>
-      <h2>Two Sports Live</h2>
-      <p>Official PBA Play-by-Play</p>
-    </div>
+</head>
+<body>
 
-    <a
-      href="https://www.pba.ph/playbyplay"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="pba-official-link"
-    >
-      Open Official PBA Page ↗
-    </a>
-  </div>
+<header class="top">
+<div class="logo">TWO <i>SPORTS</i></div>
+<button class="refresh" onclick="loadGames(true)">↻ Refresh</button>
+</header>
 
-  <div class="pba-scoreboard">
-    <iframe
-      src="https://pba-api01.actech2.com/tournaments/pba-50th-season-governors-cup"
-      title="PBA Live Play-by-Play"
-      loading="lazy"
-      allowfullscreen
-    ></iframe>
-  </div>
+<main class="wrap">
 
-  <p class="pba-disclaimer">
-    Live game information is provided by the PBA scoreboard.
-  </p>
+<section class="page active" id="home">
+<div class="eyebrow">PBA BASKETBALL · GAME CENTER</div>
+<h1 class="title">Stay in the game.</h1>
+<p class="sub">Scores, box scores and play-by-play in one place.</p>
+
+<div class="notice" id="status">Connecting to the publicly viewable PBA scoreboard…</div>
+
+<div class="tabs">
+<button class="tab active" onclick="setFilter('all',this)">All</button>
+<button class="tab" onclick="setFilter('live',this)">Live</button>
+<button class="tab" onclick="setFilter('upcoming',this)">Upcoming</button>
+<button class="tab" onclick="setFilter('final',this)">Final</button>
+</div>
+
+<div class="grid" id="games">
+<div class="empty">Loading PBA games…</div>
+</div>
 </section>
+
+<section class="page" id="teams">
+<div class="eyebrow">LEAGUE DIRECTORY</div>
+<h1 class="title">Teams</h1>
+<p class="sub">Teams appearing in retrieved PBA game data.</p>
+<input class="search" id="teamSearch" placeholder="Search team code…" oninput="renderTeams()">
+<div class="grid" id="teamList"></div>
+</section>
+
+<section class="page" id="stats">
+<div class="eyebrow">PLAYER & TEAM NUMBERS</div>
+<h1 class="title">Stats</h1>
+<p class="sub">Choose a completed or live game to view available player and team statistics.</p>
+<div class="notice">Game-level stats and player box scores are shown inside each game when the PBA page publishes them.</div>
+<button class="tab active" onclick="go('home')">Browse games →</button>
+</section>
+
+<section class="page" id="following">
+<div class="eyebrow">YOUR FAVORITES</div>
+<h1 class="title">Following</h1>
+<p class="sub">Save teams from the Teams tab.</p>
+<div id="followList" class="grid"></div>
+</section>
+
+<section class="page" id="gameDetail">
+<div class="detail-head">
+<button class="back" onclick="go('home')">← Back</button>
+<div>
+<div class="eyebrow">GAME CENTER</div>
+<b id="detailTitle">Game details</b>
+</div>
+</div>
+<div id="detail">
+<div class="empty">Choose a game to load its box score.</div>
+</div>
+</section>
+
+<div class="foot">
+TWO SPORTS · Independent fan project · Data displayed from the public PBA scoreboard. Not affiliated with the PBA.
+</div>
+
+</main>
+
+<nav class="bottom">
+<button class="nav active" data-page="home" onclick="go('home')"><span>⌂</span>Home</button>
+<button class="nav" data-page="teams" onclick="go('teams')"><span>♜</span>Teams</button>
+<button class="nav" data-page="stats" onclick="go('stats')"><span>▥</span>Stats</button>
+<button class="nav" data-page="following" onclick="go('following')"><span>☆</span>Following</button>
+</nav>
+
+<script>
+let allGames=[],filter="all",teamCodes=[],favorites=JSON.parse(localStorage.getItem("tsFav")||"[]"),refreshTimer;
+const $=id=>document.getElementById(id);
+
+function go(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
+document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("active",n.dataset.page===id));
+window.scrollTo(0,0);
+if(id==="teams")renderTeams();
+if(id==="following")renderFollowing();
+}
+
+function setFilter(f,b){
+filter=f;
+document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+b.classList.add("active");
+renderGames();
+}
+
+function stateOf(g){
+let s=(g.status||"").toLowerCase();
+if(s.includes("final"))return"final";
+if(s.includes("upcoming")||s==="details")return"upcoming";
+if(s.startsWith("q")||s.includes("live")||s.includes("ot"))return"live";
+return"all";
+}
+
+function renderGames(){
+let list=allGames.filter(g=>filter==="all"||stateOf(g)===filter);
+$("games").innerHTML=list.length?list.map(g=>`
+<article class="card game" onclick="openGame('${g.id}')">
+<div class="game-top">
+<span>${esc(g.tournament||"PBA")}</span>
+<span class="${stateOf(g)==="live"?"live":""}">${esc(g.status||"Game details")}</span>
+</div>
+<div class="teams">
+<div class="team">
+<div class="badge">${esc(g.homeCode||"PBA")}</div>
+<b>${esc(g.homeCode||"Home")}</b>
+<div class="score">${g.homeScore??"—"}</div>
+</div>
+<div class="vs">VS</div>
+<div class="team">
+<div class="badge">${esc(g.awayCode||"PBA")}</div>
+<b>${esc(g.awayCode||"Away")}</b>
+<div class="score">${g.awayScore??"—"}</div>
+</div>
+</div>
+<div class="game-foot">
+<span>Game #${esc(g.id)}</span>
+<span>View box score & play-by-play →</span>
+</div>
+</article>`).join(""):'<div class="card empty">No games found for this filter. Try All or refresh.</div>';
+}
+
+function esc(s){
+return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+async function loadGames(manual=false){
+$("status").textContent="Updating from the PBA public scoreboard…";
+try{
+let r=await fetch("/api/pba/games");
+let data=await r.json();
+if(!r.ok)throw Error(data.detail||data.error||"Source unavailable");
+allGames=data.games||[];
+teamCodes=[...new Set(allGames.flatMap(g=>[g.homeCode,g.awayCode]).filter(Boolean))];
+$("status").textContent=`Updated ${new Date(data.updatedAt).toLocaleTimeString()} · ${allGames.length} game entries found. Scores refresh automatically.`;
+renderGames();
+renderTeams();
+}catch(e){
+$("status").textContent="PBA data could not be loaded: "+e.message+". The source may be temporarily unavailable or may have changed its page format.";
+$("games").innerHTML='<div class="card empty">No live data available right now. Please try Refresh later.</div>';
+}
+}
+
+async function openGame(id){
+go("gameDetail");
+$("detailTitle").textContent="Game #"+id;
+$("detail").innerHTML='<div class="empty">Loading official game data…</div>';
+try{
+let r=await fetch("/api/pba/games/"+id);
+let d=await r.json();
+if(!r.ok)throw Error(d.error||"Could not load");
+renderDetail(d);
+}catch(e){
+$("detail").innerHTML=`<div class="notice">Could not load this game's data: ${esc(e.message)}</div>`;
+}
+}
+
+function renderDetail(d){
+let text=d.text||"";
+let tables=(d.tables||[]).map(rows=>`
+<div class="table-wrap">
+<table class="data-table">
+${rows.map((row,i)=>`<tr>${row.map(cell=>i===0?`<th>${esc(cell)}</th>`:`<td>${esc(cell)}</td>`).join("")}</tr>`).join("")}
+</table>
+</div>`).join("");
+
+let events=(d.playByPlay||[]).map(x=>`<div class="event">${esc(x)}</div>`).join("");
+let summary=text.split("Competition")[1]?.slice(0,500)||text.slice(0,500);
+
+$("detail").innerHTML=`
+<div class="card">
+<div class="eyebrow">PBA GAME DATA</div>
+<p class="status">${esc(d.tournament)} · Game #${esc(d.id)}</p>
+<p class="muted">${esc(summary)}</p>
+</div>
+<h2 class="section-title">Player box score</h2>
+${tables||'<div class="notice">No box-score table was detected in the source page for this game.</div>'}
+<h2 class="section-title">Play-by-play</h2>
+${events||'<div class="notice">Play-by-play events were not detected in the source page.</div>'}
+<p class="foot">Some source page formats may not expose all fields in a machine-readable way.</p>`;
+}
+
+function renderTeams(){
+let q=($("teamSearch")?.value||"").toLowerCase();
+$("teamList").innerHTML=teamCodes.filter(x=>x.toLowerCase().includes(q)).map(x=>`
+<div class="card" style="display:flex;justify-content:space-between;align-items:center">
+<b>${esc(x)}</b>
+<button class="tab ${favorites.includes(x)?"active":""}" onclick="toggleFav('${x}')">
+${favorites.includes(x)?"Following":"＋ Follow"}
+</button>
+</div>`).join("")||'<div class="card empty">Team codes appear when game data loads.</div>';
+}
+
+function toggleFav(x){
+favorites=favorites.includes(x)?favorites.filter(a=>a!==x):[...favorites,x];
+localStorage.setItem("tsFav",JSON.stringify(favorites));
+renderTeams();
+renderFollowing();
+}
+
+function renderFollowing(){
+$("followList").innerHTML=favorites.map(x=>`
+<div class="card">
+<b>${esc(x)}</b>
+<p class="muted">Followed team</p>
+<button class="tab" onclick="toggleFav('${x}')">Unfollow</button>
+</div>`).join("")||'<div class="card empty">No followed teams yet. Follow a team from Teams.</div>';
+}
+
+loadGames();
+refreshTimer=setInterval(loadGames,20000);
+</script>
+</body>
+</html>
