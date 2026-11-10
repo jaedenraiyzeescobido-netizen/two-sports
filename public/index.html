@@ -2,370 +2,297 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#ffffff">
-<title>Two Sports</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<title>Two Sports — PBA</title>
 
 <style>
 :root {
-  --bg: #f4f7fc;
-  --surface: #ffffff;
-  --surface2: #edf2fa;
-  --text: #15233b;
-  --muted: #718096;
-  --line: #dce5f1;
-  --blue: #1769e0;
-  --blue2: #0d4fb5;
-  --green: #159b68;
-  --red: #d83d50;
-  --shadow: 0 5px 20px rgba(30,60,100,.06);
+  --bg:#071426;
+  --surface:#101f34;
+  --surface2:#172941;
+  --text:#f4f7fb;
+  --muted:#91a2b8;
+  --blue:#2684ff;
+  --line:#263952;
+  --green:#25c98b;
+  --red:#ff626f;
 }
-
-[data-theme="dark"] {
-  --bg: #080d16;
-  --surface: #111a29;
-  --surface2: #1b2940;
-  --text: #f3f7ff;
-  --muted: #9aabc3;
-  --line: #293951;
-  --blue: #438cff;
-  --blue2: #2470e7;
-  --green: #42d69b;
-  --red: #ff6478;
-  --shadow: 0 5px 20px rgba(0,0,0,.2);
+body.light {
+  --bg:#f2f5f9;
+  --surface:#ffffff;
+  --surface2:#eaf0f7;
+  --text:#14243a;
+  --muted:#65758b;
+  --line:#dce4ee;
 }
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Inter, system-ui, Arial, sans-serif;
-  padding-bottom: 80px;
-  transition: background .2s, color .2s;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  padding-bottom:85px;
 }
-
-button {
-  font: inherit;
-  cursor: pointer;
-  color: inherit;
+button,select{font:inherit}
+button{cursor:pointer}
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding:15px 18px;
 }
-
-header {
-  height: 66px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 17px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.header-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  max-width:900px;
+  margin:auto;
 }
-
-.brand {
-  font-size: 23px;
-  font-weight: 950;
-  letter-spacing: -.8px;
+.logo{
+  font-weight:900;
+  font-size:23px;
+  letter-spacing:-1px;
 }
-
-.brand span { color: var(--blue); }
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.logo span{color:var(--blue)}
+.header-actions{display:flex;gap:9px}
+.icon-btn{
+  background:var(--surface2);
+  border:0;
+  color:var(--text);
+  border-radius:10px;
+  padding:10px 12px;
 }
-
-.season {
-  text-align: right;
-  font-size: 10px;
-  color: var(--muted);
+main{
+  max-width:900px;
+  margin:auto;
+  padding:18px 15px;
 }
-
-.theme-toggle {
-  width: 39px;
-  height: 39px;
-  border-radius: 12px;
-  background: var(--surface2);
-  border: 1px solid var(--line);
-  font-size: 18px;
+.page{display:none}
+.page.active{display:block}
+.eyebrow{
+  color:var(--blue);
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
 }
-
-main {
-  max-width: 900px;
-  margin: auto;
-  padding: 18px;
+h1{font-size:27px;margin:8px 0}
+h2{font-size:19px;margin:24px 0 13px}
+.subtitle{color:var(--muted);font-size:13px}
+.hero{
+  background:linear-gradient(135deg,#123c70,#10213b 75%);
+  padding:22px;
+  border-radius:19px;
+  margin:18px 0;
 }
-
-.page { display: none; }
-.page.active { display: block; }
-
-h1 {
-  font-size: 29px;
-  line-height: 1.15;
-  margin: 8px 0 12px;
+.hero h2{font-size:23px;margin:8px 0}
+.hero p{color:#c2d7f3;font-size:13px}
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-
-h2 {
-  font-size: 21px;
-  margin: 25px 0 12px;
+.text-btn{
+  color:var(--blue);
+  background:none;
+  border:0;
+  font-weight:bold;
 }
-
-h3 {
-  font-size: 16px;
-  margin: 0 0 6px;
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:15px;
+  margin:11px 0;
 }
-
-p { margin: 6px 0; }
-
-.muted {
-  color: var(--muted);
-  font-size: 13px;
+.game-card{cursor:pointer}
+.game-card:active{transform:scale(.99)}
+.game-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:15px;
 }
-
-.eyebrow {
-  color: var(--blue);
-  font-size: 11px;
-  font-weight: 850;
-  letter-spacing: 1.3px;
+.status{color:var(--green);font-weight:bold}
+.teams{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
-
-.hero {
-  background: linear-gradient(125deg, var(--blue2), var(--blue));
-  color: white;
-  border-radius: 19px;
-  padding: 24px;
-  margin: 15px 0;
-  box-shadow: var(--shadow);
+.team{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
 }
-
-.hero .muted { color: #e0ebff; }
-
-.hero h1 { font-size: 32px; }
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 15px;
-  padding: 15px;
-  margin: 11px 0;
-  box-shadow: var(--shadow);
+.team:last-child{justify-content:flex-end;text-align:right}
+.team-name{font-weight:bold;font-size:14px}
+.team-code{font-size:11px;color:var(--muted);margin-top:4px}
+.team-score{font-size:23px;font-weight:900;margin-left:auto}
+.team:last-child .team-score{order:-1;margin:0 0 0 auto}
+.game-bottom{
+  border-top:1px solid var(--line);
+  padding-top:11px;
+  margin-top:13px;
+  color:var(--muted);
+  font-size:11px;
+  display:flex;
+  justify-content:space-between;
 }
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.pill{
+  display:inline-block;
+  border-radius:20px;
+  padding:6px 10px;
+  font-size:10px;
+  font-weight:bold;
+  background:var(--surface2);
+  color:var(--muted);
 }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 10px;
+.live-pill{background:#47202b;color:#ff7884}
+select,.search{
+  background:var(--surface);
+  color:var(--text);
+  border:1px solid var(--line);
+  padding:12px;
+  border-radius:10px;
+  width:100%;
+  margin:10px 0;
 }
-
-.stack {
-  display: grid;
-  gap: 10px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
 }
-
-.primary {
-  background: var(--blue);
-  color: white;
-  border: 0;
-  padding: 11px 15px;
-  border-radius: 10px;
-  font-weight: 800;
+.team-card{
+  text-align:center;
+  cursor:pointer;
 }
-
-.secondary {
-  background: var(--surface2);
-  border: 1px solid var(--line);
-  padding: 9px 12px;
-  border-radius: 10px;
+.team-badge{
+  width:55px;height:55px;
+  border-radius:50%;
+  background:var(--surface2);
+  display:grid;
+  place-items:center;
+  margin:0 auto 10px;
+  font-weight:900;
+  color:var(--blue);
+  font-size:16px;
 }
-
-.tag {
-  display: inline-block;
-  background: var(--surface2);
-  border-radius: 30px;
-  padding: 4px 9px;
-  font-size: 10px;
-  font-weight: 850;
+.empty{
+  text-align:center;
+  padding:35px 15px;
+  color:var(--muted);
+  background:var(--surface);
+  border-radius:15px;
+  margin-top:15px;
 }
-
-.tag.blue {
-  color: var(--blue);
-  background: color-mix(in srgb, var(--blue) 12%, var(--surface));
+.notice{
+  background:var(--surface2);
+  border-radius:10px;
+  padding:12px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+  margin:12px 0;
 }
-
-.tag.green {
-  color: var(--green);
-  background: color-mix(in srgb, var(--green) 12%, var(--surface));
+.bottom-nav{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:20;
+  background:var(--surface);
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:center;
+  padding:8px 3px calc(8px + env(safe-area-inset-bottom));
 }
-
-.tag.red {
-  color: var(--red);
-  background: color-mix(in srgb, var(--red) 12%, var(--surface));
+.nav-inner{
+  display:flex;
+  justify-content:space-around;
+  width:100%;
+  max-width:650px;
 }
-
-.score {
-  font-size: 27px;
-  font-weight: 950;
-  letter-spacing: .5px;
+.nav-btn{
+  background:none;
+  border:0;
+  color:var(--muted);
+  font-size:10px;
+  padding:6px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
 }
-
-.team-mark {
-  width: 43px;
-  height: 43px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: var(--surface2);
-  color: var(--blue);
-  font-size: 12px;
-  font-weight: 950;
-  flex-shrink: 0;
+.nav-btn .nav-icon{font-size:19px}
+.nav-btn.active{color:var(--blue);font-weight:bold}
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  z-index:30;
+  display:none;
+  overflow-y:auto;
+  padding:20px 12px;
 }
-
-.teamrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.modal.show{display:block}
+.modal-content{
+  max-width:650px;
+  margin:20px auto;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  min-height:300px;
 }
-
-.item { cursor: pointer; }
-
-.tabbar {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 5px 0 10px;
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-
-.tabbar button {
-  background: var(--surface2);
-  border: 1px solid var(--line);
-  border-radius: 30px;
-  padding: 9px 14px;
-  white-space: nowrap;
-  font-size: 13px;
+.close-btn{
+  border:0;
+  border-radius:9px;
+  background:var(--surface2);
+  color:var(--text);
+  padding:9px 12px;
 }
-
-.tabbar button.active {
-  background: var(--blue);
-  color: white;
-  border-color: var(--blue);
+.detail-score{
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  text-align:center;
+  padding:25px 5px;
 }
-
-.search {
-  width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  padding: 13px;
-  color: var(--text);
-  margin: 10px 0;
+.detail-score strong{font-size:32px}
+.detail-team{font-size:13px;font-weight:bold;max-width:110px}
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin:15px 0;
 }
-
-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  display: flex;
-  justify-content: space-around;
-  background: var(--surface);
-  border-top: 1px solid var(--line);
-  padding: 9px 2px calc(9px + env(safe-area-inset-bottom));
+.tab-btn{
+  white-space:nowrap;
+  border:0;
+  border-radius:20px;
+  background:var(--surface2);
+  color:var(--muted);
+  padding:9px 14px;
 }
-
-nav button {
-  background: none;
-  border: 0;
-  color: var(--muted);
-  font-size: 11px;
-  display: grid;
-  gap: 3px;
-  justify-items: center;
-  min-width: 53px;
+.tab-btn.active{background:var(--blue);color:white}
+.loading{color:var(--muted);padding:20px;text-align:center}
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  padding:20px;
 }
-
-nav button b { font-size: 19px; }
-
-nav button.active { color: var(--blue); }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-th, td {
-  padding: 10px 7px;
-  text-align: left;
-  border-bottom: 1px solid var(--line);
-}
-
-th {
-  color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  background: rgba(0,0,0,.65);
-  align-items: flex-end;
-  justify-content: center;
-  padding: 12px;
-}
-
-.modal.open { display: flex; }
-
-.modalbox {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 19px;
-  padding: 20px;
-  width: 100%;
-  max-width: 560px;
-  max-height: 85vh;
-  overflow: auto;
-}
-
-.close {
-  float: right;
-  border: 0;
-  background: var(--surface2);
-  padding: 7px 11px;
-  border-radius: 9px;
-}
-
-a {
-  color: var(--blue);
-  text-decoration: none;
-}
-
-.source-note {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 15px;
-}
-
-@media(min-width:700px) {
-  main { padding: 25px; }
-  .modal { align-items: center; }
-  .grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+@media(min-width:650px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 </style>
 </head>
@@ -373,217 +300,158 @@ a {
 <body>
 
 <header>
-  <div class="brand">TWO <span>SPORTS</span></div>
-
-  <div class="header-right">
-    <div class="season">PBA · SEASON 50<br>GOVERNORS' CUP</div>
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">☾</button>
+  <div class="header-row">
+    <div class="logo">TWO <span>SPORTS</span></div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="refreshData()" title="Refresh">↻</button>
+      <button class="icon-btn" onclick="toggleTheme()" title="Theme">◐</button>
+    </div>
   </div>
 </header>
 
 <main>
 
-<section id="home" class="page active">
-  <div class="eyebrow">PHILIPPINE BASKETBALL ASSOCIATION</div>
+<section class="page active" id="home">
+  <div class="eyebrow">PHILIPPINE BASKETBALL</div>
+  <h1>Basketball, all in one place.</h1>
+  <p class="subtitle" id="homeSubtitle">Loading PBA information...</p>
 
   <div class="hero">
-    <span class="tag">PBA SEASON 50</span>
-    <h1>All the PBA.<br>In one place.</h1>
-    <p class="muted">Scores, teams, players and league updates.</p>
-    <button class="primary" onclick="go('scores')">Open Game Center →</button>
+    <div class="eyebrow">TWO SPORTS · PBA</div>
+    <h2>Every game.<br>Every moment.</h2>
+    <p>Follow PBA conferences, matchups and available game information.</p>
+    <button class="text-btn" onclick="showPage('scores')">Explore games →</button>
   </div>
 
-  <h2>Latest Result</h2>
-
-  <div class="card">
-    <div class="row">
-      <span class="tag green">FINAL</span>
-      <span class="muted">NOVEMBER 10 · GAME 5</span>
-    </div>
-
-    <div class="row" style="margin:20px 0">
-      <div style="text-align:center">
-        <div class="team-mark" style="margin:auto">GIN</div>
-        <b>Ginebra</b>
-        <div class="score">110</div>
-      </div>
-
-      <div class="score">–</div>
-
-      <div style="text-align:center">
-        <div class="team-mark" style="margin:auto">SMB</div>
-        <b>San Miguel</b>
-        <div class="score">94</div>
-      </div>
-    </div>
-
-    <p class="muted">Ginebra wins the quarterfinal series 3–2 and advances to the semifinals.</p>
-    <button class="secondary" onclick="gameDetail('614')">Game details</button>
+  <div class="section-head">
+    <h2>Games</h2>
+    <button class="text-btn" onclick="showPage('scores')">See all</button>
   </div>
+  <div id="homeGames"><div class="loading">Loading games...</div></div>
 
-  <h2>Semifinal Teams</h2>
-
-  <div class="grid">
-    <div class="card">
-      <span class="tag green">ADVANCED</span>
-      <h3 style="margin-top:10px">NLEX</h3>
-    </div>
-    <div class="card">
-      <span class="tag green">ADVANCED</span>
-      <h3 style="margin-top:10px">TNT</h3>
-    </div>
-    <div class="card">
-      <span class="tag green">ADVANCED</span>
-      <h3 style="margin-top:10px">Converge</h3>
-    </div>
-    <div class="card">
-      <span class="tag green">ADVANCED</span>
-      <h3 style="margin-top:10px">Ginebra</h3>
-    </div>
+  <div class="section-head">
+    <h2>Conferences</h2>
+    <button class="text-btn" onclick="showPage('scores')">View</button>
   </div>
-
-  <h2>Latest Headlines</h2>
-  <div id="homeNews"></div>
-
-  <small class="source-note">
-    Scores shown are a dated results snapshot, not a verified live feed.
-  </small>
+  <div id="homeConferences"></div>
 </section>
 
-<section id="scores" class="page">
-  <div class="eyebrow">GAME CENTER</div>
+<section class="page" id="scores">
+  <div class="eyebrow">PBA CENTER</div>
   <h1>Scores & Schedule</h1>
-  <p class="muted">PBA Season 50 · Governors' Cup</p>
+  <p class="subtitle">Games retrieved from the configured PBA data source.</p>
 
-  <div class="tabbar">
-    <button class="active" onclick="gameFilter('all',this)">All</button>
-    <button onclick="gameFilter('upcoming',this)">Upcoming</button>
-    <button onclick="gameFilter('final',this)">Final</button>
+  <label class="subtitle" for="conferenceSelect">Select conference</label>
+  <select id="conferenceSelect" onchange="loadGames()">
+    <option value="">Loading conferences...</option>
+  </select>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="setGameFilter('all',this)">All games</button>
+    <button class="tab-btn" onclick="setGameFilter('live',this)">Live</button>
+    <button class="tab-btn" onclick="setGameFilter('upcoming',this)">Upcoming</button>
+    <button class="tab-btn" onclick="setGameFilter('completed',this)">Completed</button>
   </div>
 
-  <div id="games"></div>
+  <div id="gamesList"><div class="loading">Loading games...</div></div>
 </section>
 
-<section id="teams" class="page">
-  <div class="eyebrow">LEAGUE DIRECTORY</div>
+<section class="page" id="teams">
+  <div class="eyebrow">PBA DIRECTORY</div>
   <h1>Teams</h1>
-  <p class="muted">PBA team directory</p>
-
-  <input class="search" placeholder="Search teams..." oninput="searchCards('teamList',this.value)">
-
-  <div id="teamList" class="grid"></div>
+  <p class="subtitle">Team directory. Live team records and rosters require a verified data source.</p>
+  <input class="search" id="teamSearch" placeholder="Search teams..." oninput="renderTeams()">
+  <div class="grid" id="teamsGrid"></div>
 </section>
 
-<section id="players" class="page">
+<section class="page" id="players">
   <div class="eyebrow">PLAYER DIRECTORY</div>
   <h1>Players</h1>
-
-  <div class="card">
-    <h3>Player information</h3>
-    <p class="muted">
-      Current player rosters and statistics still need a verified data connection.
-      This section will not display invented player information.
-    </p>
-    <a href="https://pba.ph" target="_blank" rel="noopener">Official PBA website ↗</a>
-  </div>
+  <div class="notice">Player profiles and statistics will appear here when a verified player data feed is connected. This page does not invent player statistics.</div>
+  <div class="empty">Player data is not currently available from the connected backend.</div>
 </section>
 
-<section id="standings" class="page">
-  <div class="eyebrow">POSTSEASON</div>
-  <h1>Playoff Standings</h1>
-
-  <div class="card">
-    <h3>Quarterfinal Series</h3>
-    <table>
-      <thead>
-        <tr><th>Series</th><th>Result</th><th>Status</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>NLEX vs Phoenix</td><td>3–0</td><td>Advanced</td></tr>
-        <tr><td>TNT vs Magnolia</td><td>3–0</td><td>Advanced</td></tr>
-        <tr><td>Converge vs Rain or Shine</td><td>3–1</td><td>Advanced</td></tr>
-        <tr><td>Ginebra vs San Miguel</td><td>3–2</td><td>Final</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <p class="muted">Historical playoff snapshot. Not an automatically updated standings table.</p>
+<section class="page" id="standings">
+  <div class="eyebrow">PBA COMPETITION</div>
+  <h1>Standings & Playoffs</h1>
+  <div class="notice">Official standings, series results and playoff brackets are not currently provided by the connected backend.</div>
+  <div class="empty">Standings data unavailable.</div>
 </section>
 
-<section id="news" class="page">
+<section class="page" id="news">
   <div class="eyebrow">LATEST UPDATES</div>
   <h1>PBA News</h1>
-  <div id="newsList"></div>
+  <div class="notice">News articles require a verified news feed. No fabricated headlines are displayed.</div>
+  <div class="empty">No verified news feed is connected yet.</div>
 </section>
 
-<section id="favorites" class="page">
-  <div class="eyebrow">YOUR PBA</div>
+<section class="page" id="favorites">
+  <div class="eyebrow">YOUR PICKS</div>
   <h1>Following</h1>
-  <div id="favoritesList"></div>
+  <h2>Followed teams</h2>
+  <div id="favoriteTeams" class="grid"></div>
+  <div class="notice">Your followed teams are saved on this device.</div>
 </section>
 
-<section id="more" class="page">
-  <div class="eyebrow">MORE FROM THE LEAGUE</div>
-  <h1>Explore</h1>
-
-  <div class="card item" onclick="go('standings')">
-    🏆 <b>Playoff Standings</b>
-    <p class="muted">Quarterfinal results</p>
-  </div>
-
-  <div class="card item" onclick="go('players')">
-    🏀 <b>Player Directory</b>
-    <p class="muted">Player information</p>
-  </div>
-
+<section class="page" id="more">
+  <div class="eyebrow">TWO SPORTS</div>
+  <h1>More</h1>
+  <div class="card" onclick="showPage('players')">🏀 <strong>Players</strong><p class="subtitle">Player directory and statistics</p></div>
+  <div class="card" onclick="showPage('standings')">🏆 <strong>Standings & Playoffs</strong><p class="subtitle">Conference standings and brackets</p></div>
+  <div class="card" onclick="showPage('favorites')">⭐ <strong>Following</strong><p class="subtitle">Your followed teams</p></div>
+  <div class="card" onclick="showPage('news')">📰 <strong>News</strong><p class="subtitle">PBA news and updates</p></div>
+  <div class="card" onclick="checkBackend()">⚙️ <strong>Data connection</strong><p class="subtitle" id="connectionStatus">Checking connection...</p></div>
   <div class="card">
-    <b>Official PBA</b>
-    <p><a href="https://pba.ph" target="_blank" rel="noopener">Visit pba.ph ↗</a></p>
+    <strong>About Two Sports</strong>
+    <p class="subtitle">A basketball fan project. Not affiliated with the PBA.</p>
+    <p class="subtitle">Data availability depends on the connected sources.</p>
   </div>
 </section>
 
 </main>
 
-<nav>
-  <button class="active" onclick="go('home',this)"><b>⌂</b>Home</button>
-  <button onclick="go('scores',this)"><b>▤</b>Scores</button>
-  <button onclick="go('teams',this)"><b>♧</b>Teams</button>
-  <button onclick="go('news',this)"><b>▣</b>News</button>
-  <button onclick="go('more',this)"><b>☰</b>More</button>
+<nav class="bottom-nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" data-page="home" onclick="showPage('home')"><span class="nav-icon">⌂</span>Home</button>
+    <button class="nav-btn" data-page="scores" onclick="showPage('scores')"><span class="nav-icon">▤</span>Scores</button>
+    <button class="nav-btn" data-page="teams" onclick="showPage('teams')"><span class="nav-icon">◉</span>Teams</button>
+    <button class="nav-btn" data-page="news" onclick="showPage('news')"><span class="nav-icon">▧</span>News</button>
+    <button class="nav-btn" data-page="more" onclick="showPage('more')"><span class="nav-icon">•••</span>More</button>
+  </div>
 </nav>
 
-<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modalbox">
-    <button class="close" onclick="closeModal()">✕</button>
-    <div id="modalBody"></div>
+<div class="modal" id="gameModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-content">
+    <div class="modal-head">
+      <strong>GAME CENTER</strong>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div id="gameDetails"><div class="loading">Loading game...</div></div>
   </div>
 </div>
 
+<div class="modal" id="teamModal" onclick="if(event.target===this)closeTeamModal()">
+  <div class="modal-content">
+    <div class="modal-head">
+      <strong>TEAM PROFILE</strong>
+      <button class="close-btn" onclick="closeTeamModal()">✕</button>
+    </div>
+    <div id="teamDetails"></div>
+  </div>
+</div>
+
+<footer>Two Sports · Independent PBA fan project</footer>
+
 <script>
-/* THEME */
-function applyTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-  localStorage.setItem("twoSportsTheme", theme);
-  document.getElementById("themeToggle").textContent =
-    theme === "dark" ? "☀" : "☾";
-}
+const API = "/api";
 
-function toggleTheme() {
-  const current = document.documentElement.getAttribute("data-theme") || "light";
-  applyTheme(current === "dark" ? "light" : "dark");
-}
-
-applyTheme(localStorage.getItem("twoSportsTheme") || "light");
-
-
-/* DATA */
-const teams = [
+const TEAMS = [
   ["Barangay Ginebra San Miguel","GIN"],
   ["San Miguel Beermen","SMB"],
   ["TNT Tropang 5G","TNT"],
   ["NLEX Road Warriors","NLEX"],
   ["Converge FiberXers","CON"],
-  ["Magnolia Hotshots","MAG"],
+  ["Magnolia Chicken Timplados","MAG"],
   ["Rain or Shine Elasto Painters","ROS"],
   ["Phoenix Fuel Masters","PHX"],
   ["Meralco Bolts","MER"],
@@ -593,268 +461,440 @@ const teams = [
   ["Macau Black Bears","MAC"]
 ];
 
-const games = [
-  {
-    id: "614",
-    date: "November 10, 2026",
-    home: "Barangay Ginebra",
-    away: "San Miguel Beermen",
-    hs: 110,
-    as: 94,
-    status: "final",
-    detail: "Quarterfinals Game 5. Ginebra wins the series 3–2 and advances to the semifinals."
-  },
-  {
-    date: "November 6, 2026",
-    home: "San Miguel Beermen",
-    away: "Barangay Ginebra",
-    hs: 108,
-    as: 102,
-    status: "final"
-  },
-  {
-    date: "November 3, 2026",
-    home: "Barangay Ginebra",
-    away: "San Miguel Beermen",
-    hs: 98,
-    as: 101,
-    status: "final"
-  },
-  {
-    date: "October 30, 2026",
-    home: "San Miguel Beermen",
-    away: "Barangay Ginebra",
-    hs: 99,
-    as: 126,
-    status: "final"
-  },
-  {
-    date: "October 27, 2026",
-    home: "Barangay Ginebra",
-    away: "San Miguel Beermen",
-    hs: 104,
-    as: 95,
-    status: "final"
-  }
-];
-
-const articles = [
-  {
-    title: "Ginebra defeats San Miguel in Game 5",
-    date: "November 10, 2026",
-    url: "https://www.rebanse.ph/ginebra-vs-san-miguel-quarters-game-5/"
-  },
-  {
-    title: "San Miguel forces a deciding Game 5",
-    date: "November 6, 2026",
-    url: "https://www.gmanetwork.com/news/sports/basketball/1008574/pba-san-miguel-escapes-barangay-ginebra-forces-game-5-in-quarterfinals/story/"
-  }
-];
-
+let conferences = [];
+let games = [];
+let gameFilter = "all";
+let selectedConference = "";
 let favorites = JSON.parse(localStorage.getItem("twoSportsFavorites") || "[]");
 
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const page=document.getElementById(id);
+  if(page)page.classList.add("active");
 
-/* NAVIGATION */
-function go(id, btn) {
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.remove("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>{
+    b.classList.toggle("active",b.dataset.page===id);
   });
 
-  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
 
-  document.querySelectorAll("nav button").forEach(button => {
-    button.classList.remove("active");
-  });
+  if(id==="teams")renderTeams();
+  if(id==="favorites")renderFavorites();
+}
 
-  if (btn) {
-    btn.classList.add("active");
-  } else {
-    const navButton = [...document.querySelectorAll("nav button")]
-      .find(button => button.getAttribute("onclick")?.includes("'" + id + "'"));
+function toggleTheme(){
+  document.body.classList.toggle("light");
+  localStorage.setItem("twoSportsTheme",document.body.classList.contains("light")?"light":"dark");
+}
 
-    if (navButton) navButton.classList.add("active");
+if(localStorage.getItem("twoSportsTheme")==="light"){
+  document.body.classList.add("light");
+}
+
+async function api(path){
+  const response=await fetch(API+path,{cache:"no-store"});
+  const data=await response.json();
+  if(!response.ok)throw new Error(data.error || "Request failed");
+  return data;
+}
+
+function getArray(data,...keys){
+  if(Array.isArray(data))return data;
+  for(const key of keys){
+    if(Array.isArray(data?.[key]))return data[key];
+  }
+  return [];
+}
+
+function getGameId(g){
+  return g.id ?? g.game_id ?? g.gameId ?? g.slug ?? "";
+}
+
+function getGameName(g,side){
+  const candidates=side==="home"
+    ? ["home_team","homeTeam","home","team1","team_a","visitor"]
+    : ["away_team","awayTeam","away","team2","team_b","opponent"];
+
+  for(const key of candidates){
+    const value=g[key];
+    if(typeof value==="string" && value.trim())return value;
+    if(value && typeof value==="object"){
+      return value.name || value.team_name || value.full_name || value.code || "TBD";
+    }
   }
 
-  window.scrollTo(0,0);
+  return side==="home" ? "Team 1" : "Team 2";
 }
 
+function getScore(g,side){
+  const candidates=side==="home"
+    ? ["home_score","homeScore","score1","team1_score","score_a"]
+    : ["away_score","awayScore","score2","team2_score","score_b"];
 
-/* MODALS */
-function modal(html) {
-  document.getElementById("modalBody").innerHTML = html;
-  document.getElementById("modal").classList.add("open");
+  for(const key of candidates){
+    if(g[key]!==undefined && g[key]!==null)return g[key];
+  }
+  return null;
 }
 
-function closeModal() {
-  document.getElementById("modal").classList.remove("open");
+function getStatus(g){
+  return String(g.status || g.game_status || g.state || "").toLowerCase();
 }
 
-function gameDetail(id) {
-  const game = games.find(item => String(item.id) === String(id));
+function getDate(g){
+  return g.date || g.game_date || g.datetime || g.start_time || g.game_time || "";
+}
 
-  if (!game) return;
+function isLive(g){
+  const s=getStatus(g);
+  return s.includes("live") || s.includes("progress") || s.includes("quarter") || s.includes("halftime");
+}
 
-  modal(`
-    <span class="tag green">FINAL</span>
-    <h2>${game.home} vs ${game.away}</h2>
-    <p class="muted">${game.date}</p>
+function isCompleted(g){
+  const s=getStatus(g);
+  return s.includes("final") || s.includes("complete") || s.includes("finished") || s.includes("closed");
+}
 
-    <div class="row" style="margin:25px 0;justify-content:center">
-      <div style="text-align:center">
-        <h3>${game.home}</h3>
-        <div class="score">${game.hs}</div>
+function gameStatus(g){
+  if(isLive(g))return "LIVE";
+  if(isCompleted(g))return "FINAL";
+  return g.status || "SCHEDULED";
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function gameCard(g){
+  const home=getGameName(g,"home");
+  const away=getGameName(g,"away");
+  const hs=getScore(g,"home");
+  const as=getScore(g,"away");
+  const live=isLive(g);
+  const date=getDate(g);
+  const id=getGameId(g);
+
+  return `
+  <div class="card game-card" onclick="openGame('${escapeHTML(id)}')">
+    <div class="game-top">
+      <span>${escapeHTML(g.conference_name || g.tournament || "PBA")}</span>
+      <span class="${live?"live-pill":"pill"}">${escapeHTML(gameStatus(g))}</span>
+    </div>
+    <div class="teams">
+      <div class="team">
+        <div>
+          <div class="team-name">${escapeHTML(home)}</div>
+          <div class="team-code">HOME</div>
+        </div>
+        ${hs!==null?`<div class="team-score">${escapeHTML(hs)}</div>`:""}
       </div>
-
-      <div class="score">–</div>
-
-      <div style="text-align:center">
-        <h3>${game.away}</h3>
-        <div class="score">${game.as}</div>
+      <div class="team">
+        <div>
+          <div class="team-name">${escapeHTML(away)}</div>
+          <div class="team-code">AWAY</div>
+        </div>
+        ${as!==null?`<div class="team-score">${escapeHTML(as)}</div>`:""}
       </div>
     </div>
-
-    <p>${game.detail || "Final score."}</p>
-    <p class="muted">Quarterfinals · PBA Season 50</p>
-  `);
-}
-
-
-/* SCORES */
-function renderGames(filter = "all") {
-  const list = games.filter(game =>
-    filter === "all" || game.status === filter
-  );
-
-  document.getElementById("games").innerHTML = list.map(game => `
-    <div class="card item" onclick="gameDetail('${game.id || ""}')">
-      <div class="row">
-        <span class="tag green">FINAL</span>
-        <span class="muted">${game.date}</span>
-      </div>
-
-      <div class="row" style="margin:17px 0">
-        <b>${game.home}</b>
-        <strong class="score">${game.hs} – ${game.as}</strong>
-        <b>${game.away}</b>
-      </div>
-
-      ${game.detail ? `<p class="muted">${game.detail}</p>` : ""}
+    <div class="game-bottom">
+      <span>${escapeHTML(date || "Date unavailable")}</span>
+      <span>Game details →</span>
     </div>
-  `).join("") || "<p class='muted'>No games in this category.</p>";
+  </div>`;
 }
 
-function gameFilter(filter, button) {
-  document.querySelectorAll("#scores .tabbar button").forEach(item => {
-    item.classList.remove("active");
-  });
+async function loadConferences(){
+  const select=document.getElementById("conferenceSelect");
 
+  try{
+    const data=await api("/pba/conferences");
+    conferences=getArray(data,"conferences","tournaments","data");
+
+    if(!conferences.length){
+      select.innerHTML='<option value="">No conferences available</option>';
+      document.getElementById("homeConferences").innerHTML='<div class="empty">No conference data returned.</div>';
+      return;
+    }
+
+    select.innerHTML=conferences.map((c,i)=>{
+      const id=c.id || c.slug || c.conference_id || c.tournament_id || "";
+      const name=c.name || c.title || c.tournament_name || id || "Conference";
+      return `<option value="${escapeHTML(id)}">${escapeHTML(name)}</option>`;
+    }).join("");
+
+    selectedConference=select.value;
+    document.getElementById("homeConferences").innerHTML=conferences.map(c=>{
+      const name=c.name || c.title || c.tournament_name || "PBA Conference";
+      return `<div class="card"><strong>${escapeHTML(name)}</strong></div>`;
+    }).join("");
+
+    await loadGames();
+  }catch(error){
+    select.innerHTML='<option value="">Unable to load conferences</option>';
+    document.getElementById("homeConferences").innerHTML=
+      `<div class="empty">${escapeHTML(error.message)}</div>`;
+    document.getElementById("homeGames").innerHTML=
+      `<div class="empty">PBA data could not be loaded.<br>${escapeHTML(error.message)}</div>`;
+  }
+}
+
+async function loadGames(){
+  const select=document.getElementById("conferenceSelect");
+  selectedConference=select.value;
+
+  const list=document.getElementById("gamesList");
+  const home=document.getElementById("homeGames");
+
+  list.innerHTML='<div class="loading">Loading PBA games...</div>';
+
+  try{
+    let path="/pba/games";
+    if(selectedConference){
+      path="/pba/conferences/"+encodeURIComponent(selectedConference)+"/games";
+    }
+
+    const data=await api(path);
+    games=getArray(data,"games","results","data","matches");
+
+    renderGames();
+
+    if(games.length){
+      home.innerHTML=games.slice(0,3).map(gameCard).join("");
+      document.getElementById("homeSubtitle").textContent=
+        games.length+" game(s) available from the connected data source.";
+    }else{
+      home.innerHTML='<div class="empty">No games were returned for this conference.</div>';
+      document.getElementById("homeSubtitle").textContent="No games currently available.";
+    }
+  }catch(error){
+    games=[];
+    list.innerHTML=`<div class="empty">Could not load PBA games.<br><br>${escapeHTML(error.message)}</div>`;
+    home.innerHTML=`<div class="empty">Game data unavailable.<br>${escapeHTML(error.message)}</div>`;
+  }
+}
+
+function renderGames(){
+  const list=document.getElementById("gamesList");
+  let filtered=games;
+
+  if(gameFilter==="live")filtered=games.filter(isLive);
+  if(gameFilter==="completed")filtered=games.filter(isCompleted);
+  if(gameFilter==="upcoming")filtered=games.filter(g=>!isLive(g)&&!isCompleted(g));
+
+  if(!filtered.length){
+    list.innerHTML='<div class="empty">No games found in this category.</div>';
+    return;
+  }
+
+  list.innerHTML=filtered.map(gameCard).join("");
+}
+
+function setGameFilter(filter,button){
+  gameFilter=filter;
+  document.querySelectorAll("#scores .tab-btn").forEach(b=>b.classList.remove("active"));
   button.classList.add("active");
-  renderGames(filter);
+  renderGames();
 }
 
+async function refreshData(){
+  const button=document.querySelector(".header-actions button");
+  button.textContent="…";
 
-/* TEAMS */
-function renderTeams() {
-  document.getElementById("teamList").innerHTML = teams.map(([name,abbr]) => `
-    <div class="card item teamrow"
-         data-search="${name.toLowerCase()}"
-         onclick="teamDetail('${abbr}')">
+  try{
+    await loadConferences();
+  }finally{
+    button.textContent="↻";
+  }
+}
 
-      <div class="team-mark">${abbr}</div>
+function findConferenceForGame(){
+  return selectedConference;
+}
 
-      <div>
-        <b>${name}</b>
-        <p class="muted">PBA team</p>
-      </div>
+async function openGame(id){
+  if(!id)return;
+
+  document.getElementById("gameModal").classList.add("show");
+  document.getElementById("gameDetails").innerHTML='<div class="loading">Loading game details...</div>';
+
+  try{
+    let path="/pba/games/"+encodeURIComponent(id);
+    if(findConferenceForGame()){
+      path+="?conference="+encodeURIComponent(findConferenceForGame());
+    }
+
+    const data=await api(path);
+    const g=data.game || data.data || data;
+    renderGameDetails(g);
+  }catch(error){
+    const g=games.find(x=>String(getGameId(x))===String(id));
+    if(g){
+      renderGameDetails(g);
+      document.getElementById("gameDetails").insertAdjacentHTML("beforeend",
+        `<div class="notice">Additional game details could not be loaded: ${escapeHTML(error.message)}</div>`);
+    }else{
+      document.getElementById("gameDetails").innerHTML=
+        `<div class="empty">Game details unavailable.<br>${escapeHTML(error.message)}</div>`;
+    }
+  }
+}
+
+function renderGameDetails(g){
+  const home=getGameName(g,"home");
+  const away=getGameName(g,"away");
+  const hs=getScore(g,"home");
+  const as=getScore(g,"away");
+
+  document.getElementById("gameDetails").innerHTML=`
+    <div class="eyebrow">${escapeHTML(g.conference_name || g.tournament || "PBA")}</div>
+    <div class="detail-score">
+      <div class="detail-team">${escapeHTML(home)}</div>
+      <strong>${hs===null?"—":escapeHTML(hs)}</strong>
+      <span>VS</span>
+      <strong>${as===null?"—":escapeHTML(as)}</strong>
+      <div class="detail-team">${escapeHTML(away)}</div>
     </div>
-  `).join("");
-}
-
-function teamDetail(abbr) {
-  const team = teams.find(item => item[1] === abbr);
-  const following = favorites.includes(abbr);
-
-  modal(`
-    <div class="team-mark">${abbr}</div>
-    <h2>${team[0]}</h2>
-    <p class="muted">PBA Season 50</p>
-
-    <button class="primary" onclick="toggleFav('${abbr}')">
-      ${following ? "♥ Following" : "♡ Follow team"}
-    </button>
-
-    <p class="muted" style="margin-top:16px">
-      Verified roster and player statistics are not yet connected.
-    </p>
-  `);
-}
-
-
-/* FAVORITES */
-function toggleFav(abbr) {
-  favorites = favorites.includes(abbr)
-    ? favorites.filter(item => item !== abbr)
-    : [...favorites, abbr];
-
-  localStorage.setItem("twoSportsFavorites", JSON.stringify(favorites));
-
-  renderFav();
-  teamDetail(abbr);
-}
-
-function renderFav() {
-  const target = document.getElementById("favoritesList");
-
-  target.innerHTML = favorites.length
-    ? favorites.map(abbr => {
-        const team = teams.find(item => item[1] === abbr);
-
-        return `
-          <div class="card row">
-            <b>${team ? team[0] : abbr}</b>
-            <button class="secondary" onclick="toggleFav('${abbr}')">
-              Unfollow
-            </button>
-          </div>
-        `;
-      }).join("")
-    : "<p class='muted'>Follow teams to build your list.</p>";
-}
-
-
-/* SEARCH */
-function searchCards(id, query) {
-  document.querySelectorAll("#" + id + " [data-search]").forEach(card => {
-    card.style.display = card.dataset.search.includes(query.toLowerCase())
-      ? "flex"
-      : "none";
-  });
-}
-
-
-/* NEWS */
-function renderNews() {
-  const content = articles.map(article => `
     <div class="card">
-      <span class="tag blue">PBA NEWS</span>
-      <h3 style="margin-top:10px">${article.title}</h3>
-      <p class="muted">${article.date}</p>
-      <a href="${article.url}" target="_blank" rel="noopener">
-        Read coverage ↗
-      </a>
+      <div class="game-top"><span>GAME STATUS</span><span>${escapeHTML(gameStatus(g))}</span></div>
+      <p class="subtitle">Date: ${escapeHTML(getDate(g) || "Not available")}</p>
+      <p class="subtitle">Venue: ${escapeHTML(g.venue || g.arena || "Not available")}</p>
+      <p class="subtitle">Game ID: ${escapeHTML(getGameId(g) || "Not available")}</p>
     </div>
-  `).join("");
-
-  document.getElementById("newsList").innerHTML = content;
-  document.getElementById("homeNews").innerHTML = content;
+    <h2>Box Score</h2>
+    ${renderBoxScore(g)}
+    <h2>Play-by-Play</h2>
+    ${renderPlayByPlay(g)}
+  `;
 }
 
+function renderBoxScore(g){
+  const box=g.box_score || g.boxScore || g.statistics || g.stats;
 
-/* INITIALIZE */
-renderTeams();
-renderGames();
-renderNews();
-renderFav();
+  if(!box)return '<div class="empty">No verified box score is available for this game.</div>';
+
+  if(Array.isArray(box)){
+    return box.map(item=>`<div class="card">${escapeHTML(JSON.stringify(item))}</div>`).join("");
+  }
+
+  if(typeof box==="object"){
+    return `<pre class="card" style="white-space:pre-wrap;overflow-wrap:anywhere">${escapeHTML(JSON.stringify(box,null,2))}</pre>`;
+  }
+
+  return '<div class="empty">Box score format unavailable.</div>';
+}
+
+function renderPlayByPlay(g){
+  const plays=g.play_by_play || g.playByPlay || g.plays || g.events;
+
+  if(!Array.isArray(plays)||!plays.length){
+    return '<div class="empty">No play-by-play data is available for this game.</div>';
+  }
+
+  return plays.map(p=>{
+    const text=typeof p==="string"?p:(p.description || p.text || p.event || JSON.stringify(p));
+    return `<div class="card">${escapeHTML(text)}</div>`;
+  }).join("");
+}
+
+function closeModal(){
+  document.getElementById("gameModal").classList.remove("show");
+}
+
+function renderTeams(){
+  const search=(document.getElementById("teamSearch")?.value || "").toLowerCase();
+  const filtered=TEAMS.filter(t=>t[0].toLowerCase().includes(search)||t[1].toLowerCase().includes(search));
+
+  document.getElementById("teamsGrid").innerHTML=filtered.map(t=>`
+    <div class="card team-card" onclick="openTeam('${t[1]}')">
+      <div class="team-badge">${t[1]}</div>
+      <strong>${escapeHTML(t[0])}</strong>
+      <p class="subtitle">View team</p>
+    </div>
+  `).join("");
+}
+
+function openTeam(code){
+  const team=TEAMS.find(t=>t[1]===code);
+  if(!team)return;
+
+  const followed=favorites.includes(code);
+
+  document.getElementById("teamDetails").innerHTML=`
+    <div style="text-align:center;padding:25px">
+      <div class="team-badge" style="width:75px;height:75px;font-size:22px">${code}</div>
+      <h2>${escapeHTML(team[0])}</h2>
+      <p class="subtitle">PBA team</p>
+      <button class="text-btn" onclick="toggleFavorite('${code}');openTeam('${code}')">
+        ${followed?"★ Following — Unfollow":"☆ Follow team"}
+      </button>
+    </div>
+    <div class="notice">Verified roster, team statistics and highlights are not currently available from the connected backend.</div>
+  `;
+
+  document.getElementById("teamModal").classList.add("show");
+}
+
+function closeTeamModal(){
+  document.getElementById("teamModal").classList.remove("show");
+}
+
+function toggleFavorite(code){
+  if(favorites.includes(code)){
+    favorites=favorites.filter(x=>x!==code);
+  }else{
+    favorites.push(code);
+  }
+
+  localStorage.setItem("twoSportsFavorites",JSON.stringify(favorites));
+  renderFavorites();
+}
+
+function renderFavorites(){
+  const container=document.getElementById("favoriteTeams");
+  const followed=TEAMS.filter(t=>favorites.includes(t[1]));
+
+  if(!followed.length){
+    container.innerHTML='<div class="empty" style="grid-column:1/-1">You are not following any teams yet. Open Teams to follow one.</div>';
+    return;
+  }
+
+  container.innerHTML=followed.map(t=>`
+    <div class="card team-card" onclick="openTeam('${t[1]}')">
+      <div class="team-badge">${t[1]}</div>
+      <strong>${escapeHTML(t[0])}</strong>
+    </div>
+  `).join("");
+}
+
+async function checkBackend(){
+  const status=document.getElementById("connectionStatus");
+  status.textContent="Checking...";
+
+  try{
+    const data=await api("/health");
+    status.textContent="Connected. "+(data.status || "Backend responded.");
+  }catch(error){
+    status.textContent="Connection error: "+error.message;
+  }
+}
+
+async function initialize(){
+  renderTeams();
+  renderFavorites();
+  await loadConferences();
+  checkBackend();
+}
+
+initialize();
+
+// Refresh available game information periodically.
+setInterval(()=>{
+  if(document.visibilityState==="visible"){
+    refreshData();
+  }
+},60000);
 </script>
 
 </body>
