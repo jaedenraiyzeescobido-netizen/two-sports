@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: two-sports-pba
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: STATSRADAR_KEY
+        sync: false
