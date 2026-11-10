@@ -1,92 +1,30 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Two Sports | PBA</title>
-<style>
-:root{color-scheme:dark;--bg:#080d15;--panel:#141e2c;--line:#293548;--muted:#9ba9ba;--red:#ed3448}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f9fc;font:15px system-ui,Arial;padding-bottom:40px}
-header{padding:18px;background:#111a27;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
-.logo{font-size:25px;font-weight:950}.logo span{color:var(--red)}main{max-width:980px;margin:auto;padding:18px}
-h1{font-size:30px;margin:12px 0}h2{font-size:20px;margin:24px 0 10px}
-.muted{color:var(--muted);font-size:13px}.status{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase}
-.live{color:#ff6475}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:16px;margin:11px 0}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.score{font-size:30px;font-weight:900;text-align:center;margin:12px}
-button,select,input{font:inherit;color:white;background:#243247;border:1px solid var(--line);border-radius:9px;padding:10px}
-button{cursor:pointer}button.active{background:var(--red)}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-a{color:#ff8995}.error{border-color:#74313c}.small{font-size:12px}
-table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:8px;border-bottom:1px solid var(--line)}
-</style></head>
-<body>
-<header><div class="logo">TWO <span>SPORTS</span></div><div class="muted">PBA LIVE DATA CENTER</div></header>
-<main>
-  <div class="row"><div><h1>Philippine Basketball</h1><div class="muted">Live data from your connected provider</div></div><button onclick="refreshAll()">↻ Refresh</button></div>
-  <p id="connection" class="muted">Checking backend…</p>
-  <div class="tabs">
-    <button class="active" data-tab="scores" onclick="showTab('scores',this)">Scores & Schedule</button>
-    <button data-tab="teams" onclick="showTab('teams',this)">Teams</button>
-    <button data-tab="players" onclick="showTab('players',this)">Players</button>
+<section id="pba-live" class="pba-live-section">
+  <div class="pba-live-header">
+    <div>
+      <h2>Two Sports Live</h2>
+      <p>Official PBA Play-by-Play</p>
+    </div>
+
+    <a
+      href="https://www.pba.ph/playbyplay"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="pba-official-link"
+    >
+      Open Official PBA Page ↗
+    </a>
   </div>
-  <section id="scores"><h2>Games</h2><div id="games" class="muted">Loading games…</div></section>
-  <section id="teams" hidden><h2>Teams</h2><div id="teamList" class="grid">Loading teams…</div></section>
-  <section id="players" hidden><h2>Team roster</h2><p class="muted">Choose a team from the Teams tab to load its current roster.</p><div id="roster"></div></section>
-  <p class="muted small">The app refreshes match data every 10 seconds and team data every 15 minutes. Actual update speed and available statistics depend on your provider plan and its PBA coverage. No sample scores are shown as real games.</p>
-</main>
-<script>
-const $=id=>document.getElementById(id);
-let teams=[];
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function showTab(id,btn){["scores","teams","players"].forEach(x=>$(x).hidden=x!==id);document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");}
-async function api(url){const r=await fetch(url,{cache:"no-store"});const j=await r.json();if(!r.ok)throw new Error(j.error||"Request failed");return j.data;}
-function getMatch(item){return item.match||item;}
-function renderMatches(items){
- const games=(items||[]).map(getMatch);
- if(!games.length){$("games").innerHTML='<div class="card">No PBA games returned for this date range.</div>';return;}
- $("games").innerHTML=games.map(g=>{
-  const sides=g.teams||[];const home=sides.find(t=>t.isHomeTeam)||sides[0]||{};const away=sides.find(t=>!t.isHomeTeam)||sides[1]||{};
-  const live=String(g.status).toLowerCase()==="live";
-  return `<article class="card">
-   <div class="row"><span class="status ${live?"live":""}">${live?"● LIVE":esc(g.status)}</span><span class="muted">${g.scheduledStartTime?new Date(g.scheduledStartTime).toLocaleString():""}</span></div>
-   <div class="row" style="margin-top:15px"><b>${esc(home.name)}</b><b>${esc(home.score??"—")}</b></div>
-   <div class="row"><b>${esc(away.name)}</b><b>${esc(away.score??"—")}</b></div>
-   <p class="muted">${esc(g.venueName||"")} · ${esc(g.matchId||"")}</p>
-   ${g.matchId?`<button onclick="matchDetail('${encodeURIComponent(g.matchId)}')">Box score & player stats</button>`:""}
-  </article>`;
- }).join("");
-}
-async function loadMatches(){
- const until=new Date(),from=new Date(until.getTime()-3*86400000),end=new Date(until.getTime()+4*86400000);
- const data=await api(`/api/pba/matches?from=${encodeURIComponent(from.toISOString())}&until=${encodeURIComponent(end.toISOString())}`);
- renderMatches(data);
- $("connection").textContent="Connected · last checked "+new Date().toLocaleTimeString();
-}
-async function loadTeams(){
- teams=await api("/api/pba/teams");
- $("teamList").innerHTML=teams.map(t=>`<div class="card"><div class="row"><b>${esc(t.name)}</b><span class="muted">${esc(t.abbreviation||"")}</span></div><p class="muted">${esc(t.teamId)}</p><button onclick="loadRoster('${encodeURIComponent(t.teamId)}','${esc(t.name).replace(/'/g,"&#39;")}')">View roster</button></div>`).join("")||"No teams returned.";
-}
-async function loadRoster(id,name){
- showTab("players",document.querySelector('[data-tab="players"]'));
- $("roster").innerHTML=`<h3>${name}</h3><p class="muted">Loading roster…</p>`;
- try{const data=await api(`/api/pba/teams/${id}/players`);
- $("roster").innerHTML=`<h3>${name}</h3>`+(data||[]).map(p=>`<div class="card row"><b>${esc(p.name)}</b><span class="muted">#${esc(p.jerseyNumber||"—")} · ${esc(p.position||"—")}</span></div>`).join("")||'<p class="muted">No roster data returned.</p>';
- }catch(e){$("roster").innerHTML=`<div class="card error">${esc(e.message)}</div>`;}
-}
-async function matchDetail(id){
- try{
-  const result=await api(`/api/pba/matches/${id}`);const m=result.match||result;
-  const players=m.players||[];
-  const rows=players.map(p=>{const b=p.boxScore||{};return `<tr><td>${esc(p.name)}</td><td>${esc(p.position||"")}</td><td>${esc(b.points??"—")}</td><td>${esc(b.rebounds??"—")}</td><td>${esc(b.assists??"—")}</td><td>${esc(b.steals??"—")}</td><td>${esc(b.blocks??"—")}</td></tr>`}).join("");
-  const win=window.open("","_blank");
-  if(!win){alert("Allow pop-ups to view the box score.");return;}
-  win.document.write(`<title>Two Sports box score</title><body style="background:#080d15;color:white;font:14px Arial;padding:20px"><h2>Match box score</h2><p>${esc(m.status)} · ${esc(m.venueName||"")}</p><table border="1" cellpadding="8" style="border-collapse:collapse;color:white"><tr><th>Player</th><th>Pos</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th></tr>${rows}</table></body>`);
- }catch(e){alert(e.message);}
-}
-async function refreshAll(){
- try{await loadMatches();}catch(e){$("connection").textContent="Data connection issue: "+e.message;$("games").innerHTML=`<div class="card error">${esc(e.message)}<p class="muted">Check your API key, provider access and server.</p></div>`;}
- try{if(!teams.length)await loadTeams();}catch(e){$("teamList").textContent=e.message;}
-}
-refreshAll();
-setInterval(()=>loadMatches().catch(e=>$("connection").textContent="Refresh failed: "+e.message),10000);
-setInterval(()=>loadTeams().catch(()=>{}),15*60*1000);
-</script></body></html>
+
+  <div class="pba-scoreboard">
+    <iframe
+      src="https://pba-api01.actech2.com/tournaments/pba-50th-season-governors-cup"
+      title="PBA Live Play-by-Play"
+      loading="lazy"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <p class="pba-disclaimer">
+    Live game information is provided by the PBA scoreboard.
+  </p>
+</section>
