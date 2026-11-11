@@ -58,7 +58,7 @@ function setCache(key, data, seconds = 120) {
   });
 }
 
-async function fetchText(url, timeout = 15000) {
+async function fetchText(url, timeout = 18000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
 
@@ -66,7 +66,7 @@ async function fetchText(url, timeout = 15000) {
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; TwoSports/1.0)",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
         "Accept": "text/html,application/json,application/xml,*/*"
       }
     });
@@ -83,8 +83,14 @@ async function fetchText(url, timeout = 15000) {
 
 function cleanText(value) {
   return String(value || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
     .replace(/\s+/g, " ")
-    .replace(/&nbsp;/g, " ")
     .trim();
 }
 
@@ -96,7 +102,21 @@ function absoluteUrl(url, base) {
   }
 }
 
-function parseGames(html, conference) {
+function validConference(key) {
+  return Object.prototype.hasOwnProperty.call(CONFERENCES, key);
+}
+
+/* ---------------- GAMES ---------------- */
+
+function findTeamNames(text) {
+  const lower = String(text || "").toLowerCase();
+
+  return TEAMS.filter(team =>
+    lower.includes(team.toLowerCase())
+  );
+}
+
+function parseGames(html, conferenceKey) {
   const $ = cheerio.load(html);
   const games = new Map();
 
@@ -107,28 +127,31 @@ function parseGames(html, conference) {
     if (!match) return;
 
     const id = match[1];
-    const container = $(element).closest(
+
+    let container = $(element).closest(
       "tr, article, li, .game, .game-card, .match, .match-card"
     );
 
-    const text = cleanText(
-      container.length ? container.text() : $(element).text()
-    );
+    if (!container.length) {
+      container = $(element).parent();
+    }
 
-    const headings = container.find("h1,h2,h3,h4,strong,b");
-    const headingText = cleanText(headings.text());
+    const text = cleanText(container.text());
+    const title = cleanText($(element).text());
+    const combined = `${title} ${text}`;
+    const teams = findTeamNames(combined);
 
-    const combined = `${headingText} ${text}`;
-
-    const scoreMatches = combined.match(/\b\d{1,3}\b/g) || [];
+    const scores = combined.match(/\b\d{1,3}\b/g) || [];
 
     games.set(id, {
       id,
-      conference,
-      title: headingText || cleanText($(element).text()) || `PBA Game ${id}`,
+      conference: conferenceKey,
+      conferenceName: CONFERENCES[conferenceKey].name,
+      title: title || `PBA Game ${id}`,
       text: combined,
-      url: absoluteUrl(href, "https://www.pba.ph/"),
-      scores: scoreMatches.slice(-2)
+      teams,
+      scores: scores.slice(-2),
+      url: absoluteUrl(href, "https://www.pba.ph/")
     });
   });
 
@@ -136,9 +159,7 @@ function parseGames(html, conference) {
 }
 
 async function getGames(conferenceKey) {
-  const conference = CONFERENCES[conferenceKey];
-
-  if (!conference) {
+  if (!validConference(conferenceKey)) {
     throw new Error("Invalid conference.");
   }
 
@@ -147,26 +168,31 @@ async function getGames(conferenceKey) {
 
   if (cached) return cached;
 
+  const conference = CONFERENCES[conferenceKey];
   const url = `${PBA_API}/tournaments/${conference.slug}`;
-  const html = await fetchText(url, 20000);
+
+  const html = await fetchText(url, 25000);
   const games = parseGames(html, conferenceKey);
 
   const result = {
     available: games.length > 0,
     conference: conference.name,
+    conferenceKey,
     games,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
+    message: games.length
+      ? ""
+      : "The tournament page loaded, but no game records could be extracted."
   };
 
   setCache(cacheKey, result, 90);
   return result;
 }
 
+/* ---------------- BOX SCORES ---------------- */
+
 function normalizeHeader(value) {
-  return cleanText(value)
-    .replace(/\s+/g, " ")
-    .replace(/%/g, "%")
-    .toUpperCase();
+  return cleanText(value).toUpperCase();
 }
 
 function findHeaderRow($table, $) {
@@ -174,8 +200,7 @@ function findHeaderRow($table, $) {
   let bestScore = 0;
 
   $table.find("tr").each((_, row) => {
-    const cells = $(row).find("th,td");
-    const values = cells.map((_, cell) =>
+    const values = $(row).find("th,td").map((_, cell) =>
       normalizeHeader($(cell).text())
     ).get();
 
@@ -201,13 +226,15 @@ function findHeaderRow($table, $) {
 function extractTeamName($table, $) {
   let current = $table;
 
-  for (let i = 0; i < 5 && current.length; i++) {
-    const previous = current.prevAll("h1,h2,h3,h4,h5,strong,b").first();
+  for (let i = 0; i < 6 && current.length; i++) {
+    const heading = current.prevAll(
+      "h1,h2,h3,h4,h5,strong,b"
+    ).first();
 
-    if (previous.length) {
-      const value = cleanText(previous.text());
+    if (heading.length) {
+      const value = cleanText(heading.text());
 
-      if (value.length > 2 && value.length < 80) {
+      if (value.length > 2 && value.length < 100) {
         return value;
       }
     }
@@ -222,55 +249,43 @@ function parseBoxScoreTables(html) {
   const $ = cheerio.load(html);
   const tables = [];
 
-  $("table").each((tableIndex, tableElement) => {
+  $("table").each((_, tableElement) => {
     const $table = $(tableElement);
     const headerRow = findHeaderRow($table, $);
 
     if (!headerRow) return;
 
-    const columns = $(headerRow)
-      .find("th,td")
-      .map((_, cell) => cleanText($(cell).text()))
-      .get();
-
-    if (columns.length < 2) return;
+    const columns = $(headerRow).find("th,td").map((_, cell) =>
+      cleanText($(cell).text())
+    ).get();
 
     const normalized = columns.map(normalizeHeader);
     const playerIndex = normalized.findIndex(value =>
       /PLAYER|NAME/.test(value)
     );
 
-    if (playerIndex === -1) return;
+    if (playerIndex < 0) return;
 
     const players = [];
-
-    let foundHeader = false;
+    let afterHeader = false;
 
     $table.find("tr").each((_, row) => {
       if (row === headerRow) {
-        foundHeader = true;
+        afterHeader = true;
         return;
       }
 
-      if (!foundHeader) return;
+      if (!afterHeader) return;
 
-      const cells = $(row).find("th,td");
-
-      if (!cells.length) return;
-
-      const values = cells.map((_, cell) =>
+      const values = $(row).find("th,td").map((_, cell) =>
         cleanText($(cell).text())
       ).get();
 
       if (values.length < 2) return;
 
-      const playerName = values[playerIndex];
+      const name = values[playerIndex];
 
-      if (!playerName) return;
-
-      if (
-        /TOTAL|TEAM TOTAL|PLAYER|STARTERS|BENCH/i.test(playerName)
-      ) {
+      if (!name || /TOTAL|STARTERS|BENCH|PLAYER/i.test(name)) {
         return;
       }
 
@@ -278,58 +293,62 @@ function parseBoxScoreTables(html) {
 
       columns.forEach((column, index) => {
         stats[column || `Column ${index + 1}`] =
-          values[index] ?? "";
+          values[index] || "";
       });
 
       players.push({
-        name: playerName,
+        name,
         stats
       });
     });
 
-    if (!players.length) return;
-
-    tables.push({
-      team: extractTeamName($table, $),
-      columns,
-      players
-    });
+    if (players.length) {
+      tables.push({
+        team: extractTeamName($table, $),
+        columns,
+        players
+      });
+    }
   });
 
   return tables;
 }
 
-function getGameIdFromUrl(url) {
-  try {
-    const parsed = new URL(url);
-    return parsed.searchParams.get("game_id");
-  } catch {
-    return null;
+async function getGameDetails(id, conferenceKey) {
+  if (!/^\d+$/.test(String(id))) {
+    throw new Error("Invalid game ID.");
   }
-}
 
-async function getGameDetails(id) {
-  const cacheKey = `details-${id}`;
+  if (!validConference(conferenceKey)) {
+    throw new Error("A valid conference is required.");
+  }
+
+  const cacheKey = `details-${conferenceKey}-${id}`;
   const cached = getCache(cacheKey);
 
   if (cached) return cached;
 
+  const conference = CONFERENCES[conferenceKey];
+
+  // The game ID is queried against the selected tournament.
   const urls = [
-    `https://www.pba.ph/playbyplay?game_id=${id}`,
-    `${PBA_API}/games/${id}`
+    `${PBA_API}/tournaments/${conference.slug}?game_id=${encodeURIComponent(id)}`,
+    `https://www.pba.ph/playbyplay?game_id=${encodeURIComponent(id)}`
   ];
 
-  let lastError = "Game details unavailable.";
+  let lastError = "No readable box score was found.";
 
   for (const url of urls) {
     try {
-      const html = await fetchText(url, 18000);
+      const html = await fetchText(url, 22000);
       const boxScoreTables = parseBoxScoreTables(html);
 
       if (boxScoreTables.length) {
         const result = {
           available: true,
           id,
+          conference: conferenceKey,
+          conferenceName: conference.name,
           boxScoreAvailable: true,
           boxScoreTables,
           players: boxScoreTables.flatMap(table =>
@@ -345,7 +364,8 @@ async function getGameDetails(id) {
         return result;
       }
 
-      lastError = "The page loaded, but no readable box-score tables were found.";
+      lastError =
+        "The page loaded, but no readable box-score table was present.";
     } catch (error) {
       lastError = error.message;
     }
@@ -354,11 +374,70 @@ async function getGameDetails(id) {
   return {
     available: false,
     id,
+    conference: conferenceKey,
+    conferenceName: conference.name,
     boxScoreAvailable: false,
     boxScoreTables: [],
     players: [],
     error: lastError
   };
+}
+
+/* ---------------- PLAYERS ---------------- */
+
+async function getPlayers(conferenceKey) {
+  if (!validConference(conferenceKey)) {
+    throw new Error("Invalid conference.");
+  }
+
+  const cacheKey = `players-${conferenceKey}`;
+  const cached = getCache(cacheKey);
+
+  if (cached) return cached;
+
+  const gameData = await getGames(conferenceKey);
+  const players = new Map();
+
+  // Only use players actually found in retrieved box scores.
+  for (const game of gameData.games.slice(0, 30)) {
+    try {
+      const details = await getGameDetails(game.id, conferenceKey);
+
+      for (const player of details.players || []) {
+        const key = `${player.name.toLowerCase()}-${player.team || ""}`;
+
+        if (!players.has(key)) {
+          players.set(key, {
+            name: player.name,
+            team: player.team || "",
+            stats: player.stats || {},
+            conference: conferenceKey,
+            gameIds: [game.id]
+          });
+        } else {
+          const existing = players.get(key);
+
+          if (!existing.gameIds.includes(game.id)) {
+            existing.gameIds.push(game.id);
+          }
+        }
+      }
+    } catch (error) {
+      console.log(`Player extraction skipped for game ${game.id}: ${error.message}`);
+    }
+  }
+
+  const result = {
+    available: players.size > 0,
+    conference: conferenceKey,
+    players: [...players.values()],
+    message: players.size
+      ? ""
+      : "No player names could be extracted from the available box scores."
+  };
+
+  setCache(cacheKey, result, 180);
+  return result;
 }
 
 /* ---------------- NEWS ---------------- */
@@ -368,28 +447,30 @@ function extractNewsFromHtml(html) {
   const articles = new Map();
 
   function addArticle(article) {
-    if (!article) return;
-
     const title = cleanText(article.title || article.name);
     const url = absoluteUrl(
       article.url || article.link || article.href,
       ONESPORTS_NEWS
     );
 
-    if (!title || !url) return;
+    if (!title || !url || !url.includes("onesports.ph")) return;
 
-    const combined = `${title} ${article.category || ""} ${article.description || ""}`;
+    const combined = [
+      title,
+      article.category || "",
+      article.description || ""
+    ].join(" ");
 
-    if (!/pba|basketball|pb a news/i.test(combined)) return;
-
-    if (!url.includes("onesports.ph")) return;
+    if (!/\bpba\b|basketball|philippine basketball/i.test(combined)) {
+      return;
+    }
 
     articles.set(url, {
       title,
       url,
-      date: article.date || article.published || "",
-      image: article.image || article.thumbnail || "",
-      category: article.category || "PBA"
+      date: article.date || "",
+      image: absoluteUrl(article.image || "", ONESPORTS_NEWS),
+      category: "PBA"
     });
   }
 
@@ -405,14 +486,10 @@ function extractNewsFromHtml(html) {
           return;
         }
 
-        if (
-          value.headline ||
-          (value.name && (value.url || value.mainEntityOfPage))
-        ) {
-          const image =
-            typeof value.image === "string"
-              ? value.image
-              : value.image?.url || "";
+        if (value.headline || value.name) {
+          const image = typeof value.image === "string"
+            ? value.image
+            : value.image?.url || "";
 
           addArticle({
             title: value.headline || value.name,
@@ -434,13 +511,11 @@ function extractNewsFromHtml(html) {
     const href = $(element).attr("href") || "";
     const title = cleanText($(element).text());
 
-    if (!title || title.length < 12) return;
+    if (title.length < 12) return;
 
     const card = $(element).closest(
       "article, li, .card, .post, .story, .news-item"
     );
-
-    const context = cleanText(card.text());
 
     const image =
       card.find("img").first().attr("src") ||
@@ -455,8 +530,8 @@ function extractNewsFromHtml(html) {
       title,
       url: href,
       date,
-      image: absoluteUrl(image, ONESPORTS_NEWS),
-      category: context
+      image,
+      description: cleanText(card.text())
     });
   });
 
@@ -467,7 +542,7 @@ async function getNews() {
   const cached = getCache("onesports-news");
   if (cached) return cached;
 
-  const html = await fetchText(ONESPORTS_NEWS, 20000);
+  const html = await fetchText(ONESPORTS_NEWS, 22000);
   const articles = extractNewsFromHtml(html);
 
   const result = {
@@ -476,7 +551,7 @@ async function getNews() {
     articles,
     message: articles.length
       ? ""
-      : "One Sports loaded, but no PBA articles could be extracted. The site may load its articles dynamically.",
+      : "The One Sports page loaded, but no PBA articles could be extracted.",
     updatedAt: new Date().toISOString()
   };
 
@@ -484,13 +559,13 @@ async function getNews() {
   return result;
 }
 
-/* ---------------- YOUTUBE SHORTS-STYLE FEED ---------------- */
+/* ---------------- YOUTUBE VIDEOS ---------------- */
 
 async function getYouTubeChannelId() {
   const cached = getCache("youtube-channel-id");
   if (cached) return cached;
 
-  const html = await fetchText(ONESPORTS_CHANNEL, 15000);
+  const html = await fetchText(ONESPORTS_CHANNEL, 18000);
 
   const patterns = [
     /"channelId":"(UC[a-zA-Z0-9_-]+)"/,
@@ -511,6 +586,15 @@ async function getYouTubeChannelId() {
   throw new Error("Could not identify the One Sports YouTube channel.");
 }
 
+function decodeXml(value) {
+  return cleanText(value)
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
 async function getYouTubeVideos() {
   const cached = getCache("youtube-videos");
   if (cached) return cached;
@@ -520,8 +604,7 @@ async function getYouTubeVideos() {
   const rssUrl =
     `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`;
 
-  const xml = await fetchText(rssUrl, 15000);
-
+  const xml = await fetchText(rssUrl, 18000);
   const entries = xml.match(/<entry>[\s\S]*?<\/entry>/g) || [];
 
   const videos = entries.map(entry => {
@@ -529,33 +612,36 @@ async function getYouTubeVideos() {
     const title = (entry.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "";
     const published = (entry.match(/<published>([\s\S]*?)<\/published>/) || [])[1] || "";
 
-    const decodedTitle = cleanText(
-      title.replace(/&amp;/g, "&")
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-    );
-
     return {
-      id,
-      title: decodedTitle,
-      published,
-      url: `https://www.youtube.com/watch?v=${id}`,
-      embedUrl:
-        `https://www.youtube.com/embed/${id}?playsinline=1&controls=1&rel=0&enablejsapi=1`,
-      thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+      id: decodeXml(id),
+      title: decodeXml(title),
+      published: decodeXml(published),
+      url: `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`,
+      embedUrl: `https://www.youtube.com/embed/${encodeURIComponent(id)}?playsinline=1&controls=1&rel=0`,
+      thumbnail: `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
     };
-  }).filter(video =>
-    video.id &&
-    /pba|basketball|philippine basketball|governors cup|commissioners cup/i.test(video.title)
-  );
+  }).filter(video => {
+    if (!video.id) return false;
+
+    const title = video.title.toLowerCase();
+
+    const isPBA =
+      /pba|philippine basketball|governors cup|commissioners cup/.test(title);
+
+    const isLikelyFullBroadcast =
+      /full game|full replay|live stream|full match|game replay|complete game|whole game|watch live/.test(title);
+
+    return isPBA && !isLikelyFullBroadcast;
+  });
 
   const result = {
     available: videos.length > 0,
     videos,
     source: ONESPORTS_CHANNEL,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
+    message: videos.length
+      ? ""
+      : "No matching PBA clips were found in the recent One Sports uploads."
   };
 
   setCache("youtube-videos", result, 300);
@@ -564,157 +650,4 @@ async function getYouTubeVideos() {
 
 /* ---------------- API ROUTES ---------------- */
 
-app.get("/api/pba/conferences", (req, res) => {
-  res.json(CONFERENCES);
-});
-
-app.get("/api/pba/teams", (req, res) => {
-  res.json({
-    available: true,
-    teams: TEAMS
-  });
-});
-
-app.get("/api/pba/games", async (req, res) => {
-  const conference = req.query.conference || "governors";
-
-  try {
-    const result = await getGames(conference);
-    res.json(result);
-  } catch (error) {
-    res.status(502).json({
-      available: false,
-      games: [],
-      error: error.message
-    });
-  }
-});
-
-app.get("/api/pba/games/:id", async (req, res) => {
-  try {
-    const result = await getGameDetails(req.params.id);
-    res.json(result);
-  } catch (error) {
-    res.status(502).json({
-      available: false,
-      error: error.message
-    });
-  }
-});
-
-app.get("/api/pba/news", async (req, res) => {
-  try {
-    res.json(await getNews());
-  } catch (error) {
-    res.status(502).json({
-      available: false,
-      articles: [],
-      error: error.message,
-      source: ONESPORTS_NEWS
-    });
-  }
-});
-
-app.get("/api/pba/highlights", async (req, res) => {
-  try {
-    res.json(await getYouTubeVideos());
-  } catch (error) {
-    res.status(502).json({
-      available: false,
-      videos: [],
-      error: error.message
-    });
-  }
-});
-
-app.get("/api/pba/players", async (req, res) => {
-  res.json({
-    available: false,
-    players: [],
-    message: "The official PBA player directory source has not been verified. Player information is not fabricated."
-  });
-});
-
-app.get("/api/pba/players/averages", (req, res) => {
-  res.json({
-    available: false,
-    players: [],
-    message: "Player averages are unavailable until verified box-score data can be retrieved."
-  });
-});
-
-app.get("/api/pba/playoffs", (req, res) => {
-  res.json({
-    available: false,
-    message: "A verified live playoff bracket source is not currently available."
-  });
-});
-
-/* ---------------- DIAGNOSTICS ---------------- */
-
-app.get("/api/test-pba", async (req, res) => {
-  const results = {};
-
-  for (const key of Object.keys(CONFERENCES)) {
-    try {
-      const result = await getGames(key);
-
-      results[key] = {
-        available: result.available,
-        count: result.games.length
-      };
-    } catch (error) {
-      results[key] = {
-        available: false,
-        error: error.message
-      };
-    }
-  }
-
-  res.json(results);
-});
-
-app.get("/api/test-news", async (req, res) => {
-  try {
-    const result = await getNews();
-
-    res.json({
-      available: result.available,
-      count: result.articles.length,
-      message: result.message || ""
-    });
-  } catch (error) {
-    res.json({
-      available: false,
-      error: error.message
-    });
-  }
-});
-
-app.get("/api/test-videos", async (req, res) => {
-  try {
-    const result = await getYouTubeVideos();
-
-    res.json({
-      available: result.available,
-      count: result.videos.length
-    });
-  } catch (error) {
-    res.json({
-      available: false,
-      error: error.message
-    });
-  }
-});
-
-app.get("/api/health", (req, res) => {
-  res.json({
-    status: "online",
-    app: "Two Sports",
-    time: new Date().toISOString()
-  });
-});
-
-app.listen(PORT, () => {
-  console.log(`Two Sports running on port ${PORT}`);
-});
+app.get("/api
